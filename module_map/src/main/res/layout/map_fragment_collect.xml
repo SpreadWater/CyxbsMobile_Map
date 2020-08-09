@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/transparent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/map_lc_collect"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/map_shape_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/collect_guideline">
+      <androidx.appcompat.widget.AppCompatTextView
+          android:id="@+id/map_tv_collect_cancel"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="取消"
+          android:textSize="15sp"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          android:layout_marginTop="21dp"
+          android:layout_marginStart="16dp"
+          android:textColor="@color/levelOneFontColor"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/map_tv_collect_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确定"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/map_tv_collect_cancel"
+            app:layout_constraintTop_toTopOf="@id/map_tv_collect_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/levelFourFontColor"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/map_tv_collect_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="风雨操场"
+            android:paddingBottom="5dp"
+            android:textSize="25sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/map_tv_collect_cancel"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/levelFourFontColor"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/map_tv_collect_place_alias"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/map_shape_tv_background"
+            android:text="体育场"
+            android:paddingTop="3dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="3dp"
+            android:textColor="@color/levelOneFontColor"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/map_tv_collect_place"
+            app:layout_constraintLeft_toRightOf="@id/map_tv_collect_place"
+            app:layout_constraintTop_toTopOf="@id/map_tv_collect_place"
+            app:layout_constraintVertical_bias="0.545" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/map_tv_collect_place_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="将该地点收藏为"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/map_tv_collect_place"
+            app:layout_constraintLeft_toLeftOf="@id/map_tv_collect_place"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/levelOneFontColor"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/map_et_collect_collectname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/map_shape_research_place"
+            android:hint="我的收藏"
+            android:textStyle="bold"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:maxLength="8"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:singleLine="true"
+            android:textColor="@color/levelTwoFontColor"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/map_tv_collect_place_hint" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/map_tv_collect_namenumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:text="0/8"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/map_et_collect_collectname"
+            app:layout_constraintTop_toTopOf="@+id/map_et_collect_collectname" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/map_tv_collect_recommend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="推荐"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/map_et_collect_collectname"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp" />
+
+        <com.mredrock.cyxbs.common.component.RedRockAutoWarpView
+            android:id="@+id/map_aw_collect_recommend"
+            android:layout_width="380dp"
+            android:layout_height="105dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="30dp"
+            app:horizontalSpacing="7dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/map_tv_collect_recommend"
+            app:maxLine="6"
+            app:strictMode="true"
+            app:verticalsSpacing="10dp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/map_tv_collect_cancel_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="15dp"
+            android:text="不再收藏该地点"
+            android:textColor="@color/qa_answer_empty_content_color"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/map_aw_collect_recommend" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/collect_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.04" />
+</androidx.constraintlayout.widget.ConstraintLayout>
