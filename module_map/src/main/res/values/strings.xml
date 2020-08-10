@@ -6,4 +6,13 @@
     <string name="map_tv_allimage_name">所有图片</string>
     <string name="map_tv_allimage_share">与大家分享你拍摄的此地点</string>
     <string name="map_tv_allimage_nomore">暂无更多图片</string>
+<!--    by徐国林-->
+    <string name="map_hint_input_places"> 大家都在搜: 风雨操场</string>
+    <string name="map_tv_about_place_more">关于该地点</string>
+    <string name="map_share_people_place_image">与大家分享你拍摄的此地点</string>
+    <string name="map_look_more">查看更多</string>
+    <string name="map_detail">详情</string>
+    <string name="map_label_name">运动场</string>
+    <string name="map_place_detail">风雨操场</string>
+    <string name="map_collect_place_list_foot_item">暂无收藏哦</string>
 </resources>

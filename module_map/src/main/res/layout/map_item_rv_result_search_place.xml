@@ -8,29 +8,29 @@
     tools:ignore="ResourceName"
     android:layout_height="50dp">
 <ImageView
-    android:id="@+id/iv_map_search"
+    android:id="@+id/map_iv_search"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/common_back"
+    android:src="@drawable/map_ic_search_before"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
-    android:layout_marginLeft="10dp"
+    android:layout_marginLeft="15dp"
     android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/tv_map_result_search_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:paddingRight="2dp"
+        android:paddingBottom="2dp"
         android:text="四海苑5舍"
         android:textColor="@color/levelTwoFontColor"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_marginLeft="10dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        app:layout_constraintBottom_toBottomOf="@id/iv_map_search"
-        app:layout_constraintTop_toTopOf="@id/iv_map_search"
-        app:layout_constraintLeft_toRightOf="@id/iv_map_search" />
+        app:layout_constraintBottom_toBottomOf="@+id/map_iv_search"
+        app:layout_constraintLeft_toRightOf="@id/map_iv_search"
+        app:layout_constraintTop_toTopOf="@id/map_iv_search" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,9 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.adapter.AutoWrapAdapter
-import com.mredrock.cyxbs.discover.map.utils.selectImageFromAlbum
-import com.mredrock.cyxbs.discover.map.view.activity.CollectDialog
+import com.mredrock.cyxbs.discover.map.view.adapter.AutoWrapAdapter
+import com.mredrock.cyxbs.discover.map.view.widget.CollectDialog
 import com.mredrock.cyxbs.discover.map.view.activity.SearchActivity
 import com.mredrock.cyxbs.discover.map.viewmodel.CollectViewModel
 import kotlinx.android.synthetic.main.map_fragment_collect.*
@@ -46,8 +45,8 @@ class CollectFragment :BaseViewModelFragment<CollectViewModel>() {
     }
     fun showDialog(){
 
-        val dialog=CollectDialog(activity as SearchActivity)
-        dialog.setListener(object:CollectDialog.OnClickListener{
+        val dialog= CollectDialog(activity as SearchActivity)
+        dialog.setListener(object: CollectDialog.OnClickListener{
             override fun onCancel() {
                 dialog.dismiss()
             }

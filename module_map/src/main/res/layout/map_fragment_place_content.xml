@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="525dp"
+        android:background="@drawable/map_layer_list_fragment_place_content_top"
+        android:paddingTop="15dp">
+
+        <com.mredrock.cyxbs.discover.map.view.widget.RedRockTipsView
+            android:id="@+id/map_place_detail_content_tip"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tipsColor="@color/courseTableDragIndicatorBlockColor" />
+
+
+        <LinearLayout
+            android:id="@+id/map_linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.057"
+            tools:layout_editor_absoluteX="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:maxLines="1"
+                android:text="@string/map_place_detail"
+                android:textColor="@color/grades_fragment_text_color_black"
+                android:textSize="25dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.113"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.062" />
+
+            <ImageView
+                android:id="@+id/map_iv_place_collect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="180dp"
+                android:background="@drawable/map_ic_cancel" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/map_linearlayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.145"
+            tools:layout_editor_absoluteX="0dp">
+
+            <TextView
+                android:id="@+id/map_tv_label_name1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/map_shape_place_content_item"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:text="@string/map_label_name"
+                android:textColor="@color/levelTwoFontColor"
+                android:textSize="13dp" />
+
+            <TextView
+                android:id="@+id/map_tv_label_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/map_shape_place_content_item"
+                android:gravity="center"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="4dp"
+                android:text="@string/map_label_name"
+                android:textColor="@color/levelTwoFontColor"
+                android:textSize="13dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/map_linearlayout2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.23">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/map_detail"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/map_tv_search_more_place_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="210dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/map_look_more"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:id="@+id/map_iv_search_more_place_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/map_ic_forward" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/map_rl_place_detail_content"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.448"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.693"
+            tools:layout_editor_absoluteX="0dp">
+
+            <ImageView
+                android:id="@+id/map_iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="140dp"
+                android:src="@drawable/common_back" />
+
+            <TextView
+                android:id="@+id/map_tv_share_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/map_share_people_place_image"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/map_ll_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.763"
+            tools:layout_editor_absoluteX="0dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:padding="5dp"
+                android:text="@string/map_tv_about_place_more"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+        <com.mredrock.cyxbs.common.component.RedRockAutoWarpView
+            android:id="@+id/rv_you_might"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:paddingStart="4dp"
+            android:paddingTop="18dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="15dp"
+            app:horizontalSpacing="7dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:maxLine="2"
+            app:verticalsSpacing="8dp">
+
+        </com.mredrock.cyxbs.common.component.RedRockAutoWarpView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

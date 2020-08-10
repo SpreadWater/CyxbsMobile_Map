@@ -28,6 +28,17 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"/>
 
+    <ImageView
+        android:id="@+id/map_iv_allimage_share"
+        android:layout_width="23dp"
+        android:layout_height="21dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="21dp"
+        android:src="@drawable/map_ic_share_iamge"
+        app:layout_constraintBottom_toTopOf="@id/map_rv_allimage"
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintLeft_toRightOf="@id/map_tv_allimage_name"
+        app:layout_constraintRight_toLeftOf="@id/map_tv_allimage_share" />
     <TextView
         android:id="@+id/map_tv_allimage_share"
         android:layout_width="wrap_content"

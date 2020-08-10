@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/whiteBackground">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:text="我的收藏"
+        android:id="@+id/map_tv_list_item"
+        android:textColor="@color/grades_fragment_text_color_black"
+        android:gravity="center"
+        android:padding="5dp"
+        />
+</LinearLayout>

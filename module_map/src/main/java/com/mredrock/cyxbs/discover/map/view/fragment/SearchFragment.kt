@@ -8,7 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.adapter.HistoryAdapter
+import com.mredrock.cyxbs.discover.map.view.adapter.HistoryAdapter
 import com.mredrock.cyxbs.discover.map.network.Place
 import com.mredrock.cyxbs.discover.map.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.map_fragment_search_place.*
@@ -36,16 +36,16 @@ class SearchFragment :BaseViewModelFragment<SearchViewModel>() {
         super.onActivityCreated(savedInstanceState)
         inithistoryplace()
         //为rv构造适配器
-        map_search_rv.layoutManager= LinearLayoutManager(this.context)
-        val adapter= HistoryAdapter(mlist,et_map_search_place,this)
-        map_search_rv.adapter=adapter
+        map_rv_search.layoutManager= LinearLayoutManager(this.context)
+        val adapter= HistoryAdapter(mlist,map_et_search_place,this)
+        map_rv_search.adapter=adapter
 
-        iv_map_search_content_cancel.setOnClickListener {
-            et_map_search_place.setText("")//清空输入框的内容
+        map_iv_search_content_cancel.setOnClickListener {
+            map_et_search_place.setText("")//清空输入框的内容
         }
 
         //用于监听输入框的变化。
-        et_map_search_place.addTextChangedListener {
+        map_et_search_place.addTextChangedListener {
             editable->val content=editable.toString()
             //监听到输入框不为空就显示另外一个rv布局
 
@@ -59,7 +59,7 @@ class SearchFragment :BaseViewModelFragment<SearchViewModel>() {
             }
         }
         //清除全部的监听事件
-        tv_search_deleteall.setOnClickListener {
+        map_tv_search_deleteall.setOnClickListener {
             mlist.clear()
             adapter.notifyDataSetChanged()
         }
@@ -80,18 +80,18 @@ class SearchFragment :BaseViewModelFragment<SearchViewModel>() {
         }
     }
     fun showresultplace(){
-        tv_search_history.visibility=View.GONE
-        tv_search_deleteall.visibility=View.GONE
-        iv_map_search_content_cancel.visibility=View.VISIBLE
-        iv_map_search_icon.visibility=View.GONE
+        map_tv_search_history.visibility=View.GONE
+        map_tv_search_deleteall.visibility=View.GONE
+        map_iv_search_content_cancel.visibility=View.VISIBLE
+        map_iv_search_icon.visibility=View.GONE
         mlist.clear()
         initresultplace()
     }
     fun showhistoryplace(){
-        tv_search_history.visibility=View.VISIBLE
-        tv_search_deleteall.visibility=View.VISIBLE
-        iv_map_search_content_cancel.visibility=View.GONE
-        iv_map_search_icon.visibility=View.VISIBLE
+        map_tv_search_history.visibility=View.VISIBLE
+        map_tv_search_deleteall.visibility=View.VISIBLE
+        map_iv_search_content_cancel.visibility=View.GONE
+        map_iv_search_icon.visibility=View.VISIBLE
         mlist.clear()
         inithistoryplace()
     }

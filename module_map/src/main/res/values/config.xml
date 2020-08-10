@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <integer name="config_pop_duration" tools:ignore="ResourceName">300</integer>
+</resources>
