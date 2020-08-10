@@ -1,4 +1,4 @@
-package com.mredrock.cyxbs.discover.map.network
+package com.mredrock.cyxbs.discover.map.model.network
 
 import java.io.Serializable
 

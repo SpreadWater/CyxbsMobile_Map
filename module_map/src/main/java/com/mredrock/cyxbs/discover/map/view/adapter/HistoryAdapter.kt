@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.network.Place
+import com.mredrock.cyxbs.discover.map.model.network.Place
 import com.mredrock.cyxbs.discover.map.view.fragment.SearchFragment
 import java.lang.IllegalArgumentException
 
@@ -48,6 +48,7 @@ class HistoryAdapter(val placeList:ArrayList<Place>,val editText: EditText,val f
             val place=placeList[position]
             Toast.makeText(parent.context, "开始搜索…………${place.historyplace}", Toast.LENGTH_SHORT).show()
             editText.setText(place.historyplace)
+            editText.setSelection(editText.text.length)
             fragment.showresultplace()
         }
         viewHolder

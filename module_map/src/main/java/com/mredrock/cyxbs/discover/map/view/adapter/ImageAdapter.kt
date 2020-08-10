@@ -8,7 +8,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.network.Image
+import com.mredrock.cyxbs.discover.map.model.network.Image
 import com.mredrock.cyxbs.discover.map.view.activity.ViewImageActivity
 
 /**

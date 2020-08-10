@@ -34,7 +34,7 @@
         android:textSize="15sp"
         android:textStyle="bold"
         android:maxLines="1"
-        android:paddingStart="28dp"
+        android:paddingStart="34dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         android:singleLine="true"
@@ -44,10 +44,10 @@
 
     <ImageView
         android:id="@+id/map_iv_search_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="19dp"
         android:src="@drawable/map_ic_search_before"
         app:layout_constraintStart_toStartOf="@id/map_et_search_place"
         app:layout_constraintTop_toTopOf="parent" />
@@ -58,6 +58,7 @@
         android:layout_height="15dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="14dp"
+        android:visibility="gone"
         android:src="@drawable/map_ic_search_cancel"
         app:layout_constraintEnd_toEndOf="@id/map_et_search_place"
         app:layout_constraintTop_toTopOf="parent" />

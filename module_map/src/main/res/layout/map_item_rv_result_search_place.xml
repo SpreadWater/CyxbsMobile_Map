@@ -7,15 +7,16 @@
     android:layout_width="match_parent"
     tools:ignore="ResourceName"
     android:layout_height="50dp">
-<ImageView
-    android:id="@+id/map_iv_search"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/map_ic_search_before"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    android:layout_marginLeft="15dp"
-    android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:id="@+id/map_iv_search"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/map_ic_search_status"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_map_result_search_place"

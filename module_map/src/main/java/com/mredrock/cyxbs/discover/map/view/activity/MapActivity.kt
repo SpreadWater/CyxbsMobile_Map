@@ -1,5 +1,6 @@
 package com.mredrock.cyxbs.discover.map.view.activity
 
+import android.content.Intent
 import android.graphics.PointF
 import android.os.Bundle
 import android.view.*
@@ -36,6 +37,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         initMapView()
         initTabCategory()
         initBottomSheetBehavior()
+        initEvent()
     }
 
     private fun initAddViewToIcon() {
@@ -102,5 +104,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             }
         })
         map_iv_image.setOnTouchListener { view, motionEvent -> gestureDetector.onTouchEvent(motionEvent) }
+    }
+    fun initEvent(){
+        map_et_search.setOnClickListener {
+            val intent =Intent(this,SearchActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
