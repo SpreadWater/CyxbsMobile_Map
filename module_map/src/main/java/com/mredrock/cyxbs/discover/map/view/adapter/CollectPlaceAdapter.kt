@@ -24,10 +24,10 @@ class CollectPlaceAdapter(val collectPlaceList: ArrayList<String>) : RecyclerVie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == TYPE_COLLECT) {
-            val view = LayoutInflater.from(BaseApp.context).inflate(R.layout.map_collect_place_list_item, parent, false)
+            val view = LayoutInflater.from(BaseApp.context).inflate(R.layout.map_item_collect_place_list, parent, false)
             return CollectPlaceViewHolder(view)
         } else {
-            val view = LayoutInflater.from(BaseApp.context).inflate(R.layout.map_collect_place_list_foot_item, parent, false)
+            val view = LayoutInflater.from(BaseApp.context).inflate(R.layout.map_item_collect_place_list_foot, parent, false)
             return CollectPlaceFootViewHolder(view)
         }
 

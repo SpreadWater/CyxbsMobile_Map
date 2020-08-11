@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mredrock.cyxbs.discover.map.view.widget.RectangleView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="200dp"
+    android:layout_height="110dp"
+    android:padding="10dp"
+    android:layout_margin="10dp"
+    android:id="@+id/map_iv_rectangle_iamge">
+
+</com.mredrock.cyxbs.discover.map.view.widget.RectangleView>

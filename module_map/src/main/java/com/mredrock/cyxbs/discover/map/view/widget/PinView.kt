@@ -3,6 +3,7 @@ package com.mredrock.cyxbs.discover.map.view.widget
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.view.View
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
@@ -55,7 +56,6 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
             canvas.drawBitmap(pin, vX, vY, paint)
         }
     }
-
     fun setLocation(scale: Float, pointF: PointF) {
         setScaleAndCenter(scale, pointF)
     }

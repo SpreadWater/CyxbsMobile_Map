@@ -6,11 +6,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18dp"
-        android:text="我的收藏"
-        android:id="@+id/map_tv_list_item"
+        android:textSize="13dp"
+        android:id="@+id/map_tv_list_foot_item"
+        android:text="@string/map_collect_place_list_foot_item"
+        android:maxLines="1"
         android:textColor="@color/grades_fragment_text_color_black"
         android:gravity="center"
-        android:padding="5dp"
         />
 </LinearLayout>

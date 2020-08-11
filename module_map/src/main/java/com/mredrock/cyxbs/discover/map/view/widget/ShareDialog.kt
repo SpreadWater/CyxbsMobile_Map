@@ -11,12 +11,7 @@ import com.mredrock.cyxbs.common.utils.extensions.getScreenWidth
 import com.mredrock.cyxbs.discover.map.R
 import kotlinx.android.synthetic.main.map_dialog_collect.*
 
-/**
- *@date 2020-8-8
- *@author zhangsan
- *@description
- */
-class CollectDialog(context: Context) : Dialog(context), View.OnClickListener {
+class ShareDialog(context: Context) : Dialog(context), View.OnClickListener {
 
     private var mListener: OnClickListener? = null
 
@@ -47,7 +42,7 @@ class CollectDialog(context: Context) : Dialog(context), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.map_dialog_collect)
+        setContentView(R.layout.map_dialog_share)
         map_btn_dialog_cancel.setOnClickListener(this)
         map_btn_dialog_confirm.setOnClickListener(this)
     }
