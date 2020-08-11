@@ -35,7 +35,7 @@ class ShareDialog(context: Context) : Dialog(context), View.OnClickListener {
         window.setGravity(Gravity.CENTER)
         val decorView = window.decorView
         decorView.getWindowVisibleDisplayFrame(Rect())
-        windowParams.width = context.getScreenWidth() - context.dp2px(46f)
+        windowParams.width = context.getScreenWidth() - context.dp2px(20f)
         window.setBackgroundDrawableResource(android.R.color.transparent)
         window.attributes = windowParams
     }

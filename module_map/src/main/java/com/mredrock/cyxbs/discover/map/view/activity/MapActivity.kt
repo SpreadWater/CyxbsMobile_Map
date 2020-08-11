@@ -27,23 +27,18 @@ import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.R.layout.map_activity_map2
-import com.mredrock.cyxbs.discover.map.R.layout.md_dialog_progress
 import com.mredrock.cyxbs.discover.map.view.adapter.CollectPlaceAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
 import com.mredrock.cyxbs.discover.map.utils.Toast
-import com.mredrock.cyxbs.discover.map.view.fragment.ImageAllFragment
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
 import com.mredrock.cyxbs.discover.map.view.fragment.SearchFragment
-import com.mredrock.cyxbs.discover.map.view.widget.CollectDialog
-import com.mredrock.cyxbs.discover.map.view.widget.ShowDialog
 import kotlinx.android.synthetic.main.map_activity_map2.*
 import kotlinx.android.synthetic.main.map_fragment_collect_place.view.*
-import kotlinx.android.synthetic.main.map_fragment_place_content.view.*
 
 
 @Route(path = DISCOVER_MAP)
-class MapActivity : BaseViewModelActivity<MapViewModel>() {
+class MapActivity : BaseViewModelActivity<MapViewModel>(){
     private val pointList = ArrayList<PointF>()
     private val titles = listOf<String>("入校报到点", "运动场", "教学楼", "图书馆", "食堂", "快递")
     override val isFragmentActivity: Boolean
@@ -144,7 +139,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 when (newState) {
                     BottomSheetBehavior.STATE_COLLAPSED -> {
                         if (bottomFlag!!) {
-                            map_bottom_sheet_content.visibility = View.GONE
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                             bottomFlag = false
                         }
                     }
@@ -157,10 +152,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
             }
         })
-        val view = LayoutInflater.from(BaseApp.context).inflate(R.layout.map_fragment_place_content, null)
-        view.map_tv_share_image.setOnClickListener {
-            Toast.toast("啊哦，你还没有收藏地点")
-        }
         map_et_search.setOnClickListener {
             replaceFragment(SearchFragment())
             map_bottom_sheet_content.visibility = View.VISIBLE
@@ -242,6 +233,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         val intent = Intent(BaseApp.context, activity::class.java)
         startActivity(intent)
     }
+
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager

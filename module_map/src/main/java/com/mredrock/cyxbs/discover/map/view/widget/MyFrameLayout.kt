@@ -11,9 +11,6 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
  */
 class MyFrameLayout(context: Context?, attr: AttributeSet?) : FrameLayout(context, attr)
 {
-    /*
-    自己的touch自己解决，不在向上分发
-     */
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return true
     }

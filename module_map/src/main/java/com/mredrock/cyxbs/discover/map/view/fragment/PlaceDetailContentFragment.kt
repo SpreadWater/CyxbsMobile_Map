@@ -1,6 +1,11 @@
 package com.mredrock.cyxbs.discover.map.view.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +15,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.utils.Toast
+import com.mredrock.cyxbs.discover.map.view.activity.MapActivity
+import com.mredrock.cyxbs.discover.map.view.activity.SearchActivity
 import com.mredrock.cyxbs.discover.map.view.adapter.PlaceDetailImageAdapter
 import com.mredrock.cyxbs.discover.map.view.adapter.PlaceLabelAdapter
+import com.mredrock.cyxbs.discover.map.view.widget.CollectDialog
+import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
+import com.mredrock.cyxbs.discover.map.view.widget.ShowDialog
 import com.mredrock.cyxbs.discover.map.viewmodel.PlaceDetailViewModel
+import kotlinx.android.synthetic.main.map_activity_map2.view.*
 import kotlinx.android.synthetic.main.map_fragment_place_content.*
+import kotlinx.android.synthetic.main.map_fragment_place_content.view.*
 
-class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>(), View.OnClickListener {
+class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>(){
     private val titles = listOf<String>("入校报到点", "运动场", "教学楼", "图书馆", "食堂", "快递")
     private val imageList = ArrayList<String>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,8 +40,19 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         super.onActivityCreated(savedInstanceState)
         initImagesRv()
         initLabelRV()
+        initOnClick()
     }
 
+    private fun initOnClick() {
+        map_tv_share_image.setOnClickListener {
+            activity?.let { it1 -> ShowDialog.showDialog(it1) }
+        }
+        map_tv_search_more_place_detail.setOnClickListener {
+            changeToActivity(SearchActivity(
+
+            ))
+        }
+    }
     private fun initLabelRV() {
         val titleList = ArrayList<String>()
         for (title in titles)
@@ -49,12 +73,11 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             adapter = placeDetailImageAdapter
         }
     }
+    private fun changeToActivity(activity: Activity) {
+        val intent = Intent(BaseApp.context, activity::class.java)
+        startActivity(intent)
+    }
 
     override val viewModelClass: Class<PlaceDetailViewModel>
         get() = PlaceDetailViewModel::class.java
-
-    override fun onClick(view: View?) {
-        when (view?.id) {
-        }
-    }
 }
