@@ -55,6 +55,9 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
     }
 
     private fun initOnClick() {
+        map_iv_place_collect.setOnClickListener {
+            changeToActivity(CollectActivity())
+        }
         map_tv_share_image.setOnClickListener {
             this.activity?.let { it1 -> showDialog(it1) }
         }

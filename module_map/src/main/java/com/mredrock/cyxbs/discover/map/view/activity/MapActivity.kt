@@ -34,6 +34,7 @@ import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
 import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_fragment_collect_place.view.*
+import kotlinx.android.synthetic.main.map_fragment_place_content.*
 
 
 @Route(path = DISCOVER_MAP)
@@ -126,7 +127,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     private fun initAddViewToIcon() {
         AddIconImage.setImageViewToButton(R.drawable.map_ic_my_collect, map_btn_collect_place, 2)
-        AddIconImage.setImageViewToButton(R.drawable.map_ic_search, map_et_search, 0)
+        AddIconImage.setImageViewToButton(R.drawable.map_ic_search_before, map_et_search, 0)
 
     }
 

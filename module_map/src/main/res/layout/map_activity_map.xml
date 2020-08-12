@@ -30,7 +30,7 @@
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="53dp"
                 android:src="@drawable/common_back" />
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/map_et_search"
                 android:layout_width="300dp"
                 android:layout_height="35dp"
@@ -40,9 +40,11 @@
                 android:background="@drawable/map_shape_et_search_place"
                 android:cursorVisible="false"
                 android:focusable="false"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:focusableInTouchMode="false"
                 android:hint="  大家都在搜: 风雨操场"
-                android:paddingStart="10dp" />
+                android:paddingStart="14dp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/map_tl_category"
@@ -60,7 +62,7 @@
                 app:tabTextAppearance="@style/map_tablayout_textsize"
                 app:tabTextColor="@color/qa_tab_unselected_color" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/map_btn_collect_place"
                 android:layout_width="66dp"
                 android:layout_height="60dp"

@@ -37,8 +37,6 @@
         android:textStyle="bold"
         android:maxLines="1"
         android:paddingStart="34dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
         android:singleLine="true"
         android:textColor="@color/levelTwoFontColor"
         app:layout_constraintStart_toEndOf="@id/map_iv_search_back"

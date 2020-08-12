@@ -48,6 +48,9 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
         map_tv_allimage_share.setOnClickListener {
             ImageSelectutils.selectImageFromAlbum(MAX_SELECTABLE_IMAGE_COUNT,this)
         }
+        map_iv_allimage_back.setOnClickListener {
+            finish()
+        }
         map_rv_allimage.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)

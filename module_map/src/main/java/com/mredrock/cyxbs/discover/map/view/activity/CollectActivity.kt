@@ -31,21 +31,8 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
         initisCollect()
         initEvent()
     }
-    fun showDialog() {
 
-        val dialog = CollectDialog(this)
-        dialog.setListener(object : CollectDialog.OnClickListener {
-            override fun onCancel() {
-                dialog.dismiss()
-            }
-
-            override fun onConfirm() {
-                Toast.makeText(this@CollectActivity, "发送取消收藏网络请求…………", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
-            }
-        })
-        dialog.show()
-    }
+    private fun showDialog() = Unit
 
     fun initdata() {
         repeat(2) {
@@ -133,5 +120,23 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
                 }
             }
         })
+    }
+
+    companion object {
+        private fun showDialog(collectActivity: CollectActivity) {
+
+            val dialog = CollectDialog(collectActivity)
+            dialog.setListener(object : CollectDialog.OnClickListener {
+                override fun onCancel() {
+                    dialog.dismiss()
+                }
+
+                override fun onConfirm() {
+                    Toast.makeText(collectActivity, "发送取消收藏网络请求…………", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+            })
+            dialog.show()
+        }
     }
 }

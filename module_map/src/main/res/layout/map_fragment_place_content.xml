@@ -80,6 +80,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/map_place_detail_content_tip"
             app:layout_constraintVertical_bias="0.058" />
+        <TextView
+            android:id="@+id/map_tv_place_collect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="我最爱去"
+            android:visibility="gone"
+            android:textColor="@color/mine_sign_divider_blue_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.905"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/map_place_detail_content_tip"
+            app:layout_constraintVertical_bias="0.058" />
 
         <LinearLayout
             android:id="@+id/map_linearlayout2"
