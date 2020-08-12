@@ -26,13 +26,13 @@ import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.R.layout.map_activity_map2
+import com.mredrock.cyxbs.discover.map.R.layout.map_activity_map
 import com.mredrock.cyxbs.discover.map.view.adapter.CollectPlaceAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
 import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
-import kotlinx.android.synthetic.main.map_activity_map2.*
+import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_fragment_collect_place.view.*
 
 
@@ -51,7 +51,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private val r = 100f
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(map_activity_map2)
+        setContentView(map_activity_map)
         initAddViewToIcon()
         initMapView()
         initTabCategory()

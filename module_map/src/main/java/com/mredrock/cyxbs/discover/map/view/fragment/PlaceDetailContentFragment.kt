@@ -3,7 +3,9 @@ package com.mredrock.cyxbs.discover.map.view.fragment
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,7 @@ import com.mredrock.cyxbs.discover.map.view.adapter.PlaceDetailImageAdapter
 import com.mredrock.cyxbs.discover.map.view.adapter.PlaceLabelAdapter
 import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
 import com.mredrock.cyxbs.discover.map.viewmodel.PlaceDetailViewModel
+import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.map_fragment_place_content.*
 
 class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>() {
@@ -35,6 +38,19 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         initImagesRv()
         initLabelRV()
         initOnClick()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === ImageSelectutils.REQUEST_CODE_CHOOSE_PHOTO_ALBUM && resultCode === Activity.RESULT_OK) {
+            //图片路径 同样视频地址也是这个 根据requestCode
+            val pathList: List<Uri> = Matisse.obtainResult(data)
+            for (_Uri in pathList) {
+//                Glide.with(this).load(_Uri).into(mView)
+                Log.e("*****zt",_Uri.path)
+                System.out.println(_Uri.path)
+            }
+        }
     }
 
     private fun initOnClick() {

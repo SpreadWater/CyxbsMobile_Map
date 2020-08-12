@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.model.network.Place
-import com.mredrock.cyxbs.discover.map.view.fragment.SearchFragment
+import com.mredrock.cyxbs.discover.map.view.activity.SearchActivity
 import java.lang.IllegalArgumentException
 
 /**
@@ -18,7 +18,7 @@ import java.lang.IllegalArgumentException
  *@author zhangsan
  *@description
  */
-class HistoryAdapter(val placeList:ArrayList<Place>,val editText: EditText,val fragment: SearchFragment):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HistoryAdapter(val placeList:ArrayList<Place>,val editText: EditText,val activity: SearchActivity):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class HistoryViewHolder(view: View):RecyclerView.ViewHolder(view){
         val historyplace:TextView=view.findViewById(R.id.tv_map_history_place)
@@ -49,7 +49,7 @@ class HistoryAdapter(val placeList:ArrayList<Place>,val editText: EditText,val f
             Toast.makeText(parent.context, "开始搜索…………${place.historyplace}", Toast.LENGTH_SHORT).show()
             editText.setText(place.historyplace)
             editText.setSelection(editText.text.length)
-            fragment.showresultplace()
+            activity.showresultplace()
         }
         viewHolder
     }else{
