@@ -6,25 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/transparent">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/map_lc_collect"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@drawable/map_shape_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/collect_guideline">
-      <androidx.appcompat.widget.AppCompatTextView
-          android:id="@+id/map_tv_collect_cancel"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/map_btn_cancel"
-          android:textSize="15sp"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintTop_toTopOf="parent"
-          android:layout_marginTop="21dp"
-          android:layout_marginStart="16dp"
-          android:textColor="@color/levelOneFontColor"/>
+    android:background="@drawable/map_shape_background">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/map_tv_collect_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/map_btn_cancel"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="36dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/levelOneFontColor"/>
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/map_tv_collect_confirm"
             android:layout_width="wrap_content"
@@ -104,7 +97,7 @@
             android:id="@+id/map_tv_collect_namenumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="18dp"
             android:layout_marginEnd="24dp"
             android:text="0/8"
             android:textSize="12sp"
@@ -125,7 +118,7 @@
             android:id="@+id/map_aw_collect_recommend"
             android:layout_width="380dp"
             android:layout_height="105dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="30dp"
             app:horizontalSpacing="7dp"
@@ -148,11 +141,3 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/map_aw_collect_recommend" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/collect_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.04" />
-</androidx.constraintlayout.widget.ConstraintLayout>

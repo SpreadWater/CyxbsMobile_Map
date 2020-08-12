@@ -1,59 +1,46 @@
-package com.mredrock.cyxbs.discover.map.view.fragment
+package com.mredrock.cyxbs.discover.map.view.activity
 
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
+import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.view.adapter.AutoWrapAdapter
 import com.mredrock.cyxbs.discover.map.view.widget.CollectDialog
-import com.mredrock.cyxbs.discover.map.view.activity.SearchActivity
-import com.mredrock.cyxbs.discover.map.viewmodel.CollectViewModel
-import kotlinx.android.synthetic.main.map_fragment_collect.*
+import com.mredrock.cyxbs.discover.map.viewmodel.CollectPlaceViewModel
+import kotlinx.android.synthetic.main.map_activity_collect.*
 
-/**
- *@date 2020-8-7
- *@author zhangsan
- *@description
- */
-class CollectFragment : BaseViewModelFragment<CollectViewModel>() {
+
+class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
+    override val isFragmentActivity: Boolean
+        get() = false
+    override val viewModelClass = CollectPlaceViewModel::class.java
 
     private var signatureCs: CharSequence? = null
-
-    val MAX_SELECTABLE_IMAGE_COUNT = 6
-
-    override val viewModelClass = CollectViewModel::class.java
 
     val mlist = ArrayList<AutoWrapAdapter.recommend>()
 
     val isCollect = true
 
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.map_fragment_collect, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.map_activity_collect)
         initdata()
-        initEvent()
         initisCollect()
+        initEvent()
     }
-
     fun showDialog() {
 
-        val dialog = CollectDialog(activity as SearchActivity)
+        val dialog = CollectDialog(this)
         dialog.setListener(object : CollectDialog.OnClickListener {
             override fun onCancel() {
                 dialog.dismiss()
             }
 
             override fun onConfirm() {
-                Toast.makeText(activity as SearchActivity, "发送取消收藏网络请求…………", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CollectActivity, "发送取消收藏网络请求…………", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
         })
@@ -91,20 +78,19 @@ class CollectFragment : BaseViewModelFragment<CollectViewModel>() {
 
         map_tv_collect_confirm.setOnClickListener {
             if (isCollect) {
-                Toast.makeText(activity as SearchActivity, "确认修改收藏", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "确认修改收藏", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(activity as SearchActivity, "确认收藏发起网络请求", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "确认收藏发起网络请求", Toast.LENGTH_SHORT).show()
             }
         }
 
         map_tv_collect_cancel.setOnClickListener {
-            Toast.makeText(activity as SearchActivity, "取消收藏返回详情", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "取消收藏返回详情", Toast.LENGTH_SHORT).show()
+            finish()
         }
 
         map_tv_collect_cancel_place.setOnClickListener {
             showDialog()
-//            val activity=activity as SearchActivity
-//            activity.selectImageFromAlbum(MAX_SELECTABLE_IMAGE_COUNT,null)
         }
         map_aw_collect_recommend.adapter = AutoWrapAdapter(mlist) { text ->
             map_et_collect_collectname.setText(text)

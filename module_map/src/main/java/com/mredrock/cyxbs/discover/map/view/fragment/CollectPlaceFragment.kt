@@ -10,13 +10,13 @@ import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.view.adapter.CollectPlaceAdapter
-import com.mredrock.cyxbs.discover.map.viewmodel.CollectPlaceVIewModel
+import com.mredrock.cyxbs.discover.map.viewmodel.CollectPlaceViewModel
 import kotlinx.android.synthetic.main.map_fragment_collect_place.*
 
-class CollectPlaceFragment : BaseViewModelFragment<CollectPlaceVIewModel>() {
+class CollectPlaceFragment : BaseViewModelFragment<CollectPlaceViewModel>() {
     private val titles = listOf("入校报到点", "教学楼", "图书馆", "食堂", "快递", " ")
-    override val viewModelClass: Class<CollectPlaceVIewModel>
-        get() = CollectPlaceVIewModel::class.java
+    override val viewModelClass: Class<CollectPlaceViewModel>
+        get() = CollectPlaceViewModel::class.java
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.map_fragment_place_content, container, false)

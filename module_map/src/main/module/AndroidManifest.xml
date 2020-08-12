@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mredrock.cyxbs.discover.map">
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name="com.mredrock.cyxbs.common.BaseApp"
         android:allowBackup="true"
@@ -12,33 +14,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".view.activity.ViewImageActivity">
-        </activity>
-        <activity android:name=".view.activity.SearchActivity">
+        <activity android:name=".view.activity.CollectActivity">
 
         </activity>
-        <activity
-            android:name=".view.activity.MapActivity">
+        <activity android:name=".view.activity.ViewImageActivity"></activity>
+        <activity android:name=".view.activity.SearchActivity"></activity>
+        <activity android:name=".view.activity.MapActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.ImageAllActivity" />
 
-        <provider
-            android:authorities="RedRock"
+        <provider xmlns:tools="http://schemas.android.com/tools"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="RedRock"
             android:exported="false"
             android:grantUriPermissions="true"
-            xmlns:tools="http://schemas.android.com/tools"
             tools:replace="android:authorities">
-            <meta-data
+            <meta-data xmlns:tools="http://schemas.android.com/tools"
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths"
-                xmlns:tools="http://schemas.android.com/tools"
-                tools:replace="android:resource"/>
+                tools:replace="android:resource" />
         </provider>
     </application>
 

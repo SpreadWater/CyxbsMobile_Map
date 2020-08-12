@@ -16,6 +16,7 @@ import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
+import com.mredrock.cyxbs.discover.map.view.activity.CollectActivity
 import com.mredrock.cyxbs.discover.map.view.activity.ImageAllActivity
 import com.mredrock.cyxbs.discover.map.view.activity.MapActivity
 import com.mredrock.cyxbs.discover.map.view.activity.ViewImageActivity
@@ -59,6 +60,9 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         }
         map_tv_search_more_place_detail.setOnClickListener {
             changeToActivity(ImageAllActivity())
+        }
+        map_iv_place_collect.setOnClickListener {
+            changeToActivity(CollectActivity())
         }
     }
 

@@ -3,6 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:ignore="ResourceName">
     <corners android:radius="30dp"/>
-    <solid android:color="@color/windowBackground"/>
-    <stroke android:width="1dip" android:color="@color/levelFourFontColor"/>
+    <solid android:color="@color/whiteFontColor"/>
+    <stroke android:width="1dip" android:color="@color/mine_sign_divider_grey"/>
 </shape>
