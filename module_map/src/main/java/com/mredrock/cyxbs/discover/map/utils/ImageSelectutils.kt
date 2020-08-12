@@ -1,13 +1,16 @@
 package com.mredrock.cyxbs.discover.map.utils
 
 import android.Manifest
+import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
+import com.zhihu.matisse.Matisse
+import com.zhihu.matisse.MimeType
+import com.zhihu.matisse.internal.entity.CaptureStrategy
 import org.jetbrains.anko.longToast
-import top.limuyang2.photolibrary.activity.LPhotoPickerActivity
-import top.limuyang2.photolibrary.engine.LGlideEngine
-import top.limuyang2.photolibrary.util.LPPImageType
 
 
 /**
@@ -15,24 +18,49 @@ import top.limuyang2.photolibrary.util.LPPImageType
  *@author zhangsan
  *@description图片选择
  */
-const val CHOOSE_PHOTO_REQUEST = 0x1024
+object ImageSelectutils {
+    const val REQUEST_CODE_CHOOSE_PHOTO_ALBUM = 1
+    fun selectImageFromAlbum(activity: AppCompatActivity, maxCount: Int, fragment: Fragment) {
+        activity.doPermissionAction(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA) {
+            doAfterGranted {
+                Matisse.from(fragment)
+                        .choose(MimeType.ofImage(), false)
+                        .capture(true)  // 使用相机，和 captureStrategy 一起使用
+                        .captureStrategy(CaptureStrategy(true, "RedRock"))
+                        .theme(R.style.Matisse_Zhihu)
+                        .countable(true)
+                        .maxSelectable(maxCount)
+                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                        .thumbnailScale(0.87f)
+                        .imageEngine(GlideLoadEngine())
+                        .forResult(REQUEST_CODE_CHOOSE_PHOTO_ALBUM)
 
-fun AppCompatActivity.selectImageFromAlbum(maxCount: Int, selected: ArrayList<String>?) {
-    doPermissionAction(Manifest.permission.WRITE_EXTERNAL_STORAGE) {
-        doAfterGranted {
-            val intent = LPhotoPickerActivity.IntentBuilder(this@selectImageFromAlbum)
-                    .maxChooseCount(maxCount)
-                    .columnsNumber(4)
-                    .imageType(LPPImageType.ofAll())
-                    .imageEngine(LGlideEngine())
-                    .selectedPhotos(selected)
-                    .theme(R.style.map_LPhotoTheme)
-                    .build()
-            startActivityForResult(intent, CHOOSE_PHOTO_REQUEST)
+            }
+            doAfterRefused {
+                activity.longToast("访问相册失败，原因：未授权")
+            }
         }
+    }
 
-        doAfterRefused {
-            longToast("访问相册失败，原因：未授权")
+    fun selectImageFromAlbum(maxCount: Int, activity: AppCompatActivity) {
+        activity.doPermissionAction(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA) {
+            doAfterGranted {
+                Matisse.from(activity)
+                        .choose(MimeType.ofImage(), false)
+                        .capture(true)  // 使用相机，和 captureStrategy 一起使用
+                        .captureStrategy(CaptureStrategy(true, "RedRock"))
+                        .theme(R.style.Matisse_Zhihu)
+                        .countable(true)
+                        .maxSelectable(maxCount)
+                        .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                        .thumbnailScale(0.87f)
+                        .imageEngine(GlideLoadEngine())
+                        .forResult(REQUEST_CODE_CHOOSE_PHOTO_ALBUM)
+
+            }
+            doAfterRefused {
+                activity.longToast("访问相册失败，原因：未授权")
+            }
         }
     }
 }

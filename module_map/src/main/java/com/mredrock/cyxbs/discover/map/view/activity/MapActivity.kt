@@ -32,13 +32,12 @@ import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
 import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
-import com.mredrock.cyxbs.discover.map.view.fragment.SearchFragment
 import kotlinx.android.synthetic.main.map_activity_map2.*
 import kotlinx.android.synthetic.main.map_fragment_collect_place.view.*
 
 
 @Route(path = DISCOVER_MAP)
-class MapActivity : BaseViewModelActivity<MapViewModel>(){
+class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private val pointList = ArrayList<PointF>()
     private val titles = listOf<String>("入校报到点", "运动场", "教学楼", "图书馆", "食堂", "快递")
     override val isFragmentActivity: Boolean
@@ -50,7 +49,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>(){
     private var magnetic: Sensor? = null
     private var accelerometer: Sensor? = null
     private val r = 100f
-    private var bottomFlag: Boolean? = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map2)
@@ -63,7 +61,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>(){
     private fun initRv(popupView: View) {
         val titleList = ArrayList<String>()
         if (titleList.isEmpty()) {
-            Toast.toast("啊哦，你还没有收藏地点")
+            Toast.toast("啊哦，你还没有收藏地点", Gravity.BOTTOM, 0, 100)
         }
         val collectPlaceAdapter = CollectPlaceAdapter(titleList)
         popupView.map_rv_collect_place.apply {
@@ -138,10 +136,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>(){
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        if (bottomFlag!!) {
-                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                            bottomFlag = false
-                        }
+                        bottomSheet.visibility = View.GONE
                     }
 
                 }
@@ -153,10 +148,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>(){
             }
         })
         map_et_search.setOnClickListener {
-            replaceFragment(SearchFragment())
-            map_bottom_sheet_content.visibility = View.VISIBLE
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomFlag = true
+            changeToActivity(SearchActivity())
         }
     }
 
@@ -183,9 +175,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>(){
         map_tl_category.setSelectedTabIndicator(R.drawable.map_ic_tab_indicator)
         map_tl_category.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                map_iv_image.clearPointList()
-                pointList.add(PointF(1571f, 8657f))
-                map_iv_image.addPointF(pointList)
+//                map_iv_image.clearPointList()
+//                pointList.add(PointF(1571f, 8657f))
+//                map_iv_image.addPointF(pointList)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -204,8 +196,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>(){
         dialog.show()
         map_iv_image.setImage(ImageSource.resource(R.drawable.map_ic_background))
         dialog.dismiss()
-        map_iv_image.setLocation(0.5f, PointF(1571f, 8657f))
         map_iv_image.clearPointList()
+        map_iv_image.setLocation(0.5f, PointF(1571f, 8657f))
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 if (map_iv_image.isReady) {

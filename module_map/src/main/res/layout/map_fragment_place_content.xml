@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/map_cl_replace_fragment"
         android:layout_width="match_parent"
         android:layout_height="525dp"
-        android:id="@+id/map_cl_replace_fragment"
         android:background="@drawable/map_layer_list_fragment_place_content_top"
         android:paddingTop="15dp">
 
@@ -47,16 +47,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.062" />
-
-            <ImageView
-                android:id="@+id/map_iv_place_collect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:src="@drawable/map_ic_collect"
-                android:layout_marginStart="190dp"
-                android:padding="5dp"
-                />
         </LinearLayout>
 
         <com.mredrock.cyxbs.common.component.RedRockAutoWarpView
@@ -68,13 +58,28 @@
             android:paddingEnd="10dp"
             android:paddingBottom="8dp"
             app:horizontalSpacing="7dp"
-            app:verticalsSpacing="8dp"
-            app:maxLine="3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.110"
-            tools:layout_editor_absoluteX="0dp">
+            app:layout_constraintVertical_bias="0.101"
+            app:maxLine="3"
+            app:verticalsSpacing="8dp"
+            tools:layout_editor_absoluteX="-16dp">
+
         </com.mredrock.cyxbs.common.component.RedRockAutoWarpView>
+
+        <ImageView
+            android:id="@+id/map_iv_place_collect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="5dp"
+            android:src="@drawable/map_ic_collect"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.905"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/map_place_detail_content_tip"
+            app:layout_constraintVertical_bias="0.058" />
 
         <LinearLayout
             android:id="@+id/map_linearlayout2"
@@ -86,7 +91,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.23">
+            app:layout_constraintVertical_bias="0.187">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,16 +127,17 @@
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.386"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintVertical_bias="0.33"
+            tools:layout_editor_absoluteX="-16dp" />
 
         <LinearLayout
+            android:id="@+id/map_linearlayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.626"
+            app:layout_constraintVertical_bias="0.588"
             tools:layout_editor_absoluteX="0dp">
 
             <ImageView
@@ -139,16 +145,16 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="140dp"
-                android:src="@drawable/map_ic_share_iamge" />
+                android:src="@drawable/map_ic_share_image_grey" />
 
             <TextView
                 android:id="@+id/map_tv_share_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:textColor="@color/mine_about_text_color_normal"
-                android:text="@string/map_share_people_place_image"
                 android:maxLines="1"
+                android:padding="5dp"
+                android:text="@string/map_share_people_place_image"
+                android:textColor="@color/mine_about_text_color_normal"
                 android:textSize="15dp" />
         </LinearLayout>
 
@@ -158,17 +164,17 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.71"
+            app:layout_constraintVertical_bias="0.656"
             tools:layout_editor_absoluteX="0dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:padding="5dp"
-                android:text="@string/map_tv_about_place_more"
                 android:gravity="center"
                 android:maxLines="1"
+                android:padding="5dp"
+                android:text="@string/map_tv_about_place_more"
                 android:textSize="16dp" />
         </LinearLayout>
 
@@ -176,18 +182,17 @@
             android:id="@+id/map_rrv_place_detail_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="4dp"
+            android:paddingStart="10dp"
             android:paddingTop="8dp"
-            android:paddingEnd="4dp"
+            android:paddingEnd="10dp"
             android:paddingBottom="8dp"
             app:horizontalSpacing="7dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-
             app:layout_constraintTop_toBottomOf="@+id/map_ll_divider"
-            app:layout_constraintVertical_bias="0.143"
+            app:layout_constraintVertical_bias="0.101"
             app:verticalsSpacing="8dp">
 
         </com.mredrock.cyxbs.common.component.RedRockAutoWarpView>

@@ -4,7 +4,10 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
@@ -16,7 +19,7 @@ import com.mredrock.cyxbs.discover.map.view.activity.ViewImageActivity
  *@author zhangsan
  *@description
  */
-class ImageAdapter(val imageUrls:ArrayList<Image>,val fragment: Fragment):RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
+class ImageAdapter(val imageUrls:ArrayList<Image>,val activity: AppCompatActivity):RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View):RecyclerView.ViewHolder(view){
         val image:ImageView=view.findViewById(R.id.map_iv_image)
@@ -27,9 +30,9 @@ class ImageAdapter(val imageUrls:ArrayList<Image>,val fragment: Fragment):Recycl
         val viewHolder=ViewHolder(view)
         viewHolder.image.setOnClickListener {
             val position=viewHolder.adapterPosition
-            val intent=Intent(fragment.activity,ViewImageActivity::class.java)
+            val intent=Intent(activity,ViewImageActivity::class.java)
             intent.putExtra("url",imageUrls[position].imageUrl)
-            fragment.activity?.startActivity(intent)
+            activity.startActivity(intent)
         }
         return viewHolder
     }

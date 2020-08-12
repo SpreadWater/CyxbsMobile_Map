@@ -30,7 +30,6 @@
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="53dp"
                 android:src="@drawable/common_back" />
-
             <EditText
                 android:id="@+id/map_et_search"
                 android:layout_width="300dp"
@@ -63,15 +62,25 @@
 
             <Button
                 android:id="@+id/map_btn_collect_place"
-                android:layout_width="75dp"
-                android:layout_height="62dp"
+                android:layout_width="66dp"
+                android:layout_height="60dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:background="@color/whiteBackground"
                 android:gravity="bottom|center"
                 android:padding="10dp"
                 android:text="我的收藏"
+                android:textColor="@color/transparent"
                 android:textSize="9dp" />
+
+            <ImageView
+                android:id="@+id/map_iv_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/map_et_search"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/map_ic_hot" />
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
@@ -101,10 +110,10 @@
             android:background="@drawable/map_ic_compass_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.97"
+            app:layout_constraintHorizontal_bias="0.96"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.249" />
+            app:layout_constraintVertical_bias="0.260" />
 
         <ImageView
             android:id="@+id/map_iv_compass"
@@ -113,10 +122,10 @@
             android:background="@drawable/map_ic_compass"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.925"
+            app:layout_constraintHorizontal_bias="0.915"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.263" />
+            app:layout_constraintVertical_bias="0.273" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.mredrock.cyxbs.discover.map.view.widget.MyFrameLayout

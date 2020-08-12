@@ -26,7 +26,7 @@ class ViewImageActivity : AppCompatActivity() {
         private const val IMG_RES_PATHS = "imgResPaths"
         private const val POSITION = "position"
 
-        fun activityStart(context: Context, imgResUrls: Array<String>, position: Int) {
+        fun activityStart(context: Context, imgResUrls: ArrayList<String>, position: Int) {
             context.startActivity<ViewImageActivity>(IMG_RES_PATHS to imgResUrls, POSITION to position)
         }
     }

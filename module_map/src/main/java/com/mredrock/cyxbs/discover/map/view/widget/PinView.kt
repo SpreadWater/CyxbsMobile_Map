@@ -37,8 +37,8 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
     }
 
     private fun initialise() {
-        pin = BitmapFactory.decodeResource(this.resources, R.drawable.map_ic_place_iamge)
-        pin = Bitmap.createScaledBitmap(pin, 80, 80, true)
+        pin = BitmapFactory.decodeResource(this.resources, R.drawable.map_ic_place_label)
+        pin = Bitmap.createScaledBitmap(pin, 60, 80, true)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -58,6 +58,7 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
     }
     fun setLocation(scale: Float, pointF: PointF) {
         setScaleAndCenter(scale, pointF)
+        setPin(pointF)
     }
 
     init {
