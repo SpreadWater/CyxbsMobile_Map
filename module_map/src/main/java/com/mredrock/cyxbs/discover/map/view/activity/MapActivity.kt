@@ -63,7 +63,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>(){
     private fun initRv(popupView: View) {
         val titleList = ArrayList<String>()
         if (titleList.isEmpty()) {
-            Toast.toast("啊哦，你还没有收藏地点")
+            Toast.toast("啊哦，你还没有收藏地点", Gravity.BOTTOM,0,100)
         }
         val collectPlaceAdapter = CollectPlaceAdapter(titleList)
         popupView.map_rv_collect_place.apply {
@@ -153,10 +153,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>(){
             }
         })
         map_et_search.setOnClickListener {
-            replaceFragment(SearchFragment())
-            map_bottom_sheet_content.visibility = View.VISIBLE
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-            bottomFlag = true
+            val intent=Intent(this,SearchActivity::class.java)
+            startActivity(intent)
+//            replaceFragment(SearchFragment())
+//            map_bottom_sheet_content.visibility = View.VISIBLE
+//            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+//            bottomFlag = true
         }
     }
 

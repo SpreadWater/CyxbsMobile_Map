@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 <fragment
     android:id="@+id/map_fg_search_place"
-    android:name="com.mredrock.cyxbs.discover.map.view.fragment.ImageAllFragment"
+    android:name="com.mredrock.cyxbs.discover.map.view.fragment.SearchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 </FrameLayout>

@@ -43,7 +43,7 @@ class ImageAllFragment : BaseViewModelFragment<ImageLoaderViewModel>() {
         //返回false表示已经到达底部
         map_tv_allimage_share.setOnClickListener {
             val activity = activity as SearchActivity
-            activity.selectImageFromAlbum(MAX_SELECTABLE_IMAGE_COUNT, null)
+            activity.selectImageFromAlbum(MAX_SELECTABLE_IMAGE_COUNT,this)
         }
         map_rv_allimage.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

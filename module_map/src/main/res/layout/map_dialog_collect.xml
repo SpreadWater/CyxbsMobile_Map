@@ -7,7 +7,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/map_cs_collect_dialog"
         android:layout_width="300dp"
-        android:layout_height="210dp"
+        android:layout_height="180dp"
         android:background="@drawable/map_shape_dialog_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -51,7 +51,7 @@
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginEnd="48dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="40dp"
             android:background="@drawable/map_shape_btn_background"
             android:text="@string/map_btn_confirm"
             android:textColor="@color/whiteFontColor"
@@ -65,9 +65,8 @@
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginRight="52dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="40dp"
             android:background="@drawable/map_shape_btn_white_background"
-
             android:text="@string/map_btn_cancel"
             android:textColor="@color/colorAccent"
             android:textSize="18sp"
