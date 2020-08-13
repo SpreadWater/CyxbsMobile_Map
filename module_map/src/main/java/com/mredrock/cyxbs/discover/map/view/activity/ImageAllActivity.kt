@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
@@ -14,6 +15,7 @@ import com.mredrock.cyxbs.discover.map.bean.Image
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils.REQUEST_CODE_CHOOSE_PHOTO_ALBUM
 import com.mredrock.cyxbs.discover.map.view.adapter.ImageAdapter
+import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
 import com.mredrock.cyxbs.discover.map.viewmodel.ImageLoaderViewModel
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.map_activity_allimage.*
@@ -25,8 +27,10 @@ import kotlinx.android.synthetic.main.map_activity_allimage.*
  *@description
  */
 class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
+
     override val isFragmentActivity: Boolean
         get() = false
+
     override val viewModelClass = ImageLoaderViewModel::class.java
 
     val imageUrls = ArrayList<Image>()
@@ -45,7 +49,7 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
         //返回false表示已经到达底部
 
         map_tv_allimage_share.setOnClickListener {
-            ImageSelectutils.selectImageFromAlbum(MAX_SELECTABLE_IMAGE_COUNT,this)
+            showDialog(this)
         }
         map_iv_allimage_back.setOnClickListener {
             finish()
@@ -88,5 +92,22 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
         }
     }
 
+    private fun showDialog(activity: Activity) {
 
+        val dialog = ShareDialog(activity)
+        dialog.setListener(object : ShareDialog.OnClickListener {
+            override fun onCancel() {
+                dialog.dismiss()
+            }
+            override fun onConfirm() {
+                dialog.dismiss()
+                openAlbum()
+            }
+        })
+        dialog.show()
+    }
+
+    private fun openAlbum() {
+        ImageSelectutils.selectImageFromAlbum(9,this)
+    }
 }

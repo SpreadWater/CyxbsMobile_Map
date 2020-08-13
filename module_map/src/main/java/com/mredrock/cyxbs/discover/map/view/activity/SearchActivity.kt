@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.discover.map.view.activity
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -98,7 +99,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                 map_et_search_place.setPadding(10,0,0,0)
                 map_et_search_place.setTypeface(Typeface.DEFAULT_BOLD)
             }else{
-                map_et_search_place.setPadding(50,0,0,0)
+                map_et_search_place.setPadding(95,0,0,0)
                 map_et_search_place.setTypeface(Typeface.DEFAULT)
             }
         }
