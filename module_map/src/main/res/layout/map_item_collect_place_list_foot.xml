@@ -10,7 +10,7 @@
         android:id="@+id/map_tv_list_foot_item"
         android:text="@string/map_collect_place_list_foot_item"
         android:maxLines="1"
-        android:padding="5dp"
+        android:padding="10dp"
         android:textColor="@color/grades_fragment_text_color_black"
         android:gravity="center"
         />

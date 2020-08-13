@@ -18,7 +18,7 @@
         <RelativeLayout
             android:id="@+id/map_rl"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="140dp"
             android:background="@color/whiteBackground"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="0dp">
@@ -42,24 +42,28 @@
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:hint="  大家都在搜: 风雨操场"
+                android:text="  大家都在搜：风雨操场"
+                android:textSize="15dp"
+                android:textColor="@color/transparent"
                 android:paddingStart="14dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp" />
 
             <com.mredrock.cyxbs.discover.map.view.widget.MyTabLayout
                 android:id="@+id/map_tl_category"
-                android:layout_width="290dp"
-                android:layout_height="40dp"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
                 android:layout_below="@id/map_et_search"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginStart="7dp"
                 app:tabBackground="@android:color/transparent"
-                app:tabGravity="fill"
+                app:tabGravity="center"
                 app:tabIndicatorHeight="0dp"
                 app:tabMode="scrollable"
+                app:tabPaddingEnd="-1dp"
+                app:tabPaddingStart="0dp"
                 app:tabRippleColor="@android:color/transparent"
                 app:tabSelectedTextColor="@color/qa_tab_selected_color"
-                app:tabTextAppearance="@style/map_tablayout_textsize"
                 app:tabTextColor="@color/qa_tab_unselected_color" />
 
             <Button

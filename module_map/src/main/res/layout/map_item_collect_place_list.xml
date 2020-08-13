@@ -9,7 +9,7 @@
         android:textSize="14dp"
         android:text="@string/map_et_collect_collectname"
         android:maxLines="1"
-        android:padding="5dp"
+        android:padding="10dp"
         android:id="@+id/map_tv_list_item"
         android:textColor="@color/grades_fragment_text_color_black"
         android:gravity="center"

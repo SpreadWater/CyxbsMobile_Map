@@ -200,7 +200,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
     private fun addTouchLister(pointF: PointF) {
-        if (pointF.x <= 1725f + r && pointF.y <= 931757f + r) {
+        if (pointF.x <= 1725f + r && pointF.y <= 9317f + r) {
             replaceFragment(PlaceDetailContentFragment())
             map_bottom_sheet_content.visibility = View.VISIBLE
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
