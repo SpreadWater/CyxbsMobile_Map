@@ -1,11 +1,10 @@
 package com.mredrock.cyxbs.discover.map.model.dao
 
 import android.content.Context
-import android.provider.Settings.Global.putString
 import androidx.core.content.edit
 import com.google.gson.Gson
 import com.mredrock.cyxbs.common.BaseApp
-import com.mredrock.cyxbs.discover.map.model.network.Place
+import com.mredrock.cyxbs.discover.map.bean.Place
 
 /**
  *@date 2020-8-10
@@ -13,14 +12,14 @@ import com.mredrock.cyxbs.discover.map.model.network.Place
  *@description
  */
 object HistoryPlaceDao {
-    fun savePlace(place:Place){
+    fun savePlace(place: Place){
         sharedPreferences().edit{
             putString("place",Gson().toJson(place))
         }
     }
-    fun getSavedPlace():Place{
+    fun getSavedPlace(): Place {
         val placeJson= sharedPreferences().getString("place","")
-        return Gson().fromJson(placeJson,Place::class.java)
+        return Gson().fromJson(placeJson, Place::class.java)
     }
     fun isPlaceSaved()= sharedPreferences().contains("place")
 

@@ -33,12 +33,11 @@
         android:background="@drawable/map_shape_et_search_place"
         android:hint="@string/map_et_search_place"
         android:imeOptions="actionSearch"
-        android:textSize="15sp"
-        android:textStyle="bold"
+        android:textSize="16sp"
         android:maxLines="1"
         android:paddingStart="34dp"
         android:singleLine="true"
-        android:textColor="@color/levelTwoFontColor"
+        android:textColor="@color/levelOneFontColor"
         app:layout_constraintStart_toEndOf="@id/map_iv_search_back"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -68,26 +67,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/map_tv_search_deleteall"
-        android:textColor="@color/levelThreeFontColor"
+        android:textColor="@color/logInToTheGrayFontBelow"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/map_tv_search_history"
         app:layout_constraintHorizontal_bias="0.93"
         app:layout_constraintLeft_toRightOf="@id/map_tv_search_history"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/map_tv_search_history" />
+        app:layout_constraintTop_toTopOf="@+id/map_tv_search_history"
+        app:layout_constraintVertical_bias="0.64" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/map_tv_search_history"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/levelThreeFontColor"
-        android:textSize="15sp"
-        android:text="@string/map_tv_search_history"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="28dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="@string/map_tv_search_history"
+        android:textColor="@color/logInToTheGrayFontBelow"
+        android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/map_rv_search"
-        app:layout_constraintTop_toBottomOf="@id/map_et_search_place"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/map_et_search_place" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/map_rv_search"
         android:layout_width="match_parent"

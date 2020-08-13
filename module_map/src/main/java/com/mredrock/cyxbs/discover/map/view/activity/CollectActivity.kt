@@ -32,8 +32,6 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
         initEvent()
     }
 
-    private fun showDialog() = Unit
-
     fun initdata() {
         repeat(2) {
             mlist.add(AutoWrapAdapter.recommend("我的宿舍"))
@@ -77,7 +75,7 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
         }
 
         map_tv_collect_cancel_place.setOnClickListener {
-            showDialog()
+            showDialog(this)
         }
         map_aw_collect_recommend.adapter = AutoWrapAdapter(mlist) { text ->
             map_et_collect_collectname.setText(text)
@@ -122,7 +120,6 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
         })
     }
 
-    companion object {
         private fun showDialog(collectActivity: CollectActivity) {
 
             val dialog = CollectDialog(collectActivity)
@@ -139,4 +136,3 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
             dialog.show()
         }
     }
-}

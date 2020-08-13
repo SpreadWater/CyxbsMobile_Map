@@ -102,7 +102,6 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             override fun onCancel() {
                 dialog.dismiss()
             }
-
             override fun onConfirm() {
                 dialog.dismiss()
                 openAlbum()

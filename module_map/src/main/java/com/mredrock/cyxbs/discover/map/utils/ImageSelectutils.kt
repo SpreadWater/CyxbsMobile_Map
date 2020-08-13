@@ -27,7 +27,7 @@ object ImageSelectutils {
                         .choose(MimeType.ofImage(), false)
                         .capture(true)  // 使用相机，和 captureStrategy 一起使用
                         .captureStrategy(CaptureStrategy(true, "RedRock"))
-                        .theme(R.style.Matisse_Zhihu)
+                        .theme(R.style.map_photo_style)
                         .countable(true)
                         .maxSelectable(maxCount)
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
@@ -49,7 +49,7 @@ object ImageSelectutils {
                         .choose(MimeType.ofImage(), false)
                         .capture(true)  // 使用相机，和 captureStrategy 一起使用
                         .captureStrategy(CaptureStrategy(true, "RedRock"))
-                        .theme(R.style.Matisse_Zhihu)
+                        .theme(R.style.map_photo_style)
                         .countable(true)
                         .maxSelectable(maxCount)
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)

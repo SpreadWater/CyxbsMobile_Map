@@ -54,7 +54,7 @@
             android:id="@+id/map_rrv_place_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="10dp"
+            android:paddingStart="15dp"
             android:paddingTop="8dp"
             android:paddingEnd="10dp"
             android:paddingBottom="8dp"
@@ -72,15 +72,18 @@
             android:id="@+id/map_iv_place_collect"
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="2dp"
             android:gravity="center"
-            android:padding="5dp"
+            android:padding="6dp"
             android:src="@drawable/map_ic_my_collect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.905"
+            app:layout_constraintHorizontal_bias="0.92"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/map_place_detail_content_tip"
-            app:layout_constraintVertical_bias="0.058" />
+            app:layout_constraintVertical_bias="0.01999998" />
+
         <TextView
             android:id="@+id/map_tv_place_collect"
             android:layout_width="51dp"
@@ -88,14 +91,14 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="我最爱去"
-            android:visibility="gone"
             android:textColor="@color/mine_sign_divider_blue_light"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.905"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/map_place_detail_content_tip"
-            app:layout_constraintVertical_bias="0.058" />
+            app:layout_constraintVertical_bias="0.00999999" />
 
         <LinearLayout
             android:id="@+id/map_linearlayout2"
@@ -130,6 +133,7 @@
                 android:id="@+id/map_iv_search_more_place_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
                 android:background="@drawable/map_ic_forward" />
         </LinearLayout>
 
@@ -196,7 +200,7 @@
             android:id="@+id/map_rrv_place_detail_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="10dp"
+            android:paddingStart="15dp"
             android:paddingTop="8dp"
             android:paddingEnd="10dp"
             android:paddingBottom="8dp"

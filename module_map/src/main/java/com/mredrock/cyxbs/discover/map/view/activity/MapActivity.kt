@@ -61,8 +61,10 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     private fun initRv(popupView: View) {
         val titleList = ArrayList<String>()
-        for (title in titles)
+        for (title in titles) {
             titleList.add(title)
+            titleList.add(title)
+        }
         if (titleList.isEmpty()) {
             Toast.toast("啊哦，你还没有收藏地点", Gravity.BOTTOM, 0, 100)
         }
@@ -164,7 +166,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             popupWindow.setTouchInterceptor(View.OnTouchListener { v, event ->
                 false
             })
-            popupWindow.showAsDropDown(view, -120, 10)
+            popupWindow.showAsDropDown(view, -100, 10)
             initRv(popupView)
         }
     }
