@@ -1,12 +1,13 @@
 package com.mredrock.cyxbs.discover.map.view.activity
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.model.network.Place
+import com.mredrock.cyxbs.discover.map.bean.Place
 import com.mredrock.cyxbs.discover.map.view.adapter.HistoryAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.map_activity_search_place.*
@@ -23,6 +24,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
     val TYPE_RESULTPLACE = 1
 
+    var CONTENT_TYPE=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_search_place)
@@ -81,14 +83,23 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         map_et_search_place.addTextChangedListener { editable ->
             val content = editable.toString()
             //监听到输入框不为空就显示另外一个rv布局
-
 //            根据网络请求拿下来的数据判断一下再显示第二个rv布局
+
             if (content.isNotEmpty()) {
+                CONTENT_TYPE=true
                 showresultplace()
                 adapter.notifyDataSetChanged()
             } else {
+                CONTENT_TYPE=false
                 showhistoryplace()
                 adapter.notifyDataSetChanged()
+            }
+            if (CONTENT_TYPE){
+                map_et_search_place.setPadding(10,0,0,0)
+                map_et_search_place.setTypeface(Typeface.DEFAULT_BOLD)
+            }else{
+                map_et_search_place.setPadding(50,0,0,0)
+                map_et_search_place.setTypeface(Typeface.DEFAULT)
             }
         }
         //清除全部的监听事件

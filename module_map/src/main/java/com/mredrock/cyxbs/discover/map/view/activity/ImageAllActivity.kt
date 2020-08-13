@@ -8,10 +8,9 @@ import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.model.network.Image
+import com.mredrock.cyxbs.discover.map.bean.Image
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils.REQUEST_CODE_CHOOSE_PHOTO_ALBUM
 import com.mredrock.cyxbs.discover.map.view.adapter.ImageAdapter

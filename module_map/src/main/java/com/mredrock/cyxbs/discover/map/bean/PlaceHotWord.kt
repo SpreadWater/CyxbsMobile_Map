@@ -1,3 +1,7 @@
 package com.mredrock.cyxbs.discover.map.bean
 
-data class PlaceHotWord(val data:String)
+import java.io.Serializable
+
+data class PlaceHotWord(val data:String):Serializable{
+
+}

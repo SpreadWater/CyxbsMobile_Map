@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.model.network.Place
+import com.mredrock.cyxbs.discover.map.bean.Place
 import com.mredrock.cyxbs.discover.map.view.activity.SearchActivity
 import java.lang.IllegalArgumentException
 
@@ -18,7 +18,7 @@ import java.lang.IllegalArgumentException
  *@author zhangsan
  *@description
  */
-class HistoryAdapter(val placeList:ArrayList<Place>,val editText: EditText,val activity: SearchActivity):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HistoryAdapter(val placeList:ArrayList<Place>, val editText: EditText, val activity: SearchActivity):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class HistoryViewHolder(view: View):RecyclerView.ViewHolder(view){
         val historyplace:TextView=view.findViewById(R.id.tv_map_history_place)

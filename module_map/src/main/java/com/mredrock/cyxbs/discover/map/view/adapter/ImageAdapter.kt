@@ -4,14 +4,11 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.model.network.Image
+import com.mredrock.cyxbs.discover.map.bean.Image
 import com.mredrock.cyxbs.discover.map.view.activity.ViewImageActivity
 
 /**
@@ -19,7 +16,7 @@ import com.mredrock.cyxbs.discover.map.view.activity.ViewImageActivity
  *@author zhangsan
  *@description
  */
-class ImageAdapter(val imageUrls:ArrayList<Image>,val activity: AppCompatActivity):RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
+class ImageAdapter(val imageUrls:ArrayList<Image>, val activity: AppCompatActivity):RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
     inner class ViewHolder(view: View):RecyclerView.ViewHolder(view){
         val image:ImageView=view.findViewById(R.id.map_iv_image)

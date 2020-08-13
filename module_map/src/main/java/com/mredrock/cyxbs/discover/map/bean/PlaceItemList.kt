@@ -1,11 +1,13 @@
 package com.mredrock.cyxbs.discover.map.bean
 
+import java.io.Serializable
+
 data class PlaceItemList(val hot_word: String,
                          val place_list: List<PlaceItem>,
                          val map_url: String,
                          val map_width: Float,
                          val map_height: Float,
-                         val map_background_color: String){
+                         val map_background_color: String):Serializable{
 data class PlaceItem(val place_name: String,
                      val place_id: String,
                      val building_list: BulidList,
