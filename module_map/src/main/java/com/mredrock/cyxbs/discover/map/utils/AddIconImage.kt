@@ -20,7 +20,7 @@ object AddIconImage {
                 } else {
                     TODO("VERSION.SDK_INT < LOLLIPOP")
                 }
-        drawable.setBounds(0, 0, 80, 80)
+        drawable.setBounds(0, 0, 80, 70)
         when (place) {
             TOP -> view.setCompoundDrawables(null, drawable, null, null)
             RIGHT -> view.setCompoundDrawables(null, null, drawable, null)

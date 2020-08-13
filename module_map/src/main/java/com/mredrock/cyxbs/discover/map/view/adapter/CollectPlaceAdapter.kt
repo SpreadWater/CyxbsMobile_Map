@@ -54,7 +54,7 @@ class CollectPlaceAdapter(val collectPlaceList: ArrayList<String>) : RecyclerVie
     }
 
     override fun getItemCount(): Int {
-        return collectPlaceList.size + 1
+        return collectPlaceList.size
     }
 
 }

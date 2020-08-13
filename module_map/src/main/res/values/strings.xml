@@ -1,5 +1,5 @@
 <resources>
-    <!--    by张涛 -->
+<!--    by张涛 -->
     <string name="map_tv_collect_cancel_place">不再收藏该地点</string>
     <string name="map_tv_collect_recommend">推荐</string>
     <string name="map_et_collect_collectname">我的收藏</string>
@@ -14,7 +14,7 @@
     <string name="map_tv_allimage_name">所有图片</string>
     <string name="map_tv_allimage_share">与大家分享你拍摄的此地点</string>
     <string name="map_tv_allimage_nomore">暂无更多图片</string>
-    <!--    by徐国林-->
+<!--    by徐国林-->
     <string name="map_hint_input_places"> 大家都在搜: 风雨操场</string>
     <string name="map_tv_about_place_more">关于该地点</string>
     <string name="map_share_people_place_image">与大家分享你拍摄的此地点</string>

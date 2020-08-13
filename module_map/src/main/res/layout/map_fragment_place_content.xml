@@ -34,13 +34,14 @@
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
                 android:maxLines="1"
                 android:text="@string/map_place_detail"
+                android:gravity="center"
                 android:textColor="@color/grades_fragment_text_color_black"
-                android:textSize="22dp"
+                android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.113"
@@ -69,11 +70,11 @@
 
         <ImageView
             android:id="@+id/map_iv_place_collect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:gravity="center"
             android:padding="5dp"
-            android:src="@drawable/map_ic_collect"
+            android:src="@drawable/map_ic_my_collect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.905"
@@ -82,8 +83,8 @@
             app:layout_constraintVertical_bias="0.058" />
         <TextView
             android:id="@+id/map_tv_place_collect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="51dp"
+            android:layout_height="12dp"
             android:gravity="center"
             android:padding="5dp"
             android:text="我最爱去"
@@ -109,23 +110,21 @@
             app:layout_constraintVertical_bias="0.187">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="15dp"
                 android:gravity="center"
-                android:padding="5dp"
                 android:text="@string/map_detail"
                 android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/map_tv_search_more_place_detail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="210dp"
+                android:layout_height="19dp"
+                android:layout_marginStart="240dp"
                 android:gravity="center"
-                android:padding="5dp"
                 android:text="@string/map_look_more"
-                android:textSize="15dp" />
+                android:textSize="12dp" />
 
             <ImageView
                 android:id="@+id/map_iv_search_more_place_detail"
@@ -170,7 +169,7 @@
                 android:padding="5dp"
                 android:text="@string/map_share_people_place_image"
                 android:textColor="@color/mine_about_text_color_normal"
-                android:textSize="15dp" />
+                android:textSize="14dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -190,7 +189,7 @@
                 android:maxLines="1"
                 android:padding="5dp"
                 android:text="@string/map_tv_about_place_more"
-                android:textSize="16dp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <com.mredrock.cyxbs.common.component.RedRockAutoWarpView

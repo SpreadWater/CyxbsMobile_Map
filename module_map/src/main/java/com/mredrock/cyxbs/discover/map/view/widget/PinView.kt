@@ -37,7 +37,7 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
     }
 
     private fun initialise() {
-        pin = BitmapFactory.decodeResource(this.resources, R.drawable.map_ic_place_label)
+        pin = BitmapFactory.decodeResource(this.resources, R.drawable.map_ic_label)
         pin = Bitmap.createScaledBitmap(pin, 60, 80, true)
     }
 

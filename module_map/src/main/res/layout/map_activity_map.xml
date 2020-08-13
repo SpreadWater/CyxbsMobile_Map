@@ -18,7 +18,7 @@
         <RelativeLayout
             android:id="@+id/map_rl"
             android:layout_width="match_parent"
-            android:layout_height="145dp"
+            android:layout_height="130dp"
             android:background="@color/whiteBackground"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="0dp">
@@ -30,104 +30,97 @@
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="53dp"
                 android:src="@drawable/common_back" />
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/map_et_search"
                 android:layout_width="300dp"
-                android:layout_height="35dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="45dp"
                 android:layout_toRightOf="@id/map_iv_back"
                 android:background="@drawable/map_shape_et_search_place"
                 android:cursorVisible="false"
                 android:focusable="false"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:focusableInTouchMode="false"
                 android:hint="  大家都在搜: 风雨操场"
-                android:paddingStart="14dp" />
+                android:paddingStart="14dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
 
-            <com.google.android.material.tabs.TabLayout
+            <com.mredrock.cyxbs.discover.map.view.widget.MyTabLayout
                 android:id="@+id/map_tl_category"
-                android:layout_width="300dp"
+                android:layout_width="290dp"
                 android:layout_height="40dp"
                 android:layout_below="@id/map_et_search"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 app:tabBackground="@android:color/transparent"
-                app:tabIndicatorColor="@color/qa_question_tab_indicator_color"
-                app:tabIndicatorFullWidth="false"
-                app:tabIndicatorHeight="3dp"
+                app:tabGravity="fill"
+                app:tabIndicatorHeight="0dp"
                 app:tabMode="scrollable"
                 app:tabRippleColor="@android:color/transparent"
                 app:tabSelectedTextColor="@color/qa_tab_selected_color"
                 app:tabTextAppearance="@style/map_tablayout_textsize"
                 app:tabTextColor="@color/qa_tab_unselected_color" />
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/map_btn_collect_place"
-                android:layout_width="66dp"
-                android:layout_height="60dp"
+                android:layout_width="65dp"
+                android:layout_height="54dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:background="@color/whiteBackground"
                 android:gravity="bottom|center"
-                android:padding="10dp"
+                android:padding="8dp"
                 android:text="我的收藏"
                 android:textColor="@color/transparent"
                 android:textSize="9dp" />
-
-            <ImageView
-                android:id="@+id/map_iv_hot"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/map_et_search"
-                android:layout_marginStart="70dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/map_ic_hot" />
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/map_cv_vr_map"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="196dp"
+            android:layout_marginTop="186dp"
             app:cardCornerRadius="90dp"
             app:cardElevation="0dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/map_ic_vr"
             app:layout_constraintBottom_toBottomOf="@+id/map_cv_vr_map"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@+id/map_cv_vr_map"
             app:layout_constraintRight_toRightOf="@+id/map_cv_vr_map"
-            app:layout_constraintTop_toTopOf="@+id/map_cv_vr_map" />
+            app:layout_constraintTop_toTopOf="@+id/map_cv_vr_map"
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/map_iv_compass_background"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:background="@drawable/map_ic_compass_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.96"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.260" />
+            app:layout_constraintVertical_bias="0.240" />
 
         <ImageView
             android:id="@+id/map_iv_compass"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/map_ic_compass"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.915"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.273" />
+            app:layout_constraintVertical_bias="0.253" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.mredrock.cyxbs.discover.map.view.widget.MyFrameLayout
@@ -135,8 +128,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:behavior_peekHeight="115dp"
         app:behavior_hideable="true"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        ></com.mredrock.cyxbs.discover.map.view.widget.MyFrameLayout>
+        app:behavior_peekHeight="115dp"
+        app:layout_behavior="@string/bottom_sheet_behavior"></com.mredrock.cyxbs.discover.map.view.widget.MyFrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -61,6 +61,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     private fun initRv(popupView: View) {
         val titleList = ArrayList<String>()
+        for (title in titles)
+            titleList.add(title)
         if (titleList.isEmpty()) {
             Toast.toast("啊哦，你还没有收藏地点", Gravity.BOTTOM, 0, 100)
         }
@@ -126,7 +128,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
     private fun initAddViewToIcon() {
-        AddIconImage.setImageViewToButton(R.drawable.map_ic_my_collect, map_btn_collect_place, 2)
+        AddIconImage.setImageViewToButton(R.drawable.map_ic_collect_list, map_btn_collect_place, 2)
         AddIconImage.setImageViewToButton(R.drawable.map_ic_search_before, map_et_search, 0)
 
     }
@@ -162,7 +164,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             popupWindow.setTouchInterceptor(View.OnTouchListener { v, event ->
                 false
             })
-            popupWindow.showAsDropDown(view, -200, 10)
+            popupWindow.showAsDropDown(view, -120, 10)
             initRv(popupView)
         }
     }
@@ -171,24 +173,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_btn_collect_place.setOnClickListener { view ->
             initPopupWindow(view)
         }
-        for (title in titles)
-            map_tl_category.addTab(map_tl_category.newTab().setText(title))
-        map_tl_category.setSelectedTabIndicator(R.drawable.map_ic_tab_indicator)
-        map_tl_category.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-//                map_iv_image.clearPointList()
-//                pointList.add(PointF(1571f, 8657f))
-//                map_iv_image.addPointF(pointList)
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-        })
+        map_tl_category.setTitle(titles)
     }
 
     private fun initMapView() {
@@ -198,7 +183,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_iv_image.setImage(ImageSource.resource(R.drawable.map_ic_background))
         dialog.dismiss()
         map_iv_image.clearPointList()
-        map_iv_image.setLocation(0.5f, PointF(1571f, 8657f))
+        map_iv_image.setLocation(0.5f, PointF(1703f, 9317f))
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 if (map_iv_image.isReady) {
@@ -206,7 +191,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     if (point != null) {
                         addTouchLister(point)
                     }
-                    LogUtils.d("placePoint", "" + point?.x + point?.y);
+                    LogUtils.d("placePoint", "" + point?.x + " " + point?.y);
                 }
                 return true
             }
@@ -215,7 +200,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
     private fun addTouchLister(pointF: PointF) {
-        if (pointF.x <= 1571f + r && pointF.y <= 8657f + r) {
+        if (pointF.x <= 1725f + r && pointF.y <= 931757f + r) {
             replaceFragment(PlaceDetailContentFragment())
             map_bottom_sheet_content.visibility = View.VISIBLE
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED

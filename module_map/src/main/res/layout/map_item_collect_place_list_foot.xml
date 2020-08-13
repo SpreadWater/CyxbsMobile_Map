@@ -6,10 +6,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="13dp"
+        android:textSize="14dp"
         android:id="@+id/map_tv_list_foot_item"
         android:text="@string/map_collect_place_list_foot_item"
         android:maxLines="1"
+        android:padding="5dp"
         android:textColor="@color/grades_fragment_text_color_black"
         android:gravity="center"
         />
