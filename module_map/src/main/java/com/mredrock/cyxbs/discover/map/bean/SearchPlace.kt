@@ -7,6 +7,7 @@ import java.io.Serializable
  *@author zhangsan
  *@description
  */
-data class Place(val historyplace:String,
-                 val placetype:Int): Serializable {
+data class SearchPlace(val placeItem: PlaceItem,
+                 val placetype:Int):Serializable{
+
 }

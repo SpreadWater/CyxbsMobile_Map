@@ -36,6 +36,7 @@ class PlaceItem : Serializable {
     @SerializedName("tag_bottom")
     var tagBottom: Float = 0f
 
+
     class BuildingRect : Serializable {
         @SerializedName("building_left")
         var buildingLeft: Float = 0f
