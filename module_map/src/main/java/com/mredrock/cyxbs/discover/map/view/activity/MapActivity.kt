@@ -1,6 +1,8 @@
 package com.mredrock.cyxbs.discover.map.view.activity
 
+
 import android.app.Activity
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.PointF
@@ -15,32 +17,39 @@ import android.view.animation.RotateAnimation
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.tabs.TabLayout
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.config.DISCOVER_MAP
+import com.mredrock.cyxbs.common.service.ServiceManager
+import com.mredrock.cyxbs.common.service.account.IAccountService
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.R.layout.map_activity_map
+import com.mredrock.cyxbs.discover.map.bean.Place
+import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
+import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.view.adapter.CollectPlaceAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
 import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
 import kotlinx.android.synthetic.main.map_activity_map.*
+import kotlinx.android.synthetic.main.map_activity_map.map_iv_image
 import kotlinx.android.synthetic.main.map_fragment_collect_place.view.*
-import kotlinx.android.synthetic.main.map_fragment_place_content.*
+import kotlin.collections.ArrayList
 
 
 @Route(path = DISCOVER_MAP)
 class MapActivity : BaseViewModelActivity<MapViewModel>() {
-    private val pointList = ArrayList<PointF>()
-    private val titles = listOf<String>("入校报到点", "运动场", "教学楼", "图书馆", "食堂", "快递")
+    private val hotWord: String? = null
+    private val placeXList = ArrayList<PlaceItem>()
+    private var placeItemList = ArrayList<PlaceItem>()
     override val isFragmentActivity: Boolean
         get() = false
     override val viewModelClass: Class<MapViewModel>
@@ -49,19 +58,45 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private var sensorManager: SensorManager? = null
     private var magnetic: Sensor? = null
     private var accelerometer: Sensor? = null
-    private val r = 100f
+    private var dialog: Dialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
+        val userState = ServiceManager.getService(IAccountService::class.java).getVerifyService()
+        if (!userState.isLogin()) {
+            //这里只是模拟一下登录，如果有并发需求，自己设计
+            Thread {
+                userState.login(this, "2019212381", "261919")
+            }.start()
+        }
+        dialog = ProgressDialog(this)
+        if (dialog != null) {
+            (dialog as ProgressDialog).setMessage("加载中...")
+            (dialog as ProgressDialog).show()
+        }
         initAddViewToIcon()
-        initMapView()
+        initGetPlaceItemData()
         initTabCategory()
         initBottomSheetBehavior()
     }
 
+    private fun initGetPlaceItemData() {
+        viewModel.getPlaceData()
+        viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
+            it?.run {
+                if (hotWord != null)
+                    map_et_search.setText("  大家都在搜：$hotWord")
+                if (placeList != null) {
+                    initMapView(placeList as ArrayList<PlaceItem>)
+                    dialog?.dismiss()
+                }
+            }
+        })
+    }
+
     private fun initRv(popupView: View) {
         val titleList = ArrayList<String>()
-        for (title in titles) {
+        for (title in viewModel.titles) {
             titleList.add(title)
             titleList.add(title)
         }
@@ -137,13 +172,15 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     private fun initBottomSheetBehavior() {
         bottomSheetBehavior = BottomSheetBehavior.from(map_bottom_sheet_content)
+        replaceFragment(PlaceDetailContentFragment())
+        map_bottom_sheet_content.visibility = View.VISIBLE
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
                         bottomSheet.visibility = View.GONE
                     }
-
                 }
             }
 
@@ -175,23 +212,20 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_btn_collect_place.setOnClickListener { view ->
             initPopupWindow(view)
         }
-        map_tl_category.setTitle(titles)
+        map_tl_category.setTitle(viewModel.titles)
     }
 
-    private fun initMapView() {
-        val dialog = ProgressDialog(this)
-        dialog.setMessage("加载中...")
-        dialog.show()
+    private fun initMapView(placelist: ArrayList<PlaceItem>) {
+        placeItemList = placelist
         map_iv_image.setImage(ImageSource.resource(R.drawable.map_ic_background))
-        dialog.dismiss()
         map_iv_image.clearPointList()
-        map_iv_image.setLocation(0.5f, PointF(1703f, 9317f))
+        map_iv_image.setLocation(0.5f, PointF(placelist[28].placeCenterX, placelist[28].placeCenterY))
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 if (map_iv_image.isReady) {
                     val point: PointF? = map_iv_image.viewToSourceCoord(e.x, e.y)
                     if (point != null) {
-                        addTouchLister(point)
+                        judgePlaceX(point)
                     }
                     LogUtils.d("placePoint", "" + point?.x + " " + point?.y);
                 }
@@ -201,11 +235,24 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_iv_image.setOnTouchListener { view, motionEvent -> gestureDetector.onTouchEvent(motionEvent) }
     }
 
-    private fun addTouchLister(pointF: PointF) {
-        if (pointF.x <= 1725f + r && pointF.y <= 9317f + r) {
-            replaceFragment(PlaceDetailContentFragment())
-            map_bottom_sheet_content.visibility = View.VISIBLE
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+    private fun judgePlaceX(pointF: PointF) {
+        placeXList.clear()
+        for (placeX in placeItemList) {
+            if ((pointF.x <= placeX.buildingRectList!![0].buildingRight && pointF.x >= placeX.buildingRectList!![0].buildingLeft)) {
+                placeXList.add(placeX)
+            }
+        }
+        judgePlaceY(pointF.y, placeXList)
+    }
+
+    private fun judgePlaceY(y: Float, placeList: ArrayList<PlaceItem>) {
+        for (placeY in placeList) {
+            if (y <= placeY.buildingRectList!![0].buildingBottom && y >= placeY.buildingRectList!![0].buildingTop) {
+                android.widget.Toast.makeText(BaseApp.context, placeY?.placeName, android.widget.Toast.LENGTH_SHORT).show()
+                replaceFragment(PlaceDetailContentFragment())
+                map_bottom_sheet_content.visibility = View.VISIBLE
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
         }
     }
 

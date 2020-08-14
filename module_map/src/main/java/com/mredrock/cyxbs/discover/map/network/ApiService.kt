@@ -1,28 +1,39 @@
 package com.mredrock.cyxbs.discover.map.network
 
 import androidx.room.Delete
+import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
+import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
+import io.reactivex.Observable
 import retrofit2.http.*
 
 interface ApiService
 {
-    @GET("http://118.31.20.31:8080/basic")
-    fun getPlaceItemsList()
-    @GET("http://118.31.20.31:8080/hot")
+    //地图基础数据
+    @GET("basic")
+    fun getPlaceItemsList():Observable<RedrockApiWrapper<PlaceBasicData>>
+    @GET("hot")
     fun getPlaceHot()
-    @PATCH("http://118.31.20.31:8080/rockmap/addkeep")
+    @PATCH("rockmap/addkeep")
+    @FormUrlEncoded
     fun addCollectPlace(@Field("place_nickname")place_nickname:String,@Field("place_id")place_id:Int)
-    @DELETE("http://118.31.20.31:8080/rockmap/deletekeep")
+    @DELETE("rockmap/deletekeep")
+    @FormUrlEncoded
     fun deleteCollectPlace(@Field("place_id")place_id: Int)
-    @GET("http://118.31.20.31:8080/rockmap/collect")
+    @GET("rockmap/collect")
+    @FormUrlEncoded
     fun getCollectPlaceList()
-    @POST("http://118.31.20.31:8080/searchtype")
+    @POST("searchtype")
+    @FormUrlEncoded
     fun searchPlaceType(@Field("code")code:String)
-    @POST("http://118.31.20.31:8080/detailsite")
+    @POST("detailsite")
+    @FormUrlEncoded
     fun getPlaceDetail(@Field("place_id")place_id: Int)
-    @POST("http://118.31.20.31:8080/rockmap/upload")
+    @POST("rockmap/upload")
+    @FormUrlEncoded
     fun uploadImage(@Field("file")file:String,@Field("place_id")place_id: Int)
-    @POST("http://118.31.20.31:8080/addhot")
+    @POST("addhot")
+    @FormUrlEncoded
     fun addhot(@Field("id")id:Int)
-    @GET("http://118.31.20.31:8080/button")
+    @GET("button")
     fun button()
 }

@@ -1,7 +1,9 @@
 package com.mredrock.cyxbs.discover.map.bean
 
+import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-data class PlaceHotWord(val data:String):Serializable{
-
+class PlaceHotWord:Serializable{
+    @SerializedName("hot_word")
+    val hotWord:String?=null
 }

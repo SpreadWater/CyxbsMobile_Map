@@ -8,5 +8,5 @@ import java.io.Serializable
  *@description
  */
 data class Place(val historyplace:String,
-    val placetype:Int):Serializable{
+                 val placetype:Int): Serializable {
 }

@@ -95,7 +95,7 @@ object ApiGenerator {
      * null-> 默认Timeout
      * @param tokenNeeded 是否需要添加token请求
      */
-    fun registerNetSettings(uniqueNum: Int, retrofitConfig: ((Retrofit.Builder) -> Retrofit.Builder)? = null, okHttpClientConfig: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null, tokenNeeded: Boolean) {
+    fun registerNetSettings(uniqueNum: Int, retrofitConfig:  ((Retrofit.Builder) -> Retrofit.Builder)? = null, okHttpClientConfig: ((OkHttpClient.Builder) -> OkHttpClient.Builder)? = null, tokenNeeded: Boolean) {
         retrofitMap.put(uniqueNum, Retrofit.Builder()
                 //对传入的retrofitConfig配置
                 .apply {
