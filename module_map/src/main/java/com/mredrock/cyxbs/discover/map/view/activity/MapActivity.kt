@@ -34,6 +34,7 @@ import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
 import com.mredrock.cyxbs.discover.map.bean.*
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
+import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
 import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_activity_map.map_iv_image
@@ -42,6 +43,7 @@ import kotlin.collections.ArrayList
 
 @Route(path = DISCOVER_MAP)
 class MapActivity : BaseViewModelActivity<MapViewModel>() {
+    private var collectPlaceList = ArrayList<CollectPlace>()
     private val placeXList = ArrayList<PlaceItem>()
     private var placeItemList = ArrayList<PlaceItem>()
     override val isFragmentActivity: Boolean
@@ -71,6 +73,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         initIconClick()
     }
 
+
     /*
     得到hotword
      */
@@ -99,7 +102,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 //                        LogUtils.d("****zt","存储数据成功！"+place.placeId)
                         HistoryPlaceDao.savePlace(place)
                     }
-                    dialog?.dismiss()
+
                     initMapView(it)
                 }
             }
@@ -195,11 +198,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
     /*
-    一些简单控件的点击事件
-     */
+        一些简单控件的点击事件
+         */
     fun initIconClick() {
         map_et_search.setOnClickListener {
-            changeToActivity(SearchActivity(), placeItemList)
+            changeToActivity(SearchActivity())
         }
     }
 

@@ -76,6 +76,8 @@ class MapViewModel : BaseViewModel() {
                 .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
                 .safeSubscribeBy {
 
+                    LogUtils.d("tag123456", it.toString())
+                    collectPlaces.value = it
                 }.lifeCycle()
     }
 

@@ -3,6 +3,8 @@ package com.mredrock.cyxbs.discover.map.network
 import com.mredrock.cyxbs.common.bean.RedrockApiStatus
 import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
 import com.mredrock.cyxbs.discover.map.bean.*
+import com.mredrock.cyxbs.discover.map.bean.CollectPlace
+import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
 import io.reactivex.Observable
 import io.reactivex.internal.operators.observable.ObservableError
 import retrofit2.http.*

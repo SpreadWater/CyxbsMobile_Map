@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.core.content.edit
 import com.google.gson.Gson
 import com.mredrock.cyxbs.common.BaseApp
-import com.mredrock.cyxbs.discover.map.bean.Place
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 
 /**

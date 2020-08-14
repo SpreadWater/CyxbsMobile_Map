@@ -22,7 +22,6 @@ class PlaceDetailViewModel : BaseViewModel() {
 
     init {
         ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, { builder -> okHttpConfig(builder) }, true)
-
     }
 
     fun retrofitConfig(builder: Retrofit.Builder): Retrofit.Builder {
@@ -52,6 +51,18 @@ class PlaceDetailViewModel : BaseViewModel() {
                     if (it != null) {
                         placeItemDetail.value = it
                     }
+                }
+    }
+
+    fun addCollectPlace(placeName: String, placeId: Int) {
+        ApiGenerator.getApiService(2019212381, ApiService::class.java)
+                .addCollectPlace(placeName, placeId)
+                .setSchedulers()
+                .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
+                .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
+                .safeSubscribeBy {
+                    if (it.info == "success")
+                        Toast.toast("收藏成功")
                 }.lifeCycle()
     }
 }

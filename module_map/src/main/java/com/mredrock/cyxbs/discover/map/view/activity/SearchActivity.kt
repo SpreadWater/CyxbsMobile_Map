@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.Place
+import com.mredrock.cyxbs.discover.map.bean.PlaceItem
+import com.mredrock.cyxbs.discover.map.bean.SearchPlace
 import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
+import com.mredrock.cyxbs.discover.map.model.dao.SearchHistory
 import com.mredrock.cyxbs.discover.map.view.adapter.HistoryAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.SearchViewModel
 import kotlinx.android.synthetic.main.map_activity_search_place.*
@@ -22,40 +24,57 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
     override val isFragmentActivity = false
 
-    val mlist = ArrayList<Place>()
+    val mlist = ArrayList<SearchPlace>()
+
+    val count=0
 
     val TYPE_HISTORYPLACE = 0
 
     val TYPE_RESULTPLACE = 1
 
-    var CONTENT_TYPE=false
+    var CONTENT_TYPE = false
 
-    var place_num:Int=0
+    var place_num: Int = 0
 
-    var isSearch=false
+    var isSearch = false
+
+    val placeItemList = ArrayList<PlaceItem>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_search_place)
-         place_num=intent.getIntExtra("place_num",0)
+        place_num = intent.getIntExtra("place_num", 0)
+        initData()
         inithistoryplace()
         initEvent()
     }
+
+    fun initData() {
+        //获取之前本地basic的数据
+        for (i in 1..place_num) {
+            if (HistoryPlaceDao.isPlaceSaved(i)) {
+                placeItemList.add(HistoryPlaceDao.getSavedPlace(i))
+            }
+        }
+    }
+
     //加载历史记录
     fun inithistoryplace() {
-        repeat(3) {
-            mlist.add(Place("大西北", TYPE_HISTORYPLACE))
-            mlist.add(Place("红岩网校", TYPE_HISTORYPLACE))
-            mlist.add(Place("风雨操场", TYPE_HISTORYPLACE))
+      val SearchNum=SearchHistory.getSavedNum()
+        if (SearchNum>0){
+            //展示历史记录
+            for(i in 0..SearchNum-1){
+                //顺序获取place的id
+               var placeid= SearchHistory.getSavedPlaceId(i)
+                //通过placeid获取place
+                val place=SearchHistory.getSavedPlace(placeid)
+                mlist.add(SearchPlace(place,TYPE_HISTORYPLACE))
+            }
+        }else{
+            Toast.makeText(this, "历史记录为空", Toast.LENGTH_SHORT).show()
         }
     }
-    //加载搜索结果
-    fun initresultplace() {
-        repeat(2) {
-            mlist.add(Place("四海苑1舍", TYPE_RESULTPLACE))
-            mlist.add(Place("四海苑2舍", TYPE_RESULTPLACE))
-            mlist.add(Place("四海苑3舍", TYPE_RESULTPLACE))
-        }
-    }
+
     //展示搜索结果的ui
     fun showresultplace() {
         map_tv_search_history.visibility = View.GONE
@@ -63,8 +82,8 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         map_iv_search_content_cancel.visibility = View.VISIBLE
         map_iv_search_icon.visibility = View.GONE
         mlist.clear()
-        initresultplace()
     }
+
     //展示历史搜索的ui
     fun showhistoryplace() {
         map_tv_search_history.visibility = View.VISIBLE
@@ -74,6 +93,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         mlist.clear()
         inithistoryplace()
     }
+
     //为事件添加点击事件
     fun initEvent() {
         //为rv构造适配器
@@ -90,44 +110,47 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         }
 
         //用于监听输入框的变化。
+        //监听到输入框不为空就显示另外一个rv布局
+//            根据网络请求拿下来的数据判断一下再显示第二个rv布局
         map_et_search_place.addTextChangedListener { editable ->
             val content = editable.toString()//获取输入的名字
-            for(i in 1..place_num){
-                if (HistoryPlaceDao.isPlaceSaved(i)){
-                    //如果content等于placeName
-                    if(content.equals(HistoryPlaceDao.getSavedPlace(i).placeName)){
-                       Toast.makeText(this, "查找成功", Toast.LENGTH_SHORT).show()
-                        isSearch=true
-                        break
+            if(content.isNotEmpty()){
+                CONTENT_TYPE = true
+                val filterPlace=placeItemList.filter { it.placeName!!.contains(content) }
+                if(filterPlace.size!=0){
+                    //将每一个筛选的place添加进Mlist
+                    showresultplace()
+                    for (place in filterPlace){
+                        mlist.add(SearchPlace(place,TYPE_RESULTPLACE))
                     }
+                    adapter.notifyDataSetChanged()
                 }
-            }
-            if(!isSearch){
-                Toast.makeText(this, "查找失败", Toast.LENGTH_SHORT).show()
-            }
-            //监听到输入框不为空就显示另外一个rv布局
-//            根据网络请求拿下来的数据判断一下再显示第二个rv布局
-            if (content.isNotEmpty()) {
-                CONTENT_TYPE=true
-                showresultplace()
-                adapter.notifyDataSetChanged()
-            } else {
-                CONTENT_TYPE=false
+            }else{
+                CONTENT_TYPE = false
                 showhistoryplace()
                 adapter.notifyDataSetChanged()
             }
-            if (CONTENT_TYPE){
-                map_et_search_place.setPadding(10,0,0,0)
-                map_et_search_place.setTypeface(Typeface.DEFAULT_BOLD)
-            }else{
-                map_et_search_place.setPadding(95,0,0,0)
-                map_et_search_place.setTypeface(Typeface.DEFAULT)
+                //监听到输入框不为空就显示另外一个rv布局
+//            根据网络请求拿下来的数据判断一下再显示第二个rv布局
+                if (CONTENT_TYPE) {
+                    map_et_search_place.setPadding(10, 0, 0, 0)
+                    map_et_search_place.setTypeface(Typeface.DEFAULT_BOLD)
+                } else {
+                    map_et_search_place.setPadding(95, 0, 0, 0)
+                    map_et_search_place.setTypeface(Typeface.DEFAULT)
+                }
+            }
+            //清除全部的监听事件
+            map_tv_search_deleteall.setOnClickListener {
+                mlist.clear()
+                val SearchNum=SearchHistory.getSavedNum()
+                for(i in 0..SearchNum-1 ){
+                    //顺序获取place的id
+                    var placeid= SearchHistory.getSavedPlaceId(i)
+                    SearchHistory.deletePlace(placeid)
+                }
+                SearchHistory.deleteSavedNum()
+                adapter.notifyDataSetChanged()
             }
         }
-        //清除全部的监听事件
-        map_tv_search_deleteall.setOnClickListener {
-            mlist.clear()
-            adapter.notifyDataSetChanged()
-        }
     }
-}

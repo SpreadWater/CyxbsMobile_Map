@@ -76,7 +76,7 @@
             android:layout_marginEnd="2dp"
             android:gravity="center"
             android:padding="6dp"
-            android:src="@drawable/map_ic_my_collect"
+            android:src="@drawable/map_ic_collect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.92"
