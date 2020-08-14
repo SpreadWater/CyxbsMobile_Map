@@ -60,14 +60,14 @@
                 app:tabIndicatorHeight="0dp"
                 app:tabMode="scrollable"
                 app:tabPaddingEnd="-1dp"
-                app:tabPaddingStart="0dp"
+                app:tabPaddingStart="-0.001dp"
                 app:tabRippleColor="@android:color/transparent"
                 app:tabSelectedTextColor="@color/qa_tab_selected_color"
                 app:tabTextColor="@color/qa_tab_unselected_color" />
 
             <Button
                 android:id="@+id/map_btn_collect_place"
-                android:layout_width="80dp"
+                android:layout_width="75dp"
                 android:layout_height="54dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
@@ -76,7 +76,7 @@
                 android:padding="8dp"
                 android:text="我的收藏"
                 android:textColor="@color/qa_tab_selected_color"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView

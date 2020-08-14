@@ -50,7 +50,8 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         viewModel.placeItemDetail.observe(viewLifecycleOwner, Observer {
             it?.run {
                 initImagesRv()
-                initLabelRV(placeAttribute as ArrayList<String>, ATTRIBUTE)
+                if (placeAttribute != null && !placeAttribute!!.contains(""))
+                    initLabelRV(placeAttribute as ArrayList<String>, ATTRIBUTE)
                 map_tv_place_name.text = placeName
             }
         })

@@ -15,16 +15,21 @@ object HistoryPlaceDao {
     /*
     本地开启数据库，以place的id为索引存储
      */
-    fun savePlace(place: PlaceItem){
-        sharedPreferences().edit{
-            putString(place.placeId.toString(),Gson().toJson(place))
+    fun savePlace(place: PlaceItem) {
+        sharedPreferences().edit {
+            putString(place.placeId.toString(), Gson().toJson(place))
         }
     }
-    fun getSavedPlace(placeid:Int): PlaceItem {
-        val placeJson= sharedPreferences().getString(placeid.toString(),"")
-        return Gson().fromJson(placeJson, PlaceItem::class.java)
-    }
-    fun isPlaceSaved(placeid: Int)= sharedPreferences().contains(placeid.toString())
 
-    private fun  sharedPreferences()=BaseApp.context.getSharedPreferences("history_place",Context.MODE_PRIVATE)
+    fun getSavedPlace(placeid: Int): PlaceItem? {
+        if (sharedPreferences().getString(placeid.toString(), "") != null) {
+            val placeJson = sharedPreferences().getString(placeid.toString(), "")
+            return Gson().fromJson(placeJson, PlaceItem::class.java)
+        } else
+            return null
+    }
+
+    fun isPlaceSaved(placeid: Int) = sharedPreferences().contains(placeid.toString())
+
+    private fun sharedPreferences() = BaseApp.context.getSharedPreferences("history_place", Context.MODE_PRIVATE)
 }

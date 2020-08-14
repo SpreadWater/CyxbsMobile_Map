@@ -65,8 +65,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         //获取之前本地basic的数据
         for (i in 1..125) {
             if (HistoryPlaceDao.isPlaceSaved(i)) {
-                LogUtils.d("***zt",HistoryPlaceDao.getSavedPlace(i).placeName.toString())
-                placeItemList.add(HistoryPlaceDao.getSavedPlace(i))
+                HistoryPlaceDao.getSavedPlace(i)?.let { placeItemList.add(it) }
             }
         }
     }

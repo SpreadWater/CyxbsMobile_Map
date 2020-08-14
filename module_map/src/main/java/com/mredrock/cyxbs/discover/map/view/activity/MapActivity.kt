@@ -43,7 +43,6 @@ import kotlin.collections.ArrayList
 
 @Route(path = DISCOVER_MAP)
 class MapActivity : BaseViewModelActivity<MapViewModel>() {
-    private var collectPlaceList = ArrayList<CollectPlace>()
     private val placeXList = ArrayList<PlaceItem>()
     private var placeItemList = ArrayList<PlaceItem>()
     override val isFragmentActivity: Boolean
@@ -54,8 +53,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private var sensorManager: SensorManager? = null
     private var magnetic: Sensor? = null
     private var accelerometer: Sensor? = null
+<<<<<<< Updated upstream
     private var dialog: Dialog? = null
     private var hot_Word:String?=null
+=======
+>>>>>>> Stashed changes
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
@@ -68,8 +70,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         }
         map_iv_image.setImage(ImageSource.resource(R.drawable.map_ic_background))
         initAddViewToIcon()
-        GetPlaceItemData()
         GetHotWord()
+        GetPlaceItemDataFromLocal()
         initTabCategory()
         initBottomSheetBehavior()
         initIconClick()
@@ -87,9 +89,24 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
     /*
-        拿到地点基础数据
+        从本地拿到数据
      */
-    private fun GetPlaceItemData() {
+    private fun GetPlaceItemDataFromLocal() {
+//        var count = 1
+//        while (count != 126) {
+//            if (HistoryPlaceDao.getSavedPlace(count) != null) {
+//                HistoryPlaceDao.getSavedPlace(count)?.let { placeItemList.add(it) }
+//                count++
+//            }
+//        }
+//        if (placeItemList == null)
+            GetPlaceItemDataFromNetwork()
+    }
+
+    /*
+        从网络拿到地点基础数据
+     */
+    private fun GetPlaceItemDataFromNetwork() {
         viewModel.getPlaceData()
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
@@ -100,12 +117,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     map_et_search.setText("  大家都在搜：红岩网校")
                 }
                 if (placeList != null) {
+                    placeItemList = placeList as ArrayList<PlaceItem>
                     for (place in it.placeList!!) {
                         //保存到本地数据库
-//                        LogUtils.d("****zt","存储数据成功！"+place.placeId)
                         HistoryPlaceDao.savePlace(place)
                     }
-                    initMapView(it)
+                    initMapView(placeItemList)
                 }
             }
         })
@@ -204,7 +221,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
          */
     fun initIconClick() {
         map_et_search.setOnClickListener {
-            changeToActivity(SearchActivity(),placeItemList)
+            changeToActivity(SearchActivity(), placeItemList)
         }
     }
 
@@ -218,12 +235,13 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_tl_category.setTitle(viewModel.getTabLayoutTitles())
         map_tl_category.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewModel.getTypeWordPlaceList(viewModel.getTabLayoutTitles()[tab?.position!! - 1])
-                viewModel.typewordPlaceData.observe(this@MapActivity, Observer {
-                    if (it != null) {
-
-                    }
-                })
+                //后端数据存在为空现象问题暂时不启用
+//                viewModel.getTypeWordPlaceList(viewModel.getTabLayoutTitles()[tab?.position!! - 1])
+//                viewModel.typewordPlaceData.observe(this@MapActivity, Observer {
+//                    if (it != null) {
+//
+//                    }
+//                })
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -239,10 +257,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     /*
     初始化map控件
      */
-    private fun initMapView(placeBasicData: PlaceBasicData) {
-        placeItemList = placeBasicData.placeList as ArrayList<PlaceItem>
+    private fun initMapView(placeList: ArrayList<PlaceItem>) {
+        if (placeList == null)
+            GetPlaceItemDataFromLocal()
         map_iv_image.clearPointList()
-        map_iv_image.setLocation(0.5f, PointF((placeBasicData.placeList as ArrayList<PlaceItem>)[28].placeCenterX, (placeBasicData.placeList as ArrayList<PlaceItem>)[28].placeCenterY))
+        map_iv_image.setLocation(0.5f, PointF(placeList[28].placeCenterX, placeList[28].placeCenterY))
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 if (map_iv_image.isReady) {
