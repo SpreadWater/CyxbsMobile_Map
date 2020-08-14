@@ -26,6 +26,8 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
     val mlist = ArrayList<SearchPlace>()
 
+    val count=0
+
     val TYPE_HISTORYPLACE = 0
 
     val TYPE_RESULTPLACE = 1
