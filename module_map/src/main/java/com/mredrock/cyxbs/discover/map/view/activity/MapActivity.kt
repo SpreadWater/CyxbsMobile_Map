@@ -202,7 +202,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
          */
     fun initIconClick() {
         map_et_search.setOnClickListener {
-            changeToActivity(SearchActivity())
+            changeToActivity(SearchActivity(),placeItemList)
         }
     }
 

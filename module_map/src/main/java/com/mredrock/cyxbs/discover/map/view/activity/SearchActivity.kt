@@ -3,6 +3,7 @@ package com.mredrock.cyxbs.discover.map.view.activity
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -44,6 +45,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_search_place)
         place_num = intent.getIntExtra("place_num", 0)
+        LogUtils.d("zt",place_num.toString())
         initData()
         inithistoryplace()
         initEvent()
@@ -53,6 +55,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         //获取之前本地basic的数据
         for (i in 1..place_num) {
             if (HistoryPlaceDao.isPlaceSaved(i)) {
+                LogUtils.d("***zt",HistoryPlaceDao.getSavedPlace(i).placeName.toString())
                 placeItemList.add(HistoryPlaceDao.getSavedPlace(i))
             }
         }
@@ -80,7 +83,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         map_tv_search_history.visibility = View.GONE
         map_tv_search_deleteall.visibility = View.GONE
         map_iv_search_content_cancel.visibility = View.VISIBLE
-        map_iv_search_icon.visibility = View.GONE
+        map_iv_searchplace_icon.visibility = View.GONE
         mlist.clear()
     }
 
@@ -89,7 +92,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         map_tv_search_history.visibility = View.VISIBLE
         map_tv_search_deleteall.visibility = View.VISIBLE
         map_iv_search_content_cancel.visibility = View.GONE
-        map_iv_search_icon.visibility = View.VISIBLE
+        map_iv_searchplace_icon.visibility = View.VISIBLE
         mlist.clear()
         inithistoryplace()
     }
@@ -98,7 +101,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
     fun initEvent() {
         //为rv构造适配器
         map_rv_search.layoutManager = LinearLayoutManager(this)
-        val adapter = HistoryAdapter(mlist, map_et_search_place, this)
+        val adapter = HistoryAdapter(mlist, map_et_search_place_set, this)
         map_rv_search.adapter = adapter
 
         map_iv_search_back.setOnClickListener {
@@ -106,13 +109,13 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         }
 
         map_iv_search_content_cancel.setOnClickListener {
-            map_et_search_place.setText("")//清空输入框的内容
+            map_et_search_place_set.setText("")//清空输入框的内容
         }
 
         //用于监听输入框的变化。
         //监听到输入框不为空就显示另外一个rv布局
 //            根据网络请求拿下来的数据判断一下再显示第二个rv布局
-        map_et_search_place.addTextChangedListener { editable ->
+        map_et_search_place_set.addTextChangedListener{ editable ->
             val content = editable.toString()//获取输入的名字
             if(content.isNotEmpty()){
                 CONTENT_TYPE = true
@@ -123,9 +126,16 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                     for (place in filterPlace){
                         mlist.add(SearchPlace(place,TYPE_RESULTPLACE))
                     }
+                    LogUtils.d("zt","1111")
                     adapter.notifyDataSetChanged()
+                }else{
+                    //用于输入搜索不到时的处理
+                    showresultplace()
+                    adapter.notifyDataSetChanged()
+                    com.mredrock.cyxbs.discover.map.utils.Toast.toast("搜索不到！",Gravity.CENTER,0,-800)
                 }
             }else{
+                LogUtils.d("zt","222")
                 CONTENT_TYPE = false
                 showhistoryplace()
                 adapter.notifyDataSetChanged()
@@ -133,11 +143,11 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                 //监听到输入框不为空就显示另外一个rv布局
 //            根据网络请求拿下来的数据判断一下再显示第二个rv布局
                 if (CONTENT_TYPE) {
-                    map_et_search_place.setPadding(10, 0, 0, 0)
-                    map_et_search_place.setTypeface(Typeface.DEFAULT_BOLD)
+                    map_et_search_place_set.setPadding(10, 0, 0, 0)
+                    map_et_search_place_set.setTypeface(Typeface.DEFAULT_BOLD)
                 } else {
-                    map_et_search_place.setPadding(95, 0, 0, 0)
-                    map_et_search_place.setTypeface(Typeface.DEFAULT)
+                    map_et_search_place_set.setPadding(95, 0, 0, 0)
+                    map_et_search_place_set.setTypeface(Typeface.DEFAULT)
                 }
             }
             //清除全部的监听事件
