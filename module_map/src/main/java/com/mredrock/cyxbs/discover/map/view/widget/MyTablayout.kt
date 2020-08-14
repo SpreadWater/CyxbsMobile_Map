@@ -34,7 +34,7 @@ class MyTabLayout : TabLayout {
                  */
                 if (tab?.customView != null) {
                     val tab_layout_text: TextView = tab.customView!!.findViewById(R.id.map_tv_label_item)
-                    tab_layout_text.setBackgroundResource(R.drawable.map_shape_place_content_item)
+                    tab_layout_text.setBackgroundResource(R.drawable.map_shape_et_search_place)
                 }
             }
 

@@ -67,16 +67,16 @@
 
             <Button
                 android:id="@+id/map_btn_collect_place"
-                android:layout_width="65dp"
+                android:layout_width="80dp"
                 android:layout_height="54dp"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:background="@color/whiteBackground"
-                android:gravity="bottom|center"
+                android:gravity="center"
                 android:padding="8dp"
                 android:text="我的收藏"
-                android:textColor="@color/transparent"
-                android:textSize="9dp" />
+                android:textColor="@color/qa_tab_selected_color"
+                android:textSize="15sp" />
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView

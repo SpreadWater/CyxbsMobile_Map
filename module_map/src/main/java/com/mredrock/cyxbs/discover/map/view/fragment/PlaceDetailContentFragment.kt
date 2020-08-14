@@ -1,7 +1,6 @@
 package com.mredrock.cyxbs.discover.map.view.fragment
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.BaseApp
@@ -18,8 +18,6 @@ import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
 import com.mredrock.cyxbs.discover.map.view.activity.CollectActivity
 import com.mredrock.cyxbs.discover.map.view.activity.ImageAllActivity
-import com.mredrock.cyxbs.discover.map.view.activity.MapActivity
-import com.mredrock.cyxbs.discover.map.view.activity.ViewImageActivity
 import com.mredrock.cyxbs.discover.map.view.adapter.PlaceDetailImageAdapter
 import com.mredrock.cyxbs.discover.map.view.adapter.PlaceLabelAdapter
 import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
@@ -28,17 +26,34 @@ import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.map_fragment_place_content.*
 
 class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>() {
-    private val titles = listOf<String>("入校报到点", "运动场", "教学楼", "图书", "快递")
+    var placeId: Int? = 29
+    private val ATTRIBUTE = 0
+    private val LABEL = 1
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.map_fragment_place_content, container, false)
+        val bundle = this.arguments //得到从Activity传来的数据
+        if (bundle != null) {
+            placeId = bundle.getString("placeId").toInt()
+        }
         return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initImagesRv()
-        initLabelRV()
+        placeId?.let { getPlaceDetail(it) }
         initOnClick()
+
+    }
+
+    fun getPlaceDetail(placeId: Int) {
+        viewModel.getPlaceDetail(placeId)
+        viewModel.placeItemDetail.observe(viewLifecycleOwner, Observer {
+            it?.run {
+                initImagesRv()
+                initLabelRV(placeAttribute as ArrayList<String>, ATTRIBUTE)
+                map_tv_place_name.text = placeName
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -48,7 +63,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             val pathList: List<Uri> = Matisse.obtainResult(data)
             for (_Uri in pathList) {
 //                Glide.with(this).load(_Uri).into(mView)
-                Log.e("*****zt",_Uri.path)
+                Log.e("*****zt", _Uri.path)
                 System.out.println(_Uri.path)
             }
         }
@@ -69,18 +84,22 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         }
     }
 
-    private fun initLabelRV() {
-        val titleList = ArrayList<String>()
-        for (title in titles)
-            titleList.add(title)
-        val placeLabelAdapter = PlaceLabelAdapter(titleList)
-        map_rrv_place_detail_label.adapter = placeLabelAdapter
-        map_rrv_place_label.adapter = placeLabelAdapter
+    private fun initLabelRV(placeLabelList: ArrayList<String>, type: Int) {
+        when (type) {
+            ATTRIBUTE -> {
+                val placeAttributeAdapter = PlaceLabelAdapter(placeLabelList)
+                map_rrv_place_label.adapter = placeAttributeAdapter
+            }
+            LABEL -> {
+                val placeLabelAdapter = PlaceLabelAdapter(placeLabelList)
+                map_rrv_place_detail_label.adapter = placeLabelAdapter
+            }
+        }
     }
 
     private fun initImagesRv() {
         val titleList = ArrayList<String>()
-        for (title in titles)
+        for (title in viewModel.titles)
             titleList.add(title)
         val placeDetailImageAdapter = PlaceDetailImageAdapter(titleList)
         map_rv_place_detail_image_list.apply {
@@ -102,6 +121,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             override fun onCancel() {
                 dialog.dismiss()
             }
+
             override fun onConfirm() {
                 dialog.dismiss()
                 openAlbum()

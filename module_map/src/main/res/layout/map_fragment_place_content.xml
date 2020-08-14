@@ -33,13 +33,13 @@
             tools:layout_editor_absoluteX="0dp">
 
             <TextView
+                android:id="@+id/map_tv_place_name"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
-                android:maxLines="1"
-                android:text="@string/map_place_detail"
                 android:gravity="center"
+                android:maxLines="1"
                 android:textColor="@color/grades_fragment_text_color_black"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -72,7 +72,7 @@
             android:id="@+id/map_iv_place_collect"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="2dp"
             android:gravity="center"
             android:padding="6dp"
@@ -83,22 +83,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/map_place_detail_content_tip"
             app:layout_constraintVertical_bias="0.01999998" />
-
-        <TextView
-            android:id="@+id/map_tv_place_collect"
-            android:layout_width="51dp"
-            android:layout_height="12dp"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="我最爱去"
-            android:textColor="@color/mine_sign_divider_blue_light"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.905"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/map_place_detail_content_tip"
-            app:layout_constraintVertical_bias="0.00999999" />
 
         <LinearLayout
             android:id="@+id/map_linearlayout2"
