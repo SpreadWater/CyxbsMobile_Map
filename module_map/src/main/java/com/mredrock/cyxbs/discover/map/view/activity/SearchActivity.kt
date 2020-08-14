@@ -17,6 +17,7 @@ import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
 import com.mredrock.cyxbs.discover.map.model.dao.SearchHistory
 import com.mredrock.cyxbs.discover.map.view.adapter.HistoryAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.SearchViewModel
+import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_activity_search_place.*
 
 class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
@@ -41,10 +42,12 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
     val placeItemList = ArrayList<PlaceItem>()
 
+    var hot_word=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_search_place)
         place_num = intent.getIntExtra("place_num", 0)
+//        hot_word=intent.getStringExtra("hot_word")
         LogUtils.d("zt",place_num.toString())
         initData()
         inithistoryplace()
@@ -52,8 +55,15 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
     }
 
     fun initData() {
+        /*if (!hot_word.equals("")) {
+            map_et_search_place_set.setText("大家都在搜：$hot_word")
+            map_et_search_place_set.setTypeface(Typeface.DEFAULT)
+        } else {
+            map_et_search_place_set.setText("大家都在搜：红岩网校")
+            map_et_search_place_set.setTypeface(Typeface.DEFAULT)
+        }*/
         //获取之前本地basic的数据
-        for (i in 1..place_num) {
+        for (i in 1..125) {
             if (HistoryPlaceDao.isPlaceSaved(i)) {
                 LogUtils.d("***zt",HistoryPlaceDao.getSavedPlace(i).placeName.toString())
                 placeItemList.add(HistoryPlaceDao.getSavedPlace(i))
@@ -115,6 +125,15 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         //用于监听输入框的变化。
         //监听到输入框不为空就显示另外一个rv布局
 //            根据网络请求拿下来的数据判断一下再显示第二个rv布局
+
+
+        //把属性变化一下
+        map_et_search_place_set.setOnClickListener {
+            map_et_search_place_set.setText("")
+            map_et_search_place_set.isCursorVisible=true
+            map_et_search_place_set.isFocusable=true
+
+        }
         map_et_search_place_set.addTextChangedListener{ editable ->
             val content = editable.toString()//获取输入的名字
             if(content.isNotEmpty()){

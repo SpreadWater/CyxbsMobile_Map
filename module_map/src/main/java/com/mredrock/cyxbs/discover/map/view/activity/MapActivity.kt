@@ -55,6 +55,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private var magnetic: Sensor? = null
     private var accelerometer: Sensor? = null
     private var dialog: Dialog? = null
+    private var hot_Word:String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
@@ -93,6 +94,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
                 if (!hotWord.equals("")) {
+                    hot_Word=hotWord
                     map_et_search.setText("  大家都在搜：$hotWord")
                 } else {
                     map_et_search.setText("  大家都在搜：红岩网校")
@@ -290,6 +292,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private fun changeToActivity(activity: Activity, placelist: ArrayList<PlaceItem>) {
         val intent = Intent(BaseApp.context, activity::class.java)
         intent.putExtra("place_num", placelist.size)
+        intent.putExtra("hot_word",hot_Word)
         startActivity(intent)
     }
 

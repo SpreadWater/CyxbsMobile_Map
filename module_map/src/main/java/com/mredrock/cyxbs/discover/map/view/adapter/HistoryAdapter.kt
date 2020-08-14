@@ -25,6 +25,8 @@ class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val editText: EditTex
 
     var SearchNum:Int=0
 
+    var isRepetive=false
+
     inner class HistoryViewHolder(view: View):RecyclerView.ViewHolder(view){
         val historyplace:TextView=view.findViewById(R.id.tv_map_history_place)
         val deleteplace:ImageView=view.findViewById(R.id.iv_map_history_delete)
@@ -54,7 +56,7 @@ class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val editText: EditTex
             SearchHistory.savePlaceNum(SearchNum)//保存新的搜索个数
             notifyDataSetChanged()
         }
-        //点击历史搜索item的点击事件
+        //历史搜索item的点击事件
         viewHolder.itemView.setOnClickListener {
             val position=viewHolder.adapterPosition
             val place=placeList[position]
@@ -72,9 +74,23 @@ class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val editText: EditTex
             val place=placeList[position]
             Toast.makeText(parent.context, "开始搜索…………"+viewHolder.resultplace.text, Toast.LENGTH_SHORT).show()
             SearchNum=SearchHistory.getSavedNum()//获取上一次保存的记录个数
-            SearchHistory.savePlace(place.placeItem,SearchNum)
-            SearchNum++//点击一次搜索记录个数加1
-            SearchHistory.savePlaceNum(SearchNum)//保存新的搜索个数
+            //判断一下是否历史记录重复的情况
+            for (i in 0..SearchNum-1){
+                //获取placeid
+                var placeid= SearchHistory.getSavedPlaceId(i)
+                //如果发现重复
+                if (SearchHistory.getSavedPlace(placeid).placeName.equals(place.placeItem.placeName)){
+                        isRepetive=true
+                }
+            }
+            if(!isRepetive){
+                SearchHistory.savePlace(place.placeItem,SearchNum)
+                SearchNum++//点击一次搜索记录个数加1
+                SearchHistory.savePlaceNum(SearchNum)//保存新的搜索个数
+            }
+            editText.setText("")
+            editText.setSelection(editText.text.length)
+            activity.showhistoryplace()
         }
         viewHolder
     }
