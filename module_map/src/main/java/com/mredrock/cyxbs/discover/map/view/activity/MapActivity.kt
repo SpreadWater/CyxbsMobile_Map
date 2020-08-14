@@ -65,6 +65,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 userState.login(this, "2019212381", "261919")
             }.start()
         }
+        map_iv_image.setImage(ImageSource.resource(R.drawable.map_ic_background))
         initAddViewToIcon()
         GetPlaceItemData()
         GetHotWord()
@@ -102,7 +103,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 //                        LogUtils.d("****zt","存储数据成功！"+place.placeId)
                         HistoryPlaceDao.savePlace(place)
                     }
-
                     initMapView(it)
                 }
             }
@@ -239,7 +239,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
      */
     private fun initMapView(placeBasicData: PlaceBasicData) {
         placeItemList = placeBasicData.placeList as ArrayList<PlaceItem>
-        map_iv_image.setImage(ImageSource.resource(R.drawable.map_ic_background))
         map_iv_image.clearPointList()
         map_iv_image.setLocation(0.5f, PointF((placeBasicData.placeList as ArrayList<PlaceItem>)[28].placeCenterX, (placeBasicData.placeList as ArrayList<PlaceItem>)[28].placeCenterY))
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
