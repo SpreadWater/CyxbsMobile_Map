@@ -4,21 +4,18 @@ import android.content.Context
 import androidx.core.content.edit
 import com.google.gson.Gson
 import com.mredrock.cyxbs.common.BaseApp
-import com.mredrock.cyxbs.discover.map.bean.Place
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 
 /**
- *@date 2020-8-10
+ *@date 2020-8-14
  *@author zhangsan
- *@description
+ *@description  用来储存搜索记录。
  */
-object HistoryPlaceDao {
-    /*
-    本地开启数据库，以place的id为索引存储
-     */
+object SearchHistory {
+
     fun savePlace(place: PlaceItem){
         sharedPreferences().edit{
-            putString(place.placeId.toString(),Gson().toJson(place))
+            putString(place.placeId.toString(), Gson().toJson(place))
         }
     }
     fun getSavedPlace(placeid:Int): PlaceItem {
@@ -27,5 +24,5 @@ object HistoryPlaceDao {
     }
     fun isPlaceSaved(placeid: Int)= sharedPreferences().contains(placeid.toString())
 
-    private fun  sharedPreferences()=BaseApp.context.getSharedPreferences("history_place",Context.MODE_PRIVATE)
+    private fun  sharedPreferences()= BaseApp.context.getSharedPreferences("search_place", Context.MODE_PRIVATE)
 }

@@ -34,6 +34,7 @@ import com.mredrock.cyxbs.discover.map.R.layout.map_activity_map
 import com.mredrock.cyxbs.discover.map.bean.Place
 import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
+import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
 import com.mredrock.cyxbs.discover.map.view.adapter.CollectPlaceAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
@@ -84,10 +85,18 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         viewModel.getPlaceData()
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
-                if (hotWord != null)
+                if (!hotWord.equals("")) {
                     map_et_search.setText("  大家都在搜：$hotWord")
+                }else{
+                    map_et_search.setText("  大家都在搜：红岩网校")
+                }
                 if (placeList != null) {
                     initMapView(placeList as ArrayList<PlaceItem>)
+                    for(place in it.placeList!!){
+                        //保存到本地数据库
+//                        LogUtils.d("****zt","存储数据成功！"+place.placeId)
+                        HistoryPlaceDao.savePlace(place)
+                    }
                     dialog?.dismiss()
                 }
             }
@@ -190,7 +199,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             }
         })
         map_et_search.setOnClickListener {
-            changeToActivity(SearchActivity())
+            changeToActivity(SearchActivity(),placeItemList)
         }
     }
 
@@ -260,7 +269,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         val intent = Intent(BaseApp.context, activity::class.java)
         startActivity(intent)
     }
-
+    private fun changeToActivity(activity: Activity,placelist: ArrayList<PlaceItem>){
+        val intent=Intent(BaseApp.context,activity::class.java)
+        intent.putExtra("place_num",placelist.size)
+        startActivity(intent)
+    }
 
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = supportFragmentManager

@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.discover.map.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.mredrock.cyxbs.common.network.ApiGenerator
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.common.utils.extensions.mapOrThrowApiException
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
@@ -9,6 +10,7 @@ import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.common.viewmodel.event.ProgressDialogEvent
 import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
+import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
 import com.mredrock.cyxbs.discover.map.network.ApiService
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
