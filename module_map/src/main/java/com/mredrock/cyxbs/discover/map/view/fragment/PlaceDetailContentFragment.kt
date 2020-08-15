@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.model.dao.CollectDao
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
 import com.mredrock.cyxbs.discover.map.view.activity.CollectActivity
 import com.mredrock.cyxbs.discover.map.view.activity.ImageAllActivity
@@ -29,6 +31,12 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
     var placeId: Int? = 29
     private val ATTRIBUTE = 0
     private val LABEL = 1
+
+    var isCollect=false
+    var mplaceattribute=""
+    override val viewModelClass: Class<PlaceDetailViewModel>
+        get() = PlaceDetailViewModel::class.java
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.map_fragment_place_content, container, false)
         val bundle = this.arguments //得到从Activity传来的数据
@@ -51,6 +59,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             it?.run {
                 if (placeAttribute != null && !placeAttribute!!.contains("")) {
                     initLabelRV(placeAttribute as ArrayList<String>, ATTRIBUTE)
+                    mplaceattribute=placeAttribute!!.get(0)
                 }
                 if (images != null)
                     initImagesRv(images as ArrayList<String>)
@@ -74,16 +83,13 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
 
     private fun initOnClick() {
         map_iv_place_collect.setOnClickListener {
-            changeToActivity(CollectActivity())
+            changeToActivity(CollectActivity(), placeId!!,mplaceattribute)
         }
         map_tv_share_image.setOnClickListener {
             this.activity?.let { it1 -> showDialog(it1) }
         }
         map_tv_search_more_place_detail.setOnClickListener {
             changeToActivity(ImageAllActivity())
-        }
-        map_iv_place_collect.setOnClickListener {
-            changeToActivity(CollectActivity())
         }
     }
 
@@ -113,7 +119,16 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
 
     private fun changeToActivity(activity: Activity) {
         val intent = Intent(BaseApp.context, activity::class.java)
-        startActivity(intent)
+        this.startActivity(intent)
+    }
+
+    private fun changeToActivity(activity: Activity, placeId: Int,atribute:String) {
+        val intent = Intent(BaseApp.context, activity::class.java)
+        isCollect=CollectDao.getCollectStatus(placeId)
+        intent.putExtra("PlaceCollect", placeId)
+        intent.putExtra("CollectStatus",isCollect)
+        intent.putExtra("CollectAtribute",atribute)
+        this.startActivity(intent)
     }
 
     private fun showDialog(activity: Activity) {
@@ -135,7 +150,4 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
     private fun openAlbum() {
         ImageSelectutils.selectImageFromAlbum(activity as AppCompatActivity, 9, this)
     }
-
-    override val viewModelClass: Class<PlaceDetailViewModel>
-        get() = PlaceDetailViewModel::class.java
 }

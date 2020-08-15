@@ -25,7 +25,7 @@ class PlaceDetailViewModel : BaseViewModel() {
     }
 
     fun retrofitConfig(builder: Retrofit.Builder): Retrofit.Builder {
-        builder.baseUrl("http://118.31.20.31:8080/")
+        builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         return builder
@@ -54,15 +54,4 @@ class PlaceDetailViewModel : BaseViewModel() {
                 }
     }
 
-    fun addCollectPlace(placeName: String, placeId: Int) {
-        ApiGenerator.getApiService(2019212381, ApiService::class.java)
-                .addCollectPlace(placeName, placeId)
-                .setSchedulers()
-                .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
-                .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
-                .safeSubscribeBy {
-                    if (it.info == "success")
-                        Toast.toast("收藏成功")
-                }.lifeCycle()
-    }
 }

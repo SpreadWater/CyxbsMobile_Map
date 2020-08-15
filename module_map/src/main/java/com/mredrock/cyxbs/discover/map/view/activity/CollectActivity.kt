@@ -3,17 +3,23 @@ package com.mredrock.cyxbs.discover.map.view.activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.model.dao.CollectDao
+import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
 import com.mredrock.cyxbs.discover.map.view.adapter.AutoWrapAdapter
+import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
 import com.mredrock.cyxbs.discover.map.view.widget.CollectDialog
 import com.mredrock.cyxbs.discover.map.viewmodel.CollectPlaceViewModel
 import kotlinx.android.synthetic.main.map_activity_collect.*
 
 
 class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
+
     override val isFragmentActivity: Boolean
         get() = false
     override val viewModelClass = CollectPlaceViewModel::class.java
@@ -22,7 +28,12 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
 
     val mlist = ArrayList<AutoWrapAdapter.recommend>()
 
-    val isCollect = true
+    var isCollect = true
+
+    var tag=""
+
+    var mplaceid=0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,20 +44,31 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
     }
 
     fun initdata() {
+        mplaceid=intent.getIntExtra("PlaceCollect",0)
+        isCollect=intent.getBooleanExtra("CollectStatus",false)
+        tag=intent.getStringExtra("CollectAtribute")
+        //获取点击进来的place
+        val placeItem=HistoryPlaceDao.getSavedPlace(mplaceid)
+
+        if (placeItem!=null){
+            map_tv_collect_place.text=placeItem.placeName
+        }
+        if(!tag.equals("")){
+            map_tv_collect_place_alias.text=tag
+        }
         repeat(2) {
             mlist.add(AutoWrapAdapter.recommend("我的宿舍"))
             mlist.add(AutoWrapAdapter.recommend("隐藏的角落"))
             mlist.add(AutoWrapAdapter.recommend("宝藏地点"))
         }
     }
-
     fun isCollect() {
-        map_tv_collect_cancel.visibility = View.VISIBLE
+        map_tv_collect_cancel_place.visibility = View.VISIBLE
         map_tv_collect_place_hint.text = "将该地点收藏改为"
     }
 
     fun isNotCollect() {
-        map_tv_collect_cancel.visibility = View.GONE
+        map_tv_collect_cancel_place.visibility = View.GONE
     }
 
     //如果收藏了就更改参数显示问题
@@ -63,14 +85,23 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
 
         map_tv_collect_confirm.setOnClickListener {
             if (isCollect) {
-                Toast.makeText(this, "确认修改收藏", Toast.LENGTH_SHORT).show()
+                viewModel.addCollectPlace(map_et_collect_collectname.text.toString(),mplaceid)
+                finish()
             } else {
-                Toast.makeText(this, "确认收藏发起网络请求", Toast.LENGTH_SHORT).show()
+                if (map_et_collect_collectname.text!!.equals("我的收藏")){
+                    viewModel.addCollectPlace(map_et_collect_collectname.text.toString()+"1",mplaceid)
+                    //存储当前收藏的状态
+                    CollectDao.saveCollectStatus(mplaceid,true)
+                }else{
+                    viewModel.addCollectPlace(map_et_collect_collectname.text.toString(),mplaceid)
+                    //存储当前收藏的状态
+                    CollectDao.saveCollectStatus(mplaceid,true)
+                }
+                finish()
             }
         }
 
         map_tv_collect_cancel.setOnClickListener {
-            Toast.makeText(this, "取消收藏返回详情", Toast.LENGTH_SHORT).show()
             finish()
         }
 
@@ -129,7 +160,8 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
                 }
 
                 override fun onConfirm() {
-                    Toast.makeText(collectActivity, "发送取消收藏网络请求…………", Toast.LENGTH_SHORT).show()
+                    viewModel.deleteCollectPlace(mplaceid)
+                    CollectDao.saveCollectStatus(mplaceid,false)
                     dialog.dismiss()
                 }
             })
