@@ -51,9 +51,10 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             it?.run {
                 if (placeAttribute != null && !placeAttribute!!.contains("")) {
                     initLabelRV(placeAttribute as ArrayList<String>, ATTRIBUTE)
-                    initImagesRv(images as ArrayList<String>)
-                    map_tv_place_name.text = placeName
                 }
+                if (images != null)
+                    initImagesRv(images as ArrayList<String>)
+                map_tv_place_name.text = placeName
             }
         })
     }
