@@ -44,6 +44,7 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
     }
 
     fun initdata() {
+
         mplaceid = intent.getIntExtra("PlaceCollect", 0)
         isCollect = intent.getBooleanExtra("CollectStatus", false)
         tag = intent.getStringExtra("CollectAtribute")
@@ -86,15 +87,15 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
 
         map_tv_collect_confirm.setOnClickListener {
             if (isCollect) {
-                viewModel.addCollectPlace(map_et_collect_collectname.text.toString(), mplaceid)
+                viewModel.addCollectPlace(mplaceid)
                 finish()
             } else {
                 if (map_et_collect_collectname.text!!.equals("我的收藏")) {
-                    viewModel.addCollectPlace(map_et_collect_collectname.text.toString() + "1", mplaceid)
+                    viewModel.addCollectPlace( mplaceid)
                     //存储当前收藏的状态
                     CollectDao.saveCollectStatus(mplaceid, true)
                 } else {
-                    viewModel.addCollectPlace(map_et_collect_collectname.text.toString(), mplaceid)
+                    viewModel.addCollectPlace(mplaceid)
                     //存储当前收藏的状态
                     CollectDao.saveCollectStatus(mplaceid, true)
                 }
@@ -159,11 +160,11 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
             override fun onCancel() {
                 dialog.dismiss()
             }
-
             override fun onConfirm() {
                 viewModel.deleteCollectPlace(mplaceid)
                 CollectDao.saveCollectStatus(mplaceid, false)
                 dialog.dismiss()
+                finish()
             }
         })
         dialog.show()

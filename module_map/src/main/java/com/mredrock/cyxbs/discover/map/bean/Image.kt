@@ -1,5 +1,6 @@
 package com.mredrock.cyxbs.discover.map.bean
 
+import android.net.Uri
 import java.io.Serializable
 
 /**
@@ -7,5 +8,5 @@ import java.io.Serializable
  *@author zhangsan
  *@description
  */
-data class Image(val imageUrl:Int):Serializable{
+data class Image(val imageUrl:Uri):Serializable{
 }

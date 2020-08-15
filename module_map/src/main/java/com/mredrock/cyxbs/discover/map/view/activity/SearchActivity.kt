@@ -51,8 +51,6 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         setContentView(R.layout.map_activity_search_place)
         place_num = SearchData.getSavedItemNum()
         hot_word = SearchData.getSavedHotword()
-        LogUtils.d("zt", place_num.toString())
-        LogUtils.d("zt", hot_word)
         initData()
         inithistoryplace()
         initEvent()

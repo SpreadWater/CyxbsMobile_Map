@@ -17,6 +17,7 @@ import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils.REQUEST_CODE_CHOOS
 import com.mredrock.cyxbs.discover.map.view.adapter.ImageAdapter
 import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
 import com.mredrock.cyxbs.discover.map.viewmodel.ImageLoaderViewModel
+import com.umeng.analytics.MobclickAgent
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.map_activity_allimage.*
 
@@ -33,18 +34,19 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
 
     override val viewModelClass = ImageLoaderViewModel::class.java
 
-    val imageUrls = ArrayList<Image>()
+    val imageUrls = ArrayList<Uri>()
 
     val MAX_SELECTABLE_IMAGE_COUNT = 6
+
+    var adapter:ImageAdapter?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_allimage)
-        initData()
-
         val layoutManager = GridLayoutManager(this, 2)
         layoutManager.isAutoMeasureEnabled
-        map_rv_allimage.adapter = ImageAdapter(imageUrls, this)
+        adapter= ImageAdapter(imageUrls,this)
+        map_rv_allimage.adapter = adapter
         map_rv_allimage.layoutManager = layoutManager
         //返回false表示已经到达底部
 
@@ -72,6 +74,16 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        MobclickAgent.onResume(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MobclickAgent.onPause(this)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === REQUEST_CODE_CHOOSE_PHOTO_ALBUM && resultCode === Activity.RESULT_OK) {
@@ -79,18 +91,14 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
             val pathList: List<Uri> = Matisse.obtainResult(data)
             for (_Uri in pathList) {
 //                Glide.with(this).load(_Uri).into(mView)
+                imageUrls.add(_Uri)
                 Log.e("*****zt",_Uri.path)
                 System.out.println(_Uri.path)
             }
+            adapter?.notifyDataSetChanged()
         }
     }
 
-    private fun initData() {
-        repeat(7) {
-            imageUrls.add(Image(R.drawable.umeng_socialize_qq))
-            imageUrls.add(Image(R.drawable.umeng_socialize_qq))
-        }
-    }
 
     private fun showDialog(activity: Activity) {
 

@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
 import com.mredrock.cyxbs.common.network.ApiGenerator
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
 import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
@@ -36,25 +37,29 @@ class CollectPlaceViewModel : BaseViewModel() {
         }
         return builder
     }
-    fun addCollectPlace(placeName: String, placeId: Int) {
+    fun addCollectPlace(placeId: Int) {
         ApiGenerator.getApiService(2019212381, ApiService::class.java)
-                .addCollectPlace(placeName, placeId)
+                .addCollectPlace(placeId)
                 .setSchedulers()
                 .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
                 .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
                 .safeSubscribeBy {
-                    if (it.info == "success")
+                    if (it.status == 200){
                         Toast.toast("收藏成功")
+                    }
+                    LogUtils.e("zt","收藏成功")
                 }.lifeCycle()
     }
     fun deleteCollectPlace(placeId: Int){
         ApiGenerator.getApiService(2019212381, ApiService::class.java)
                 .deleteCollectPlace(placeId)
+                .setSchedulers()
                 .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
                 .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
                 .safeSubscribeBy {
-                    if (it.info == "success")
+                    if (it.status == 200)
                         Toast.toast("取消成功")
+                    LogUtils.d("zt","取消收藏成功")
                 }.lifeCycle()
     }
 }

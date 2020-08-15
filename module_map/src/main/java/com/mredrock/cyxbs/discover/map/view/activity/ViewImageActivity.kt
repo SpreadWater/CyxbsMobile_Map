@@ -4,11 +4,14 @@ import android.Manifest
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaScannerConnection
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mredrock.cyxbs.common.config.DIR_PHOTO
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
 import com.mredrock.cyxbs.common.utils.extensions.saveImage
 import com.mredrock.cyxbs.common.utils.extensions.setFullScreen
@@ -26,17 +29,17 @@ class ViewImageActivity : AppCompatActivity() {
         private const val IMG_RES_PATHS = "imgResPaths"
         private const val POSITION = "position"
 
-        fun activityStart(context: Context, imgResUrls: ArrayList<String>, position: Int) {
-            context.startActivity<ViewImageActivity>(IMG_RES_PATHS to imgResUrls, POSITION to position)
-        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_view_image)
         setTheme(R.style.Theme_MaterialComponents)
         setFullScreen()
-        val url=intent.getIntExtra("url",0)
-        map_pv_view_image.setImageResource(url)
+        val urlString=intent.getStringExtra("url")
+        LogUtils.d("zt","图片路径$urlString")
+        val url=Uri.parse(urlString)
+        Glide.with(this).load(url).into(map_pv_view_image)
+
         map_pv_view_image.setOnPhotoTapListener { view, x, y ->
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
