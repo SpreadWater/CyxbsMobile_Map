@@ -49,10 +49,11 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         viewModel.getPlaceDetail(placeId)
         viewModel.placeItemDetail.observe(viewLifecycleOwner, Observer {
             it?.run {
-                initImagesRv()
-                if (placeAttribute != null && !placeAttribute!!.contains(""))
+                if (placeAttribute != null && !placeAttribute!!.contains("")) {
                     initLabelRV(placeAttribute as ArrayList<String>, ATTRIBUTE)
-                map_tv_place_name.text = placeName
+                    initImagesRv(images as ArrayList<String>)
+                    map_tv_place_name.text = placeName
+                }
             }
         })
     }
@@ -98,15 +99,14 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         }
     }
 
-    private fun initImagesRv() {
-        val titleList = ArrayList<String>()
-        for (title in viewModel.titles)
-            titleList.add(title)
-        val placeDetailImageAdapter = PlaceDetailImageAdapter(titleList)
-        map_rv_place_detail_image_list.apply {
-            layoutManager = LinearLayoutManager(BaseApp.context, LinearLayoutManager.HORIZONTAL, false)
-            addItemDecoration(DividerItemDecoration(BaseApp.context, DividerItemDecoration.VERTICAL))
-            adapter = placeDetailImageAdapter
+    private fun initImagesRv(imageUrlList: ArrayList<String>) {
+        if (imageUrlList != null) {
+            val placeDetailImageAdapter = PlaceDetailImageAdapter(imageUrlList)
+            map_rv_place_detail_image_list.apply {
+                layoutManager = LinearLayoutManager(BaseApp.context, LinearLayoutManager.HORIZONTAL, false)
+                addItemDecoration(DividerItemDecoration(BaseApp.context, DividerItemDecoration.VERTICAL))
+                adapter = placeDetailImageAdapter
+            }
         }
     }
 

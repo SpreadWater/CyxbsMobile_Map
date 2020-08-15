@@ -60,7 +60,7 @@
                 app:tabIndicatorHeight="0dp"
                 app:tabMode="scrollable"
                 app:tabPaddingEnd="-1dp"
-                app:tabPaddingStart="-0.001dp"
+                app:tabPaddingStart="-1dp"
                 app:tabRippleColor="@android:color/transparent"
                 app:tabSelectedTextColor="@color/qa_tab_selected_color"
                 app:tabTextColor="@color/qa_tab_unselected_color" />

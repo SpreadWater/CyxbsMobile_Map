@@ -11,8 +11,6 @@ import com.mredrock.cyxbs.discover.map.R
 
 class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageView(context, attr) {
     private val paint: Paint = Paint()
-
-    //    private var sPin: PointF? = null
     private var pin: Bitmap? = null
     private var pointList = ArrayList<PointF>()
 
@@ -26,6 +24,10 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
         invalidate()
     }
 
+    fun stopScale() {
+        setScaleAndCenter(0f, center)
+    }
+
     fun addPointF(pointF: ArrayList<PointF>) {
         pointList.addAll(pointF)
         initialise()
@@ -36,11 +38,13 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
         pointList.clear()
     }
 
+    //初始化图标
     private fun initialise() {
         pin = BitmapFactory.decodeResource(this.resources, R.drawable.map_ic_label)
         pin = Bitmap.createScaledBitmap(pin, 60, 80, true)
     }
 
+    //在地图上画点
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         // Don't draw pin before image is ready so it doesn't move around during setup.
@@ -56,6 +60,8 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
             canvas.drawBitmap(pin, vX, vY, paint)
         }
     }
+
+    //定位具体位置并放缩
     fun setLocation(scale: Float, pointF: PointF) {
         setScaleAndCenter(scale, pointF)
         setPin(pointF)

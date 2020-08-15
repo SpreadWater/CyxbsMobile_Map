@@ -108,7 +108,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
                 if (!hotWord.equals("")) {
-                    if (hotWord!=null){
+                    if (hotWord != null) {
                         SearchData.saveHotword(hotWord!!)
                     }
                     map_et_search.setText("  大家都在搜：$hotWord")
@@ -121,7 +121,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     for (place in it.placeList!!) {
                         //保存到本地数据库
                         //判断是否已经保持
-                        if(!HistoryPlaceDao.isPlaceSaved(place.placeId)){
+                        if (!HistoryPlaceDao.isPlaceSaved(place.placeId)) {
                             HistoryPlaceDao.savePlace(place)
                         }
                     }
@@ -238,13 +238,19 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_tl_category.setTitle(viewModel.getTabLayoutTitles())
         map_tl_category.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                //后端数据存在为空现象问题暂时不启用
-//                viewModel.getTypeWordPlaceList(viewModel.getTabLayoutTitles()[tab?.position!! - 1])
-//                viewModel.typewordPlaceData.observe(this@MapActivity, Observer {
-//                    if (it != null) {
-//
-//                    }
-//                })
+                viewModel.getTypeWordPlaceList(viewModel.getTabLayoutTitles()[tab?.position!!])
+                viewModel.typewordPlaceData.observe(this@MapActivity, Observer {
+                    map_iv_image.clearPointList()
+                    map_iv_image.stopScale()
+                    if (it != null) {
+                        for (placeId in it) {
+                            val place = HistoryPlaceDao.getSavedPlace(placeId)
+                            if (place != null) {
+                                map_iv_image.setPin(PointF(place.placeCenterX, place.placeCenterY))
+                            }
+                        }
+                    }
+                })
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

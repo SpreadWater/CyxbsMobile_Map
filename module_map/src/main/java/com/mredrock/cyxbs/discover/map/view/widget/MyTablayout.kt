@@ -75,7 +75,7 @@ class MyTabLayout : TabLayout {
                 val text: TextView = tab.customView!!.findViewById(R.id.map_tv_label_item)
                 text.text = title
             }
-            this.addTab(tab)
+            this.addTab(tab,false)
         }
 
     }
