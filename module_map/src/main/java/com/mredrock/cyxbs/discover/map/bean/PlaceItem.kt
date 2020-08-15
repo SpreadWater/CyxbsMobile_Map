@@ -1,12 +1,10 @@
 package com.mredrock.cyxbs.discover.map.bean
 
-import androidx.room.Entity
-import androidx.room.TypeConverters
+
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 
-@Entity(primaryKeys = ["placeId"], tableName = "places")
 class PlaceItem : Serializable {
     @SerializedName("place_name")
     var placeName: String? = null
@@ -20,7 +18,6 @@ class PlaceItem : Serializable {
     @SerializedName("place_center_y")
     var placeCenterY: Float = 0f
 
-    @TypeConverters(BuildingRectConverter::class)
     @SerializedName("building_list")
     var buildingRectList: MutableList<BuildingRect>? = null
 

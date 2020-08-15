@@ -3,9 +3,7 @@ package com.mredrock.cyxbs.discover.map.bean
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-class CollectPlace:Serializable{
-    @SerializedName("place_nickname")
-    val placeNickName:String?=null
+class CollectPlace : Serializable {
     @SerializedName("place_id")
-    val placeId:Int?=null
+    val placeId: List<Int>? = null
 }

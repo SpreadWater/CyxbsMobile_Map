@@ -2,17 +2,13 @@ package com.mredrock.cyxbs.discover.map.view.activity
 
 import android.content.Context
 import android.graphics.Typeface
-import android.hardware.input.InputManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.LogUtils
@@ -24,7 +20,6 @@ import com.mredrock.cyxbs.discover.map.model.dao.SearchData
 import com.mredrock.cyxbs.discover.map.model.dao.SearchHistory
 import com.mredrock.cyxbs.discover.map.view.adapter.HistoryAdapter
 import com.mredrock.cyxbs.discover.map.viewmodel.SearchViewModel
-import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_activity_search_place.*
 import org.jetbrains.anko.textColor
 

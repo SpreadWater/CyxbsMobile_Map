@@ -17,6 +17,6 @@ object Toast {
         toast.setGravity(position, xOffset, yOffset)
         toast.duration = Toast.LENGTH_LONG
         toast.view = view
-        toast.show();
+        toast.show()
     }
 }

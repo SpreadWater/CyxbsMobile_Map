@@ -30,9 +30,9 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
 
     var isCollect = true
 
-    var tag=""
+    var tag = ""
 
-    var mplaceid=0
+    var mplaceid = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,17 +44,17 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
     }
 
     fun initdata() {
-        mplaceid=intent.getIntExtra("PlaceCollect",0)
-        isCollect=intent.getBooleanExtra("CollectStatus",false)
-        tag=intent.getStringExtra("CollectAtribute")
+        mplaceid = intent.getIntExtra("PlaceCollect", 0)
+        isCollect = intent.getBooleanExtra("CollectStatus", false)
+        tag = intent.getStringExtra("CollectAtribute")
         //获取点击进来的place
-        val placeItem=HistoryPlaceDao.getSavedPlace(mplaceid)
+        val placeItem = HistoryPlaceDao.getSavedPlace(mplaceid)
 
-        if (placeItem!=null){
-            map_tv_collect_place.text=placeItem.placeName
+        if (placeItem != null) {
+            map_tv_collect_place.text = placeItem.placeName
         }
-        if(!tag.equals("")){
-            map_tv_collect_place_alias.text=tag
+        if (!tag.equals("")) {
+            map_tv_collect_place_alias.text = tag
         }
         repeat(2) {
             mlist.add(AutoWrapAdapter.recommend("我的宿舍"))
@@ -62,6 +62,7 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
             mlist.add(AutoWrapAdapter.recommend("宝藏地点"))
         }
     }
+
     fun isCollect() {
         map_tv_collect_cancel_place.visibility = View.VISIBLE
         map_tv_collect_place_hint.text = "将该地点收藏改为"
@@ -85,17 +86,17 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
 
         map_tv_collect_confirm.setOnClickListener {
             if (isCollect) {
-                viewModel.addCollectPlace(map_et_collect_collectname.text.toString(),mplaceid)
+                viewModel.addCollectPlace(map_et_collect_collectname.text.toString(), mplaceid)
                 finish()
             } else {
-                if (map_et_collect_collectname.text!!.equals("我的收藏")){
-                    viewModel.addCollectPlace(map_et_collect_collectname.text.toString()+"1",mplaceid)
+                if (map_et_collect_collectname.text!!.equals("我的收藏")) {
+                    viewModel.addCollectPlace(map_et_collect_collectname.text.toString() + "1", mplaceid)
                     //存储当前收藏的状态
-                    CollectDao.saveCollectStatus(mplaceid,true)
-                }else{
-                    viewModel.addCollectPlace(map_et_collect_collectname.text.toString(),mplaceid)
+                    CollectDao.saveCollectStatus(mplaceid, true)
+                } else {
+                    viewModel.addCollectPlace(map_et_collect_collectname.text.toString(), mplaceid)
                     //存储当前收藏的状态
-                    CollectDao.saveCollectStatus(mplaceid,true)
+                    CollectDao.saveCollectStatus(mplaceid, true)
                 }
                 finish()
             }
@@ -151,20 +152,20 @@ class CollectActivity : BaseViewModelActivity<CollectPlaceViewModel>() {
         })
     }
 
-        private fun showDialog(collectActivity: CollectActivity) {
+    private fun showDialog(collectActivity: CollectActivity) {
 
-            val dialog = CollectDialog(collectActivity)
-            dialog.setListener(object : CollectDialog.OnClickListener {
-                override fun onCancel() {
-                    dialog.dismiss()
-                }
+        val dialog = CollectDialog(collectActivity)
+        dialog.setListener(object : CollectDialog.OnClickListener {
+            override fun onCancel() {
+                dialog.dismiss()
+            }
 
-                override fun onConfirm() {
-                    viewModel.deleteCollectPlace(mplaceid)
-                    CollectDao.saveCollectStatus(mplaceid,false)
-                    dialog.dismiss()
-                }
-            })
-            dialog.show()
-        }
+            override fun onConfirm() {
+                viewModel.deleteCollectPlace(mplaceid)
+                CollectDao.saveCollectStatus(mplaceid, false)
+                dialog.dismiss()
+            }
+        })
+        dialog.show()
     }
+}

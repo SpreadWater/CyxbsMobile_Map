@@ -9,41 +9,42 @@ import io.reactivex.Observable
 import io.reactivex.internal.operators.observable.ObservableError
 import retrofit2.http.*
 
-interface ApiService
-{
+interface ApiService {
     //地图基础数据
     @GET("basic")
-    fun getPlaceItemsList():Observable<RedrockApiWrapper<PlaceBasicData>>
+    fun getPlaceItemsList(): Observable<RedrockApiWrapper<PlaceBasicData>>
 
     @GET("hot")
-    fun getPlaceHot():Observable<RedrockApiWrapper<String>>
-
-    @PATCH("rockmap/addkeep")
-    @FormUrlEncoded
-    fun addCollectPlace(@Field("place_nickname")place_nickname:String,@Field("place_id")place_id:Int):Observable<RedrockApiStatus>
-
-    @DELETE("rockmap/deletekeep")
-    fun deleteCollectPlace(@Field("place_id")place_id: Int):Observable<RedrockApiStatus>
+    fun getPlaceHot(): Observable<RedrockApiWrapper<String>>
 
     @GET("rockmap/collect")
-    fun getCollectPlaceList():Observable<RedrockApiWrapper<List<CollectPlace>>>
+    fun getCollectPlaceList(): Observable<RedrockApiWrapper<CollectPlace>>
 
     @POST("searchtype")
     @FormUrlEncoded
-    fun searchPlaceType(@Field("code")code:String):Observable<RedrockApiWrapper<List<Int>>>
+    fun searchPlaceType(@Field("code") code: String): Observable<RedrockApiWrapper<List<Int>>>
 
     @POST("detailsite")
     @FormUrlEncoded
-    fun getPlaceDetail(@Field("place_id")place_id: Int):Observable<RedrockApiWrapper<PlaceDetail>>
+    fun getPlaceDetail(@Field("place_id") place_id: Int): Observable<RedrockApiWrapper<PlaceDetail>>
 
     @POST("rockmap/upload")
     @FormUrlEncoded
-    fun uploadImage(@Field("file")file:String,@Field("place_id")place_id: Int)
+    fun uploadImage(@Field("file") file: String, @Field("place_id") place_id: Int)
 
     @POST("addhot")
     @FormUrlEncoded
-    fun addhot(@Field("id")id:Int)
+    fun addhot(@Field("id") id: Int)
 
     @GET("button")
-    fun button()
+    fun button(): Observable<RedrockApiWrapper<TabLayoutTitles>>
+
+    @PATCH("rockmap/addkeep")
+    @FormUrlEncoded
+    fun addCollectPlace(@Field("place_nickname") place_nickname: String, @Field("place_id") place_id: Int): Observable<RedrockApiStatus>
+
+    @DELETE("rockmap/deletekeep")
+    @FormUrlEncoded
+    fun deleteCollectPlace(@Field("place_id") place_id: Int): Observable<RedrockApiStatus>
+
 }

@@ -2,7 +2,6 @@ package com.mredrock.cyxbs.discover.map.view.activity
 
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.PointF
 import android.hardware.Sensor
@@ -44,16 +43,15 @@ import kotlin.collections.ArrayList
 
 @Route(path = DISCOVER_MAP)
 class MapActivity : BaseViewModelActivity<MapViewModel>() {
+    private val collectPointFList = ArrayList<PointF>()
     private val placeXList = ArrayList<PlaceItem>()
     private var placeItemList = ArrayList<PlaceItem>()
+    private var tabItemList = ArrayList<TabLayoutTitles.TabLayoutItem>()
     override val isFragmentActivity: Boolean
         get() = false
     override val viewModelClass: Class<MapViewModel>
         get() = MapViewModel::class.java
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
-    private var sensorManager: SensorManager? = null
-    private var magnetic: Sensor? = null
-    private var accelerometer: Sensor? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
@@ -66,18 +64,40 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         }
         map_iv_image.setImage(ImageSource.resource(R.drawable.map_ic_background))
         initAddViewToIcon()
-        GetHotWord()
-        GetPlaceItemDataFromLocal()
         initTabCategory()
+        getHotWord()
+        getPlaceItemDataFromLocal()
         initBottomSheetBehavior()
         initIconClick()
     }
 
+    /*
+        拿到收藏数据
+     */
+
+    fun getCollectPlaceData() {
+        viewModel.getCollectPlace()
+        viewModel.collectPlaces.observe(this, Observer<CollectPlace> {
+            for (collectPlace in it.placeId!!) {
+                val place = collectPlace?.let { it1 -> HistoryPlaceDao.getSavedPlace(it1) }
+                if (place != null) {
+                    collectPointFList.add(PointF(place.placeCenterX, place.placeCenterY))
+                }
+            }
+            if (!collectPointFList.isEmpty()) {
+                map_iv_image.clearPointList()
+                map_iv_image.stopScale()
+                map_iv_image.addPointF(collectPointFList)
+            } else {
+                Toast.toast("啊哦，你还未收场地点")
+            }
+        })
+    }
 
     /*
     得到hotword
      */
-    fun GetHotWord() {
+    fun getHotWord() {
         viewModel.getHotWord()
         viewModel.hotWord.observe(this, Observer {
 
@@ -88,22 +108,23 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     /*
         从本地拿到数据
      */
-    private fun GetPlaceItemDataFromLocal() {
-//        var count = 1
-//        while (count != 126) {
-//            if (HistoryPlaceDao.getSavedPlace(count) != null) {
-//                HistoryPlaceDao.getSavedPlace(count)?.let { placeItemList.add(it) }
-//                count++
-//            }
-//        }
-//        if (placeItemList == null)
-        GetPlaceItemDataFromNetwork()
+    private fun getPlaceItemDataFromLocal() {
+        var num = 1
+        if (HistoryPlaceDao.getAllSavePlace() != 0) {
+            while (num <= HistoryPlaceDao.getAllSavePlace()) {
+                HistoryPlaceDao.getSavedPlace(num)?.let { placeItemList.add(it) }
+                LogUtils.d("placelist", placeItemList[num - 1].placeName.toString())
+                num++
+            }
+            initMapView(placeItemList)
+        } else
+            getPlaceItemDataFromNetwork()
     }
 
     /*
         从网络拿到地点基础数据
      */
-    private fun GetPlaceItemDataFromNetwork() {
+    private fun getPlaceItemDataFromNetwork() {
         viewModel.getPlaceData()
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
@@ -131,65 +152,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        initCompass()
-    }
-
-    /*
-    指南针监听
-     */
-    private val listener: SensorEventListener = object : SensorEventListener {
-        var accelerometerValues = FloatArray(3)
-        var magneticValues = FloatArray(3)
-        private var startDegree = 0f
-        override fun onSensorChanged(event: SensorEvent) {
-            if (event.sensor.getType() === Sensor.TYPE_ACCELEROMETER) {
-                accelerometerValues = event.values.clone()
-            } else if (event.sensor.getType() === Sensor.TYPE_MAGNETIC_FIELD) {
-                magneticValues = event.values.clone()
-            }
-            val R = FloatArray(9)
-            val values = FloatArray(3)
-            SensorManager.getRotationMatrix(R, null, accelerometerValues,
-                    magneticValues)
-            SensorManager.getOrientation(R, values)
-            val endDegree = (Math.toDegrees(values[0].toDouble())).toFloat()
-            val animation = RotateAnimation(startDegree,
-                    endDegree, Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF, 0.5f)
-            animation.fillAfter = true // 动画执行完后是否停留在执行完的状态
-            map_iv_compass.startAnimation(animation)
-            startDegree = endDegree
-        }
-
-        override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        sensorManager?.unregisterListener(listener)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        sensorManager?.unregisterListener(listener)
-    }
-
-    /*
-    初始化指南针
-     */
-    private fun initCompass() {
-        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager?
-        magnetic = sensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-        accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        sensorManager?.registerListener(listener, magnetic,
-                SensorManager.SENSOR_DELAY_GAME)
-        sensorManager?.registerListener(listener, accelerometer,
-                SensorManager.SENSOR_DELAY_GAME)
-    }
-
     private fun initAddViewToIcon() {
         AddIconImage.setImageViewToButton(R.drawable.map_ic_search_before, map_et_search, 0)
 
@@ -200,7 +162,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
      */
     private fun initBottomSheetBehavior() {
         bottomSheetBehavior = BottomSheetBehavior.from(map_bottom_sheet_content)
-        replaceFragment(PlaceDetailContentFragment(), 29)
+        replaceFragment(PlaceDetailContentFragment(), 29,"腾飞门（新校门）")
         map_bottom_sheet_content.visibility = View.VISIBLE
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -223,6 +185,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         一些简单控件的点击事件
          */
     fun initIconClick() {
+        map_btn_collect_place.setOnClickListener {
+            getCollectPlaceData()
+        }
         map_et_search.setOnClickListener {
             changeToActivity(SearchActivity())
         }
@@ -232,13 +197,16 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     tab菜单
      */
     private fun initTabCategory() {
-        map_btn_collect_place.setOnClickListener { view ->
-
-        }
-        map_tl_category.setTitle(viewModel.getTabLayoutTitles())
+        viewModel.getTabLayoutTitles()
+        viewModel.tabTitles.observe(this, Observer<TabLayoutTitles> {
+            tabItemList = it.buttonInfo as ArrayList<TabLayoutTitles.TabLayoutItem>
+            map_tl_category.setTitle(tabItemList)
+        })
         map_tl_category.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewModel.getTypeWordPlaceList(viewModel.getTabLayoutTitles()[tab?.position!!])
+                if (tab != null) {
+                    tabItemList.get(tab.position).code?.let { viewModel.getTypeWordPlaceList(it) }
+                }
                 viewModel.typewordPlaceData.observe(this@MapActivity, Observer {
                     map_iv_image.clearPointList()
                     map_iv_image.stopScale()
@@ -267,8 +235,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     初始化map控件
      */
     private fun initMapView(placeList: ArrayList<PlaceItem>) {
-        if (placeList == null)
-            GetPlaceItemDataFromLocal()
+        if (placeList.isEmpty())
+            getPlaceItemDataFromLocal()
         map_iv_image.clearPointList()
         map_iv_image.setLocation(0.5f, PointF(placeList[28].placeCenterX, placeList[28].placeCenterY))
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
@@ -292,8 +260,10 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private fun judgePlaceX(pointF: PointF) {
         placeXList.clear()
         for (placeX in placeItemList) {
-            if ((pointF.x <= placeX.buildingRectList!![0].buildingRight && pointF.x >= placeX.buildingRectList!![0].buildingLeft)) {
-                placeXList.add(placeX)
+            for (building in placeX.buildingRectList!!) {
+                if ((pointF.x <= building.buildingRight && pointF.x >= building.buildingLeft)) {
+                    placeXList.add(placeX)
+                }
             }
         }
         judgePlaceY(pointF.y, placeXList)
@@ -304,10 +274,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
      */
     private fun judgePlaceY(y: Float, placeList: ArrayList<PlaceItem>) {
         for (placeY in placeList) {
-            if (y <= placeY.buildingRectList!![0].buildingBottom && y >= placeY.buildingRectList!![0].buildingTop) {
-                replaceFragment(PlaceDetailContentFragment(), placeY.placeId)
-                map_bottom_sheet_content.visibility = View.VISIBLE
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            for (building in placeY.buildingRectList!!) {
+                if (y <= building.buildingBottom && y >= building.buildingTop) {
+                    placeY.placeName?.let { replaceFragment(PlaceDetailContentFragment(), placeY.placeId, it) }
+                    map_bottom_sheet_content.visibility = View.VISIBLE
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                }
             }
         }
     }
@@ -318,9 +290,10 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
 
-    private fun replaceFragment(fragment: Fragment, placeId: Int) {
+    private fun replaceFragment(fragment: Fragment, placeId: Int, placeName: String) {
         val bundle = Bundle()
         bundle.putString("placeId", placeId.toString())
+        bundle.putString("placeName", placeName)
         fragment.arguments = bundle
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()

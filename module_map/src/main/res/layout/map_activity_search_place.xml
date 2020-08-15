@@ -59,7 +59,7 @@
         android:layout_marginTop="18dp"
         android:layout_marginEnd="14dp"
         android:visibility="gone"
-        android:src="@drawable/map_ic_search_cancel"
+        android:src="@drawable/map_ic_cancel"
         app:layout_constraintEnd_toEndOf="@id/map_et_search_place_set"
         app:layout_constraintTop_toTopOf="parent" />
 

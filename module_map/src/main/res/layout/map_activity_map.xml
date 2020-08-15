@@ -30,6 +30,7 @@
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="52dp"
                 android:src="@drawable/common_back" />
+
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/map_et_search"
                 android:layout_width="310dp"
@@ -40,21 +41,21 @@
                 android:background="@drawable/map_shape_et_search_place"
                 android:cursorVisible="false"
                 android:focusable="false"
-                android:singleLine="true"
                 android:focusableInTouchMode="false"
-                android:textColor="@color/transparent"
-                android:textSize="16sp"
                 android:paddingStart="14dp"
                 android:paddingTop="5dp"
-                android:paddingBottom="5dp" />
+                android:paddingBottom="5dp"
+                android:singleLine="true"
+                android:textColor="@color/transparent"
+                android:textSize="16sp" />
 
             <com.mredrock.cyxbs.discover.map.view.widget.MyTabLayout
                 android:id="@+id/map_tl_category"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
                 android:layout_below="@id/map_et_search"
-                android:layout_marginTop="7dp"
                 android:layout_marginStart="7dp"
+                android:layout_marginTop="7dp"
                 app:tabBackground="@android:color/transparent"
                 app:tabGravity="center"
                 app:tabIndicatorHeight="0dp"
@@ -102,28 +103,16 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
-            android:id="@+id/map_iv_compass_background"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:background="@drawable/map_ic_compass_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.96"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.240" />
-
-        <ImageView
             android:id="@+id/map_iv_compass"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:background="@drawable/map_ic_compass"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.915"
+            app:layout_constraintHorizontal_bias="0.98"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.253" />
+            app:layout_constraintVertical_bias="0.236" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.mredrock.cyxbs.discover.map.view.widget.MyFrameLayout

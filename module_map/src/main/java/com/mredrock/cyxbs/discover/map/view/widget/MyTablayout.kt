@@ -6,12 +6,14 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import com.google.android.material.tabs.TabLayout
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.bean.TabLayoutTitles
 import kotlinx.android.synthetic.main.map_item_tablayout_label_one.view.*
 
 
 class MyTabLayout : TabLayout {
-    private var titles: List<String>? = null
+    private var titles: List<TabLayoutTitles.TabLayoutItem>? = null
 
     constructor(context: Context?) : super(context!!) {
         init()
@@ -52,30 +54,27 @@ class MyTabLayout : TabLayout {
         })
     }
 
-    fun setTitle(titles: List<String>?) {
+    fun setTitle(titles: List<TabLayoutTitles.TabLayoutItem>?) {
         this.titles = titles
-        var count = 0
         /**
          * 开始添加切换的Tab。
          */
         for (title in this.titles!!) {
-            count++
             val tab = newTab()
             tab.setCustomView(R.layout.map_item_tablayout_label_one)
             if (tab.customView != null) {
-                val map_iv_hot=tab.customView!!.map_iv_hot
-                if(count==1)
-                {
-                    map_iv_hot.visibility=View.VISIBLE
+                val map_iv_hot = tab.customView!!.map_iv_hot
+                if (!title.equals(null)) {
+                    if (title.isHot!!) {
+                        map_iv_hot.visibility = View.VISIBLE
+                    } else {
+                        map_iv_hot.visibility = View.GONE
+                    }
+                    val text: TextView = tab.customView!!.findViewById(R.id.map_tv_label_item)
+                    text.text = title.code
                 }
-                else
-                {
-                    map_iv_hot.visibility=View.GONE
-                }
-                val text: TextView = tab.customView!!.findViewById(R.id.map_tv_label_item)
-                text.text = title
+                this.addTab(tab, false)
             }
-            this.addTab(tab,false)
         }
 
     }

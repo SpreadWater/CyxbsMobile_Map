@@ -29,6 +29,11 @@ object HistoryPlaceDao {
             return null
     }
 
+    fun getAllSavePlace(): Int {
+        if(sharedPreferences().all!=null)
+            return sharedPreferences().all.size
+        return 0
+    }
     fun isPlaceSaved(placeid: Int) = sharedPreferences().contains(placeid.toString())
 
     private fun sharedPreferences() = BaseApp.context.getSharedPreferences("history_place", Context.MODE_PRIVATE)
