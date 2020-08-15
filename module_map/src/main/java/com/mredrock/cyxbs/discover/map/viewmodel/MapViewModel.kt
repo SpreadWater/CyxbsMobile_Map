@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
 import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.extensions.mapOrThrowApiException
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
@@ -12,6 +13,7 @@ import com.mredrock.cyxbs.discover.map.bean.CollectPlace
 import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
 import com.mredrock.cyxbs.discover.map.bean.TabLayoutTitles
 import com.mredrock.cyxbs.discover.map.network.ApiService
+import com.mredrock.cyxbs.discover.map.utils.Toast
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -20,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MapViewModel : BaseViewModel() {
     var typewordPlaceData = MutableLiveData<List<Int>>()
     val tabTitles = MutableLiveData<TabLayoutTitles>()
-    val collectPlaces = MutableLiveData<CollectPlace>()
+    val collectPlaces = MutableLiveData<RedrockApiWrapper<CollectPlace>>()
     var placeBasicData = MutableLiveData<PlaceBasicData>()
     val hotWord = MutableLiveData<String>()
 
@@ -72,7 +74,6 @@ class MapViewModel : BaseViewModel() {
     fun getCollectPlace() {
         ApiGenerator.getApiService(2019212381, ApiService::class.java)
                 .getCollectPlaceList()
-                .mapOrThrowApiException()
                 .setSchedulers()
                 .safeSubscribeBy {
                     collectPlaces.value = it

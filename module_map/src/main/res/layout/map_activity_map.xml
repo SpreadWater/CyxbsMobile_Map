@@ -8,7 +8,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/map_layout_background">
+        android:id="@+id/map_cl_map_background"
+       >
 
         <com.mredrock.cyxbs.discover.map.view.widget.PinView
             android:id="@+id/map_iv_image"

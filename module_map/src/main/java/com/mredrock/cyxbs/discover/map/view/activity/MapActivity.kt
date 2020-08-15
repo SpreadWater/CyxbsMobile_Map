@@ -3,15 +3,10 @@ package com.mredrock.cyxbs.discover.map.view.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.PointF
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.*
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +15,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.mredrock.cyxbs.common.BaseApp
+import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
 import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
 import com.mredrock.cyxbs.common.service.account.IAccountService
@@ -31,6 +27,7 @@ import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
 import com.mredrock.cyxbs.discover.map.bean.*
+import com.mredrock.cyxbs.discover.map.model.dao.MapDataDao
 import com.mredrock.cyxbs.discover.map.model.dao.SearchData
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
@@ -43,12 +40,14 @@ import kotlin.collections.ArrayList
 
 @Route(path = DISCOVER_MAP)
 class MapActivity : BaseViewModelActivity<MapViewModel>() {
+    private var placeData: PlaceBasicData? = null
     private val collectPointFList = ArrayList<PointF>()
     private val placeXList = ArrayList<PlaceItem>()
     private var placeItemList = ArrayList<PlaceItem>()
     private var tabItemList = ArrayList<TabLayoutTitles.TabLayoutItem>()
     override val isFragmentActivity: Boolean
         get() = false
+    private val map = MapData()
     override val viewModelClass: Class<MapViewModel>
         get() = MapViewModel::class.java
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
@@ -62,10 +61,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 userState.login(this, "2019212381", "261919")
             }.start()
         }
+        LogUtils.d("tokentoken", ServiceManager.getService(IAccountService::class.java).getUserTokenService().getToken())
         map_iv_image.setImage(ImageSource.resource(R.drawable.map_ic_background))
+        map_cl_map_background.setBackgroundColor(Color.parseColor("#A8BCF1"))
         initAddViewToIcon()
-        initTabCategory()
         getHotWord()
+        initTabCategory()
         getPlaceItemDataFromLocal()
         initBottomSheetBehavior()
         initIconClick()
@@ -76,20 +77,17 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
      */
 
     fun getCollectPlaceData() {
+        map_iv_image.clearPointList()
+        map_iv_image.stopScale()
         viewModel.getCollectPlace()
-        viewModel.collectPlaces.observe(this, Observer<CollectPlace> {
-            for (collectPlace in it.placeId!!) {
+        viewModel.collectPlaces.observe(this, Observer<RedrockApiWrapper<CollectPlace>> {
+            if (it.data.equals(""))
+                map_iv_image.clearPointList()
+            for (collectPlace in it.data.placeId!!) {
                 val place = collectPlace?.let { it1 -> HistoryPlaceDao.getSavedPlace(it1) }
                 if (place != null) {
-                    collectPointFList.add(PointF(place.placeCenterX, place.placeCenterY))
+                    map_iv_image.setPin(PointF(place.placeCenterX, place.placeCenterY))
                 }
-            }
-            if (!collectPointFList.isEmpty()) {
-                map_iv_image.clearPointList()
-                map_iv_image.stopScale()
-                map_iv_image.addPointF(collectPointFList)
-            } else {
-                Toast.toast("啊哦，你还未收场地点")
             }
         })
     }
@@ -100,8 +98,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     fun getHotWord() {
         viewModel.getHotWord()
         viewModel.hotWord.observe(this, Observer {
-
-            map_et_search.setText("  大家都在搜：${it}")
+            if (it != null) {
+                SearchData.saveHotword(it!!)
+                map_et_search.setText("  大家都在搜：${it}")
+            } else {
+                map_et_search.setText("  大家都在搜:" + SearchData.getSavedHotword())
+            }
         })
     }
 
@@ -113,10 +115,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         if (HistoryPlaceDao.getAllSavePlace() != 0) {
             while (num <= HistoryPlaceDao.getAllSavePlace()) {
                 HistoryPlaceDao.getSavedPlace(num)?.let { placeItemList.add(it) }
-                LogUtils.d("placelist", placeItemList[num - 1].placeName.toString())
                 num++
             }
-            initMapView(placeItemList)
+            initMapData(placeItemList)
         } else
             getPlaceItemDataFromNetwork()
     }
@@ -127,6 +128,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private fun getPlaceItemDataFromNetwork() {
         viewModel.getPlaceData()
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
+            placeData = it
             it?.run {
                 if (!hotWord.equals("")) {
                     if (hotWord != null) {
@@ -134,7 +136,19 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     }
                     map_et_search.setText("  大家都在搜：$hotWord")
                 } else {
-                    map_et_search.setText("  大家都在搜：红岩网校")
+                    map_et_search.setText("  大家都在搜:" + SearchData.getSavedHotword())
+                }
+                initMapData(it.placeList as ArrayList<PlaceItem>)
+                map.apply {
+                    mapBackgroundColor = it.mapBackgroundColor
+                    mapHeight = it.mapHeight
+                    mapUrl = it.mapUrl
+                    mapWidth = it.mapWidth
+                    openSite = it.openSite
+                    pictureVersion = it.pictureVersion
+                }
+                if (!map.mapVersion?.let { it1 -> MapDataDao.isMapSaved(it1) }!!) {
+                    MapDataDao.saveMap(map)
                 }
                 if (placeList != null) {
                     SearchData.saveItemNum(placeList!!.size)
@@ -146,7 +160,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                             HistoryPlaceDao.savePlace(place)
                         }
                     }
-                    initMapView(placeItemList)
                 }
             }
         })
@@ -162,7 +175,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
      */
     private fun initBottomSheetBehavior() {
         bottomSheetBehavior = BottomSheetBehavior.from(map_bottom_sheet_content)
-        replaceFragment(PlaceDetailContentFragment(), 29,"腾飞门（新校门）")
+        replaceFragment(PlaceDetailContentFragment(), 29, "腾飞门（新校门）")
         map_bottom_sheet_content.visibility = View.VISIBLE
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -234,7 +247,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     /*
     初始化map控件
      */
-    private fun initMapView(placeList: ArrayList<PlaceItem>) {
+    private fun initMapData(placeList: ArrayList<PlaceItem>) {
         if (placeList.isEmpty())
             getPlaceItemDataFromLocal()
         map_iv_image.clearPointList()

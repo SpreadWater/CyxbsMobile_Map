@@ -41,10 +41,11 @@ interface ApiService {
 
     @PATCH("rockmap/addkeep")
     @FormUrlEncoded
+
     fun addCollectPlace(@Field("place_id") place_id: Int): Observable<RedrockApiStatus>
 
     @Multipart
-    @HTTP(method = "DELETE",path = "rockmap/deletekeep",hasBody = true)
+    @HTTP(method = "DELETE", path = "rockmap/deletekeep", hasBody = true)
     fun deleteCollectPlace(@Part("place_id") place_id: Int): Observable<RedrockApiStatus>
 
 }

@@ -2,6 +2,7 @@ package com.mredrock.cyxbs.discover.map.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import com.mredrock.cyxbs.common.network.ApiGenerator
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.common.utils.extensions.mapOrThrowApiException
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
@@ -43,6 +44,7 @@ class PlaceDetailViewModel : BaseViewModel() {
                     collectPlaces.value = it
                 }.lifeCycle()
     }
+
     fun okHttpConfig(builder: okhttp3.OkHttpClient.Builder): okhttp3.OkHttpClient.Builder {
         builder.run {
             if (BuildConfig.DEBUG) {
@@ -60,10 +62,31 @@ class PlaceDetailViewModel : BaseViewModel() {
                 .mapOrThrowApiException()
                 .setSchedulers()
                 .safeSubscribeBy {
-                    if (it != null) {
+                    if (!it.equals(null)) {
                         placeItemDetail.value = it
                     }
                 }
+    }
+
+    fun addCollectPlace(placeId: Int) {
+        ApiGenerator.getApiService(2019212381, ApiService::class.java)
+                .addCollectPlace(placeId)
+                .setSchedulers()
+                .safeSubscribeBy {
+                    if (it.status == 200) {
+                        Toast.toast("收藏成功")
+                    }
+                }.lifeCycle()
+    }
+
+    fun deleteCollectPlace(placeId: Int) {
+        ApiGenerator.getApiService(2019212381, ApiService::class.java)
+                .deleteCollectPlace(placeId)
+                .setSchedulers()
+                .safeSubscribeBy {
+                    if (it.status == 200)
+                        Toast.toast("取消成功")
+                }.lifeCycle()
     }
 
 }
