@@ -32,6 +32,7 @@ import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
 import com.mredrock.cyxbs.discover.map.bean.*
+import com.mredrock.cyxbs.discover.map.model.dao.SearchData
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
 import com.mredrock.cyxbs.discover.map.utils.Toast
@@ -53,7 +54,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private var sensorManager: SensorManager? = null
     private var magnetic: Sensor? = null
     private var accelerometer: Sensor? = null
-    private var hot_Word: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
@@ -80,6 +80,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     fun GetHotWord() {
         viewModel.getHotWord()
         viewModel.hotWord.observe(this, Observer {
+
             map_et_search.setText("  大家都在搜：${it}")
         })
     }
@@ -107,16 +108,22 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
                 if (!hotWord.equals("")) {
-                    hot_Word = hotWord
+                    if (hotWord!=null){
+                        SearchData.saveHotword(hotWord!!)
+                    }
                     map_et_search.setText("  大家都在搜：$hotWord")
                 } else {
                     map_et_search.setText("  大家都在搜：红岩网校")
                 }
                 if (placeList != null) {
+                    SearchData.saveItemNum(placeList!!.size)
                     placeItemList = placeList as ArrayList<PlaceItem>
                     for (place in it.placeList!!) {
                         //保存到本地数据库
-                        HistoryPlaceDao.savePlace(place)
+                        //判断是否已经保持
+                        if(!HistoryPlaceDao.isPlaceSaved(place.placeId)){
+                            HistoryPlaceDao.savePlace(place)
+                        }
                     }
                     initMapView(placeItemList)
                 }
@@ -217,7 +224,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
          */
     fun initIconClick() {
         map_et_search.setOnClickListener {
-            changeToActivity(SearchActivity(), placeItemList)
+            changeToActivity(SearchActivity())
         }
     }
 
@@ -304,12 +311,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         startActivity(intent)
     }
 
-    private fun changeToActivity(activity: Activity, placelist: ArrayList<PlaceItem>) {
-        val intent = Intent(BaseApp.context, activity::class.java)
-        intent.putExtra("place_num", placelist.size)
-        intent.putExtra("hot_word", hot_Word)
-        startActivity(intent)
-    }
 
     private fun replaceFragment(fragment: Fragment, placeId: Int) {
         val bundle = Bundle()

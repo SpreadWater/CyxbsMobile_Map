@@ -33,12 +33,11 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/map_shape_et_search_place"
-        android:hint="大家都在搜：风雨操场"
         android:imeOptions="actionSearch"
         android:maxLines="1"
         android:paddingStart="34dp"
         android:singleLine="true"
-        android:textColor="@color/levelOneFontColor"
+        android:textColor="@color/transparent"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
