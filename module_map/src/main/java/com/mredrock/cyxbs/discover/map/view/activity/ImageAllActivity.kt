@@ -9,6 +9,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
@@ -49,13 +50,11 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
         setContentView(R.layout.map_activity_allimage)
         placeid=intent.getIntExtra("sharePlaceid",0)
         LogUtils.d("zt",placeid.toString())
-        val layoutManager = GridLayoutManager(this, 2)
+        val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         layoutManager.isAutoMeasureEnabled
         adapter= ImageAdapter(imageUrls,this)
         map_rv_allimage.adapter = adapter
         map_rv_allimage.layoutManager = layoutManager
-        //返回false表示已经到达底部
-
         map_tv_allimage_share.setOnClickListener {
             showDialog(this)
         }

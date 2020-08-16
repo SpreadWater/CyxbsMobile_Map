@@ -19,7 +19,6 @@
         <activity
             android:name=".view.activity.SearchActivity"
             android:windowSoftInputMode="stateHidden">
-
         </activity>
         <activity android:name=".view.activity.MapActivity">
             <intent-filter>

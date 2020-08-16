@@ -1,6 +1,7 @@
 package com.mredrock.cyxbs.discover.map.view.activity
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
@@ -173,7 +174,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
             }
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                map_et_search_place_set.textColor=R.color.levelOneFontColor
+                map_et_search_place_set.setTextColor(resources.getColor(R.color.levelOneFontColor))
             }
         })
 

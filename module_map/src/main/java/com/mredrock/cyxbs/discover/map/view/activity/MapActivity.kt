@@ -62,7 +62,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         if (!userState.isLogin()) {
             //这里只是模拟一下登录，如果有并发需求，自己设计
             Thread {
-                userState.login(this, "2019212381", "261919")
+                userState.login(this, "2019210437", "142576")
             }.start()
         }
         placeId = intent.getStringExtra("placeId")

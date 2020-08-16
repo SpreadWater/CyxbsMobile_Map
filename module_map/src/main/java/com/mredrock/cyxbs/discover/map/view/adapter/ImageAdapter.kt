@@ -38,7 +38,7 @@ class ImageAdapter(val imageUrls:ArrayList<Uri>, val activity: AppCompatActivity
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val image=imageUrls[position]
-        Glide.with(activity).load(image).into(holder.image)
+        Glide.with(activity).load(image).placeholder(R.drawable.map_shape_image_loading).into(holder.image)
     }
 
     override fun getItemCount()=imageUrls.size
