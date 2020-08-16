@@ -27,7 +27,7 @@ class PlaceBasicData : Serializable {
     var openSite: Int = 29
 
     @SerializedName("picture_version")
-    var pictureVersion: Int? = null
+    var mapLoadTime: Int? = null
 }
 
 class MapData : Serializable {
@@ -47,7 +47,7 @@ class MapData : Serializable {
     var openSite: Int = 29
 
     @SerializedName("picture_version")
-    var pictureVersion: Int? = null
+    var mapLoadTime: Int? = null
 
     @SerializedName("map_version")
     var mapVersion: Int? = 1

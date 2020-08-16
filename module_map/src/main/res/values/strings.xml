@@ -23,4 +23,5 @@
     <string name="map_label_name">运动场</string>
     <string name="map_place_detail">风雨操场</string>
     <string name="map_collect_place_list_foot_item">暂无收藏哦</string>
+    <string name="map_dialog_progress_title">正在加载地图图片</string>
 </resources>

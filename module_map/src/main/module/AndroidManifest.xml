@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -15,7 +16,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".view.activity.ViewImageActivity"></activity>
-        <activity android:name=".view.activity.SearchActivity"
+        <activity
+            android:name=".view.activity.SearchActivity"
             android:windowSoftInputMode="stateHidden">
 
         </activity>

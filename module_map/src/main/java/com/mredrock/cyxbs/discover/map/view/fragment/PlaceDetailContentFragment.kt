@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.CollectPlace
 import com.mredrock.cyxbs.discover.map.model.dao.CollectDao
+import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
 import com.mredrock.cyxbs.discover.map.view.activity.ImageAllActivity
 import com.mredrock.cyxbs.discover.map.view.adapter.PlaceDetailImageAdapter
@@ -120,7 +122,6 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             placeId?.let { it1 -> changeToActivity(ImageAllActivity(), it1) }
         }
         map_iv_place_collect.setOnClickListener {
-
             if (!placeId?.let { it1 -> CollectDao.getCollectStatus(it1) }!!) {
                 viewModel.addCollectPlace(placeId!!)
                 map_iv_place_collect.setImageResource(R.drawable.map_ic_collect_red)

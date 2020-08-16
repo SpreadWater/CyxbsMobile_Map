@@ -1,13 +1,13 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
 import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.common.utils.extensions.mapOrThrowApiException
 import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
 import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
-import com.mredrock.cyxbs.common.viewmodel.event.ProgressDialogEvent
 import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.bean.CollectPlace
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetail
@@ -19,8 +19,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class PlaceDetailViewModel : BaseViewModel() {
-    val collectPlaces = MutableLiveData<CollectPlace>()
-    val titles = listOf<String>("入校报到点", "运动场", "教学楼", "图书", "快递")
+    val collectPlaces = MutableLiveData<RedrockApiWrapper<CollectPlace>>()
     var placeItemDetail = MutableLiveData<PlaceDetail>()
 
     init {
@@ -28,22 +27,23 @@ class PlaceDetailViewModel : BaseViewModel() {
     }
 
     fun retrofitConfig(builder: Retrofit.Builder): Retrofit.Builder {
-        builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
+        builder.baseUrl("http://118.31.20.31:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         return builder
     }
 
-
     fun getCollectPlace() {
         ApiGenerator.getApiService(2019212381, ApiService::class.java)
                 .getCollectPlaceList()
-                .mapOrThrowApiException()
                 .setSchedulers()
                 .safeSubscribeBy {
+                    LogUtils.d("collectp", it.status.toString())
                     collectPlaces.value = it
                 }.lifeCycle()
     }
+
+
 
     fun okHttpConfig(builder: okhttp3.OkHttpClient.Builder): okhttp3.OkHttpClient.Builder {
         builder.run {

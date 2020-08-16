@@ -36,8 +36,6 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
 
     fun clearPointList() {
         pointList.clear()
-        initialise()
-        invalidate()
     }
 
     //初始化图标

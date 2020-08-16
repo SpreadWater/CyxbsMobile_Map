@@ -68,8 +68,8 @@ class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val viewModel: Search
             val place=placeList[position]
             viewModel.SearchPlace(place.placeItem.placeId)
             val intent = Intent(activity,MapActivity::class.java)
-            intent.putExtra("placeSearchid",place.placeItem.placeId)
-            activity.startActivity(intent)
+            intent.putExtra("placeItemId",place.placeItem.placeId)
+            activity.startActivityForResult(intent,1)
             activity.finish()
         }
         viewHolder

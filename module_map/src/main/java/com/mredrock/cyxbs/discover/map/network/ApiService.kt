@@ -7,6 +7,7 @@ import com.mredrock.cyxbs.discover.map.bean.CollectPlace
 import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
 import io.reactivex.Observable
 import io.reactivex.internal.operators.observable.ObservableError
+import okhttp3.ResponseBody
 import retrofit2.http.*
 import java.io.File
 
@@ -31,11 +32,11 @@ interface ApiService {
 
     @Multipart
     @POST("rockmap/upload")
-    fun uploadImage(@Part("file") file: File, @Part("place_id") place_id: Int):Observable<RedrockApiStatus>
+    fun uploadImage(@Part("file") file: File, @Part("place_id") place_id: Int): Observable<RedrockApiStatus>
 
     @POST("addhot")
     @FormUrlEncoded
-    fun addhot(@Field("id") id: Int):Observable<RedrockApiStatus>
+    fun addhot(@Field("id") id: Int): Observable<RedrockApiStatus>
 
     @GET("button")
     fun button(): Observable<RedrockApiWrapper<TabLayoutTitles>>
@@ -47,5 +48,9 @@ interface ApiService {
     @Multipart
     @HTTP(method = "DELETE", path = "rockmap/deletekeep", hasBody = true)
     fun deleteCollectPlace(@Part("place_id") place_id: Int): Observable<RedrockApiStatus>
+
+    @GET
+    @Streaming
+    fun download(@Url url: String): Observable<ResponseBody>
 
 }
