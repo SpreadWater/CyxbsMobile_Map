@@ -131,8 +131,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     private fun getPlaceItemData() {
         //判断是否有网络
-        getPlaceItemDataFromNetwork()
-
+        if (MapDataDao.isMapSaved(1)) {
+            getPlaceItemDataFromLocal()
+        } else {
+            getPlaceItemDataFromNetwork()
+        }
     }
 
 
@@ -141,12 +144,16 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
  */
 
     fun getCollectPlaceData() {
+        viewModel.getCollectPlace()
         map_iv_image.stopScale()
         viewModel.collectPlaces.observe(this, Observer<CollectPlace> {
             map_iv_image.clearPointList()
             for (placeId in it.placeId!!) {
+                LogUtils.d("tagtagtag", "123456")
                 val place = HistoryPlaceDao.getSavedPlace(placeId)
                 if (place != null) {
+                    LogUtils.d("tagtagtag", "123456")
+
                     map_iv_image.setPin(PointF(place.placeCenterX, place.placeCenterY))
                 } else {
                     map_iv_image.clearPointList()
@@ -159,13 +166,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     得到hotword
      */
     fun getHotWord() {
+        map_et_search.setText("  大家都在搜:" + SearchData.getSavedHotword())
         viewModel.getHotWord()
         viewModel.hotWord.observe(this, Observer {
             if (it != "" && it != null) {
                 SearchData.saveHotword(it)
                 map_et_search.setText("  大家都在搜：${it}")
-            } else {
-                map_et_search.setText("  大家都在搜:" + SearchData.getSavedHotword())
             }
         })
     }
@@ -337,13 +343,13 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     初始化map控件
      */
     private fun initMapData(placeList: ArrayList<PlaceItem>) {
-        LogUtils.d("tagtag", "7")
+        LogUtils.d("tagtagtag", "7")
         placeLocation(placeList[28])
-        LogUtils.d("tagtag", "8")
+        LogUtils.d("tagtagtag", "8")
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 if (map_iv_image.isReady) {
-                    LogUtils.d("tagtag", "9")
+                    LogUtils.d("tagtagtag", "9")
                     val point: PointF? = map_iv_image.viewToSourceCoord(e.x, e.y)
                     if (point != null) {
                         LogUtils.d("tagtag", "10")
@@ -367,7 +373,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 //                placeXList.add(placeX)
 //            }
             for (building in placeX.buildingRectList!!) {
-                if (placeX(pointF.x, building)) {
+                if (pointF.x <= building.buildingRight && pointF.x >= building.buildingLeft) {
                     placeXList.add(placeX)
                 }
             }
@@ -384,7 +390,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 //                showPlaceDetail(placeY)
 //            }
             for (building in placeY.buildingRectList!!) {
-                if (placeY(y, building)) {
+                if (y <= building.buildingBottom && y >= building.buildingTop) {
                     showPlaceDetail(placeY)
                 }
             }
