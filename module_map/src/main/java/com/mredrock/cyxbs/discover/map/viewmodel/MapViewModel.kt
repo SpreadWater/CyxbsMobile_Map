@@ -33,6 +33,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MapViewModel : BaseViewModel() {
     val mapLoadProgress = MutableLiveData<Float>()
+    val isSuccess=MutableLiveData<Boolean>()
     var disposable: Disposable? = null
     var typewordPlaceData = MutableLiveData<List<Int>>()
     val tabTitles = MutableLiveData<TabLayoutTitles>()
@@ -72,6 +73,7 @@ class MapViewModel : BaseViewModel() {
             addInterceptor(DownloadInterceptor(object : DownloadListener {
                 override fun onProgress(currentByte: Long, totalByte: Long, done: Boolean) {
                     mapLoadProgress.postValue((currentByte.toDouble() / totalByte).toFloat())
+                    isSuccess.postValue(done)
                 }
             }))
         }

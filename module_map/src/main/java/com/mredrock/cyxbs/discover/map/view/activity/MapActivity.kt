@@ -3,19 +3,13 @@ package com.mredrock.cyxbs.discover.map.view.activity
 
 import android.Manifest
 import android.app.Activity
-import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.PointF
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.*
 import android.widget.FrameLayout
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -23,7 +17,6 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.mredrock.cyxbs.common.BaseApp
-import com.mredrock.cyxbs.common.bean.RedrockApiWrapper
 import com.mredrock.cyxbs.common.component.CyxbsToast
 import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
@@ -41,13 +34,10 @@ import com.mredrock.cyxbs.discover.map.model.dao.MapDataDao
 import com.mredrock.cyxbs.discover.map.model.dao.SearchData
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
-import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
 import com.mredrock.cyxbs.discover.map.view.widget.ProgressDialog
-import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
 import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_activity_map.map_iv_image
-import kotlinx.android.synthetic.main.map_dialog_progress.*
 import java.io.File
 import kotlin.collections.ArrayList
 
@@ -76,10 +66,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             }.start()
         }
         placeId = intent.getStringExtra("placeId")
+        initMapImage()
         initView()
         initBottomSheetBehavior()
-        initMapImage()
-        initBasicData()
     }
 
     private fun initBasicData() {
@@ -98,6 +87,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     if (MapDataDao.isMapSaved(1))
                         map_cl_map_background.setBackgroundColor(Color.parseColor(MapDataDao.getSavedMap(1)?.mapBackgroundColor))
                 }
+                initBasicData()
             }
             doAfterRefused {
                 CyxbsToast.makeText(BaseApp.context, "操作失败，请开启储存权限", android.widget.Toast.LENGTH_LONG).show()
@@ -105,34 +95,35 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         }
     }
 
-    private fun showProgressDialog(it: Float) {
-        val dialog = ProgressDialog(this)
-        dialog.show()
-        dialog.setProgress((it * 100).toInt().toString())
-        if ((it * 100).toInt() >= 100 || it == 0f) {
-            dialog.dismiss()
-            dialog.setProgress("0")
-        }
-        dialog.setListener(object : ProgressDialog.OnClickListener {
-            override fun onCancel() {
-                dialog.setProgress("0")
-                dialog.dismiss()
-                viewModel.disposable?.dispose()
-                dialog.setProgress("0")
-                dialog.dismiss()
-            }
-        })
-    }
-
     private fun initLoadMapProgress() {
         viewModel.loadMapFile()
+        var isLoadSuccess: Boolean = false
+        viewModel.isSuccess.observe(this, Observer {
+            isLoadSuccess = it
+        })
+        val dialog = ProgressDialog(this)
+        dialog.show()
         viewModel.mapLoadProgress.observe(this, Observer<Float> {
-            showProgressDialog(it)
+            dialog.setProgress((it * 100).toInt().toString())
+            if ((it * 100).toInt() >= 100 || it == 0f) {
+                val path = Environment.getExternalStorageDirectory().absolutePath + "/cquptmap/map.jpg"
+                if (File(path).exists()) {
+                    map_iv_image.setImage(ImageSource.uri(path))
+                }
+                dialog.dismiss()
+            }
+            dialog.setListener(object : ProgressDialog.OnClickListener {
+                override fun onCancel() {
+                    dialog.setProgress("0")
+                    dialog.dismiss()
+                    viewModel.disposable?.dispose()
+                }
+            })
         })
     }
 
     private fun getPlaceItemData() {
-        //判断是否有网络
+//        判断是否有网络
         if (MapDataDao.isMapSaved(1)) {
             getPlaceItemDataFromLocal()
         } else {
@@ -202,11 +193,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             placeData = it
             it?.run {
-                LogUtils.d("tagtag", "1")
                 initMapData(it.placeList as ArrayList<PlaceItem>)
-                LogUtils.d("tagtag", "2")
                 map_cl_map_background.setBackgroundColor(Color.parseColor(mapBackgroundColor))
-                LogUtils.d("tagtag", "3")
                 if (!hotWord.equals("") && hotWord != null) {
                     map_et_search.setText("  大家都在搜：$hotWord")
                     SearchData.saveHotword(hotWord!!)
