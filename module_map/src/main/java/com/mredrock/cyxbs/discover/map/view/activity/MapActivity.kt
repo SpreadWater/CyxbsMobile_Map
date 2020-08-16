@@ -54,7 +54,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private var placeId: String? = null
     override val viewModelClass: Class<MapViewModel>
         get() = MapViewModel::class.java
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+    private  var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
@@ -250,8 +250,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         bottomSheetBehavior = BottomSheetBehavior.from(map_bottom_sheet_content)
         replaceFragment(PlaceDetailContentFragment(), 29, "腾飞门（新校门）")
         map_bottom_sheet_content.visibility = View.VISIBLE
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        (bottomSheetBehavior as BottomSheetBehavior<FrameLayout>).state = BottomSheetBehavior.STATE_COLLAPSED
+        (bottomSheetBehavior as BottomSheetBehavior<FrameLayout>).addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
@@ -374,7 +374,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private fun showPlaceDetail(placeItem: PlaceItem) {
         placeItem.placeName?.let { replaceFragment(PlaceDetailContentFragment(), placeItem.placeId, it) }
         map_bottom_sheet_content.visibility = View.VISIBLE
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     /*

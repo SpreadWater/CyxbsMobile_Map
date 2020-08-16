@@ -97,7 +97,7 @@ class HistoryAdapter(val placeList: ArrayList<SearchPlace>, val viewModel: Searc
             }
             viewModel.SearchPlace(place.placeItem.placeId)
             val intent = Intent(activity, MapActivity::class.java)
-            intent.putExtra("placeSearchid", place.placeItem.placeId)
+            intent.putExtra("placeId", place.placeItem.placeId.toString())
             activity.startActivity(intent)
             activity.finish()
         }
