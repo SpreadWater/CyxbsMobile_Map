@@ -32,7 +32,6 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
     val mlist = ArrayList<SearchPlace>()
 
-
     val TYPE_HISTORYPLACE = 0
 
     val TYPE_RESULTPLACE = 1
@@ -142,10 +141,17 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                     showresultplace()
                     if(filterPlace.size!=0){
                         //将每一个筛选的place添加进Mlist
+                        isSearch=false
                         for (place in filterPlace){
                             mlist.add(SearchPlace(place,TYPE_RESULTPLACE))
                         }
                         adapter.notifyDataSetChanged()
+                    }else{
+                        //用于搜素不到的处理
+                        if(!isSearch){
+                            isSearch=true
+                            com.mredrock.cyxbs.discover.map.utils.Toast.toast("搜索不到该地点",Gravity.CENTER,0,-800)
+                        }
                     }
                 }else{
                     CONTENT_TYPE = false
