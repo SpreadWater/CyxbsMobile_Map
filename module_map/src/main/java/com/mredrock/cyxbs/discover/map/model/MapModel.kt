@@ -30,7 +30,7 @@ object MapModel {
             file.parentFile.mkdirs()
             file.createNewFile()
         }
-        val buffer = ByteArray(1024 * 4)
+        val buffer = ByteArray(1024 * 1024)
         val randomAccessFile = RandomAccessFile(file, "rwd")
         val loadFileLength: Long = file.length()
         randomAccessFile.seek(loadFileLength)

@@ -42,7 +42,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
     override val viewModelClass: Class<PlaceDetailViewModel>
         get() = PlaceDetailViewModel::class.java
 
-    val LoadviewModel=ImageLoaderViewModel()
+    val LoadviewModel = ImageLoaderViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.map_fragment_place_content, container, false)
@@ -100,8 +100,8 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             for (_Uri in pathList) {
 //                Glide.with(this).load(_Uri).into(mView)
                 Log.e("*****zt", _Uri.path)
-                val file= File(_Uri.toString())
-                LoadviewModel.loadImage(file,placeId!!)
+                val file = File(_Uri.toString())
+                LoadviewModel.loadImage(file, placeId!!)
                 System.out.println(_Uri.path)
             }
         }
@@ -161,9 +161,9 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         }
     }
 
-    private fun changeToActivity(activity: Activity,placeId: Int) {
+    private fun changeToActivity(activity: Activity, placeId: Int) {
         val intent = Intent(BaseApp.context, activity::class.java)
-        intent.putExtra("sharePlaceid",placeId)
+        intent.putExtra("sharePlaceid", placeId)
         this.startActivity(intent)
     }
 

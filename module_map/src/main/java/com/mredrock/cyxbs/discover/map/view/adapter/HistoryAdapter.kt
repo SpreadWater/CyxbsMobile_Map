@@ -26,77 +26,78 @@ import java.lang.IllegalArgumentException
  *@author zhangsan
  *@description
  */
-class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val viewModel: SearchViewModel, val activity: SearchActivity):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HistoryAdapter(val placeList: ArrayList<SearchPlace>, val viewModel: SearchViewModel, val activity: SearchActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var SearchNum:Int=0
+    var SearchNum: Int = 0
 
-    var isRepetive=false
+    var isRepetive = false
 
 
-    inner class HistoryViewHolder(view: View):RecyclerView.ViewHolder(view){
-        val historyplace:TextView=view.findViewById(R.id.tv_map_history_place)
-        val deleteplace:ImageView=view.findViewById(R.id.iv_map_history_delete)
+    inner class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val historyplace: TextView = view.findViewById(R.id.tv_map_history_place)
+        val deleteplace: ImageView = view.findViewById(R.id.iv_map_history_delete)
     }
-    inner class ResultViewHolder(view:View):RecyclerView.ViewHolder(view){
-        val resultplace:TextView=view.findViewById(R.id.map_tv_result_search_place)
+
+    inner class ResultViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val resultplace: TextView = view.findViewById(R.id.map_tv_result_search_place)
     }
 
     override fun getItemViewType(position: Int): Int {
-        val place=placeList[position]
+        val place = placeList[position]
         return place.placetype
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)=if (viewType==0){
-        val view=LayoutInflater.from(parent.context).inflate(R.layout.map_item_rv_history_search_place,parent,false)
-        val viewHolder=HistoryViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = if (viewType == 0) {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.map_item_rv_history_search_place, parent, false)
+        val viewHolder = HistoryViewHolder(view)
         //删除历史地点按钮的点击事件
         viewHolder.deleteplace.setOnClickListener {
-            val position=viewHolder.adapterPosition
-            val place=placeList[position]
+            val position = viewHolder.adapterPosition
+            val place = placeList[position]
             placeList.remove(place)
             //删除数据库中对应的数据
             SearchHistory.deletePlace(place.placeItem.placeId)
-            SearchNum=SearchHistory.getSavedNum()//获取上一次保存的记录个数
-            SearchHistory.savePlace(place.placeItem,SearchNum)
+            SearchNum = SearchHistory.getSavedNum()//获取上一次保存的记录个数
+            SearchHistory.savePlace(place.placeItem, SearchNum)
             SearchNum--//点击一次搜索记录个数-1
             SearchHistory.savePlaceNum(SearchNum)//保存新的搜索个数
             notifyDataSetChanged()
         }
         //历史搜索item的点击事件
         viewHolder.itemView.setOnClickListener {
-            val position=viewHolder.adapterPosition
-            val place=placeList[position]
+            val position = viewHolder.adapterPosition
+            val place = placeList[position]
             viewModel.SearchPlace(place.placeItem.placeId)
-            val intent = Intent(activity,MapActivity::class.java)
-            intent.putExtra("placeItemId",place.placeItem.placeId)
-            activity.startActivityForResult(intent,1)
+            val intent = Intent(activity, MapActivity::class.java)
+            intent.putExtra("placeId", place.placeItem.placeId.toString())
+            activity.startActivity(intent)
             activity.finish()
         }
         viewHolder
-    }else{
-        val view=LayoutInflater.from(parent.context).inflate(R.layout.map_item_rv_result_search_place,parent,false)
-        val viewHolder=ResultViewHolder(view)
+    } else {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.map_item_rv_result_search_place, parent, false)
+        val viewHolder = ResultViewHolder(view)
         viewHolder.resultplace.setOnClickListener {
-            val position=viewHolder.adapterPosition
-            val place=placeList[position]
-            SearchNum=SearchHistory.getSavedNum()//获取上一次保存的记录个数
+            val position = viewHolder.adapterPosition
+            val place = placeList[position]
+            SearchNum = SearchHistory.getSavedNum()//获取上一次保存的记录个数
             //判断一下是否历史记录重复的情况
-            for (i in 0..SearchNum-1){
+            for (i in 0..SearchNum - 1) {
                 //获取placeid
-                var placeid= SearchHistory.getSavedPlaceId(i)
+                var placeid = SearchHistory.getSavedPlaceId(i)
                 //如果发现重复
-                if (SearchHistory.getSavedPlace(placeid).placeName.equals(place.placeItem.placeName)){
-                        isRepetive=true
+                if (SearchHistory.getSavedPlace(placeid).placeName.equals(place.placeItem.placeName)) {
+                    isRepetive = true
                 }
             }
-            if(!isRepetive){
-                SearchHistory.savePlace(place.placeItem,SearchNum)
+            if (!isRepetive) {
+                SearchHistory.savePlace(place.placeItem, SearchNum)
                 SearchNum++//点击一次搜索记录个数加1
                 SearchHistory.savePlaceNum(SearchNum)//保存新的搜索个数
             }
             viewModel.SearchPlace(place.placeItem.placeId)
-            val intent = Intent(activity,MapActivity::class.java)
-            intent.putExtra("placeSearchid",place.placeItem.placeId)
+            val intent = Intent(activity, MapActivity::class.java)
+            intent.putExtra("placeSearchid", place.placeItem.placeId)
             activity.startActivity(intent)
             activity.finish()
         }
@@ -105,13 +106,13 @@ class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val viewModel: Search
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val place=placeList[position]
-        when(holder){
-            is HistoryViewHolder->holder.historyplace.text=place.placeItem.placeName
-            is ResultViewHolder->holder.resultplace.text=place.placeItem.placeName
-            else->throw IllegalArgumentException()
+        val place = placeList[position]
+        when (holder) {
+            is HistoryViewHolder -> holder.historyplace.text = place.placeItem.placeName
+            is ResultViewHolder -> holder.resultplace.text = place.placeItem.placeName
+            else -> throw IllegalArgumentException()
         }
     }
 
-    override fun getItemCount()=placeList.size
+    override fun getItemCount() = placeList.size
 }

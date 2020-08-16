@@ -27,7 +27,7 @@ class PlaceDetailViewModel : BaseViewModel() {
     }
 
     fun retrofitConfig(builder: Retrofit.Builder): Retrofit.Builder {
-        builder.baseUrl("http://118.31.20.31:8080/")
+        builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         return builder
@@ -42,7 +42,6 @@ class PlaceDetailViewModel : BaseViewModel() {
                     collectPlaces.value = it
                 }.lifeCycle()
     }
-
 
 
     fun okHttpConfig(builder: okhttp3.OkHttpClient.Builder): okhttp3.OkHttpClient.Builder {

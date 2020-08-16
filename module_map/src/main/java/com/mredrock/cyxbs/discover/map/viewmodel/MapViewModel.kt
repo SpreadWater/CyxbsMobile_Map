@@ -45,7 +45,7 @@ class MapViewModel : BaseViewModel() {
     }
 
     fun retrofitConfig(builder: Retrofit.Builder): Retrofit.Builder {
-        builder.baseUrl("http://118.31.20.31:8080/")
+        builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         return builder

@@ -1,0 +1,82 @@
+Index: module_map/src/main/res/layout/map_dialog_collect.xml
+===================================================================
+--- module_map/src/main/res/layout/map_dialog_collect.xml	(date 0)
++++ module_map/src/main/res/layout/map_dialog_collect.xml	(date 0)
+@@ -1,76 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent">
+-
+-    <androidx.constraintlayout.widget.ConstraintLayout
+-        android:id="@+id/map_cs_collect_dialog"
+-        android:layout_width="300dp"
+-        android:layout_height="200dp"
+-        android:background="@drawable/map_shape_dialog_background"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintLeft_toLeftOf="parent"
+-        app:layout_constraintRight_toRightOf="parent"
+-        app:layout_constraintTop_toTopOf="parent">
+-
+-        <androidx.appcompat.widget.AppCompatTextView
+-            android:id="@+id/map_tv_cancel_collect"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_marginTop="24dp"
+-            android:gravity="center"
+-            android:text="@string/map_tv_collect_cancel"
+-            android:textColor="@color/levelOneFontColor"
+-            android:textSize="20sp"
+-            app:layout_constraintHorizontal_bias="0.5"
+-            app:layout_constraintLeft_toLeftOf="parent"
+-            app:layout_constraintRight_toRightOf="parent"
+-            app:layout_constraintTop_toTopOf="parent" />
+-
+-        <androidx.appcompat.widget.AppCompatTextView
+-            android:id="@+id/map_tv_cancel_collect_hint"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_marginTop="12dp"
+-            android:width="300dp"
+-            android:padding="5dp"
+-            android:gravity="center"
+-            android:text="@string/map_tv_cancel_collect_hint"
+-            android:textColor="@color/levelFourFontColor"
+-            android:textSize="15sp"
+-            app:layout_constraintEnd_toEndOf="parent"
+-            app:layout_constraintHorizontal_bias="0.533"
+-            app:layout_constraintLeft_toLeftOf="parent"
+-            app:layout_constraintRight_toRightOf="parent"
+-            app:layout_constraintStart_toStartOf="parent"
+-            app:layout_constraintTop_toBottomOf="@id/map_tv_cancel_collect" />
+-
+-        <androidx.appcompat.widget.AppCompatButton
+-            android:id="@+id/map_btn_dialog_confirm"
+-            android:layout_width="80dp"
+-            android:layout_height="40dp"
+-            android:layout_marginEnd="48dp"
+-            android:layout_marginBottom="22dp"
+-            android:background="@drawable/map_shape_btn_background"
+-            android:text="@string/map_btn_confirm"
+-            android:textColor="@color/whiteFontColor"
+-            android:textSize="15sp"
+-            app:layout_constraintBottom_toBottomOf="parent"
+-            app:layout_constraintEnd_toEndOf="parent"
+-            app:layout_constraintRight_toRightOf="parent" />
+-
+-        <androidx.appcompat.widget.AppCompatButton
+-            android:id="@+id/map_btn_dialog_cancel"
+-            android:layout_width="80dp"
+-            android:layout_height="40dp"
+-            android:layout_marginRight="44dp"
+-            android:layout_marginBottom="22dp"
+-            android:background="@drawable/map_shape_btn_white_background"
+-            android:text="@string/map_btn_cancel"
+-            android:textColor="@color/colorAccent"
+-            android:textSize="18sp"
+-            app:layout_constraintBottom_toBottomOf="parent"
+-            app:layout_constraintRight_toLeftOf="@id/map_btn_dialog_confirm" />
+-    </androidx.constraintlayout.widget.ConstraintLayout>
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file

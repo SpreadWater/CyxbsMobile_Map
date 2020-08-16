@@ -61,6 +61,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override val isFragmentActivity: Boolean
         get() = false
     private val map = MapData()
+    private var placeId: String? = null
     override val viewModelClass: Class<MapViewModel>
         get() = MapViewModel::class.java
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
@@ -74,10 +75,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 userState.login(this, "2019212381", "261919")
             }.start()
         }
+        placeId = intent.getStringExtra("placeId")
         initView()
+        initBottomSheetBehavior()
         initMapImage()
         initBasicData()
-        initBottomSheetBehavior()
     }
 
     private fun initBasicData() {
@@ -145,15 +147,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     fun getCollectPlaceData() {
         viewModel.getCollectPlace()
+        map_iv_image.clearPointList()
         map_iv_image.stopScale()
         viewModel.collectPlaces.observe(this, Observer<CollectPlace> {
-            map_iv_image.clearPointList()
             for (placeId in it.placeId!!) {
-                LogUtils.d("tagtagtag", "123456")
                 val place = HistoryPlaceDao.getSavedPlace(placeId)
                 if (place != null) {
-                    LogUtils.d("tagtagtag", "123456")
-
                     map_iv_image.setPin(PointF(place.placeCenterX, place.placeCenterY))
                 } else {
                     map_iv_image.clearPointList()
@@ -226,7 +225,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 if (!map.mapVersion?.let { it1 -> MapDataDao.isMapSaved(it1) }!!) {
                     MapDataDao.saveMap(map)
                 }
-                LogUtils.d("tagtag", "4")
                 val path = Environment.getExternalStorageDirectory().absolutePath + "/cquptmap/map.jpg"
                 if (!File(path).exists()) {
                     initLoadMapProgress()
@@ -236,9 +234,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     SearchData.saveItemNum(placeList!!.size)
                     placeItemList = placeList as ArrayList<PlaceItem>
                     for (place in it.placeList!!) {
-                        LogUtils.d("tagtag", "5")
                         if (!HistoryPlaceDao.isPlaceSaved(place.placeId)) {
-                            LogUtils.d("tagtag", "6")
                             HistoryPlaceDao.savePlace(place)
                         }
                     }
@@ -302,10 +298,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     map_iv_image.stopScale()
                     if (it != null) {
                         for (placeId in it) {
-                            LogUtils.d("tag", "123456")
                             val place = HistoryPlaceDao.getSavedPlace(placeId)
                             if (place != null) {
-                                LogUtils.d("tag", "12345")
                                 map_iv_image.setPin(PointF(place.placeCenterX, place.placeCenterY))
                             }
                         }
@@ -323,14 +317,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val placeId = data?.getIntExtra("placeItemId", 0)
-        if (placeId != null) {
-            HistoryPlaceDao.getSavedPlace(placeId)?.let { placeLocation(it) }
-        }
-    }
-
     /*
         定位处理
      */
@@ -343,16 +329,16 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     初始化map控件
      */
     private fun initMapData(placeList: ArrayList<PlaceItem>) {
-        LogUtils.d("tagtagtag", "7")
         placeLocation(placeList[28])
-        LogUtils.d("tagtagtag", "8")
+        if (placeId != null) {
+            HistoryPlaceDao.getSavedPlace(placeId!!.toInt())?.let { placeLocation(it) }
+            HistoryPlaceDao.getSavedPlace(placeId!!.toInt())?.let { showPlaceDetail(it) }
+        }
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 if (map_iv_image.isReady) {
-                    LogUtils.d("tagtagtag", "9")
                     val point: PointF? = map_iv_image.viewToSourceCoord(e.x, e.y)
                     if (point != null) {
-                        LogUtils.d("tagtag", "10")
                         judgePlaceX(point)
                     }
                     LogUtils.d("tagtag", "" + point?.x + " " + point?.y)
@@ -369,11 +355,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private fun judgePlaceX(pointF: PointF) {
         placeXList.clear()
         for (placeX in placeItemList) {
-//            if (placeNameX(pointF.x, placeX)) {
-//                placeXList.add(placeX)
-//            }
+            if (placeNameX(pointF.x, placeX)) {
+                placeXList.add(placeX)
+            }
             for (building in placeX.buildingRectList!!) {
-                if (pointF.x <= building.buildingRight && pointF.x >= building.buildingLeft) {
+                if (placeX(pointF.x, building)) {
                     placeXList.add(placeX)
                 }
             }
@@ -386,11 +372,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
      */
     private fun judgePlaceY(y: Float, placeList: ArrayList<PlaceItem>) {
         for (placeY in placeList) {
-//            if (placeNameY(y, placeY)) {
-//                showPlaceDetail(placeY)
-//            }
+            if (placeNameY(y, placeY)) {
+                showPlaceDetail(placeY)
+            }
             for (building in placeY.buildingRectList!!) {
-                if (y <= building.buildingBottom && y >= building.buildingTop) {
+                if (placeY(y, building)) {
                     showPlaceDetail(placeY)
                 }
             }
@@ -418,17 +404,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         建筑判断
      */
     private fun placeX(x: Float, building: PlaceItem.BuildingRect): Boolean {
-        if (x <= building.buildingRight && x >= building.buildingLeft)
-            return true
-        else
-            return false
+        return x <= building.buildingRight && x >= building.buildingLeft
     }
 
     private fun placeY(y: Float, building: PlaceItem.BuildingRect): Boolean {
-        if (y <= building.buildingBottom && y >= building.buildingTop)
-            return true
-        else
-            return false
+        return y <= building.buildingBottom && y >= building.buildingTop
     }
 
 
