@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.Image
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
@@ -20,6 +21,7 @@ import com.mredrock.cyxbs.discover.map.viewmodel.ImageLoaderViewModel
 import com.umeng.analytics.MobclickAgent
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.map_activity_allimage.*
+import java.io.File
 
 
 /**
@@ -40,9 +42,13 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
 
     var adapter:ImageAdapter?=null
 
+    var placeid=0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_allimage)
+        placeid=intent.getIntExtra("sharePlaceid",0)
+        LogUtils.d("zt",placeid.toString())
         val layoutManager = GridLayoutManager(this, 2)
         layoutManager.isAutoMeasureEnabled
         adapter= ImageAdapter(imageUrls,this)
@@ -92,8 +98,8 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
             for (_Uri in pathList) {
 //                Glide.with(this).load(_Uri).into(mView)
                 imageUrls.add(_Uri)
-                Log.e("*****zt",_Uri.path)
-                System.out.println(_Uri.path)
+                val file=File(_Uri.toString())
+                viewModel.loadImage(file,placeid)
             }
             adapter?.notifyDataSetChanged()
         }

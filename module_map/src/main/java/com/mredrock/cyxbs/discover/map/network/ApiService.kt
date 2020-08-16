@@ -8,6 +8,7 @@ import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
 import io.reactivex.Observable
 import io.reactivex.internal.operators.observable.ObservableError
 import retrofit2.http.*
+import java.io.File
 
 interface ApiService {
     //地图基础数据
@@ -28,20 +29,19 @@ interface ApiService {
     @FormUrlEncoded
     fun getPlaceDetail(@Field("place_id") place_id: Int): Observable<RedrockApiWrapper<PlaceDetail>>
 
+    @Multipart
     @POST("rockmap/upload")
-    @FormUrlEncoded
-    fun uploadImage(@Field("file") file: String, @Field("place_id") place_id: Int)
+    fun uploadImage(@Part("file") file: File, @Part("place_id") place_id: Int):Observable<RedrockApiStatus>
 
     @POST("addhot")
     @FormUrlEncoded
-    fun addhot(@Field("id") id: Int)
+    fun addhot(@Field("id") id: Int):Observable<RedrockApiStatus>
 
     @GET("button")
     fun button(): Observable<RedrockApiWrapper<TabLayoutTitles>>
 
     @PATCH("rockmap/addkeep")
     @FormUrlEncoded
-
     fun addCollectPlace(@Field("place_id") place_id: Int): Observable<RedrockApiStatus>
 
     @Multipart

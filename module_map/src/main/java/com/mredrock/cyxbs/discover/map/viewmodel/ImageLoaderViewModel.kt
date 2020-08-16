@@ -1,7 +1,11 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
 import com.mredrock.cyxbs.common.network.ApiGenerator
+import com.mredrock.cyxbs.common.utils.LogUtils
+import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
+import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
 import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
+import com.mredrock.cyxbs.common.viewmodel.event.ProgressDialogEvent
 import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.network.ApiService
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,5 +40,19 @@ class ImageLoaderViewModel:BaseViewModel() {
             }
         }
         return builder
+    }
+    fun loadImage(file: File,placeid:Int){
+        ApiGenerator.getApiService(2019212381,ApiService::class.java)
+                .uploadImage(file,placeid)
+                .setSchedulers()
+                .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
+                .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
+                .safeSubscribeBy {
+                    if (it.status==200){
+                        LogUtils.d("zt","上传成功!")
+                    }else{
+                        LogUtils.d("zt","上传失败!${it.info}")
+                    }
+                }.lifeCycle()
     }
 }

@@ -14,9 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.activity.CollectActivity"></activity>
         <activity android:name=".view.activity.ViewImageActivity"></activity>
-        <activity android:name=".view.activity.SearchActivity"></activity>
+        <activity android:name=".view.activity.SearchActivity"
+            android:windowSoftInputMode="stateHidden">
+
+        </activity>
         <activity android:name=".view.activity.MapActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,5 +1,6 @@
 package com.mredrock.cyxbs.discover.map.view.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,12 @@ import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.bean.SearchPlace
+import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
+import com.mredrock.cyxbs.discover.map.model.dao.SearchData
 import com.mredrock.cyxbs.discover.map.model.dao.SearchHistory
+import com.mredrock.cyxbs.discover.map.view.activity.MapActivity
 import com.mredrock.cyxbs.discover.map.view.activity.SearchActivity
+import com.mredrock.cyxbs.discover.map.viewmodel.SearchViewModel
 import java.lang.IllegalArgumentException
 
 /**
@@ -21,11 +26,12 @@ import java.lang.IllegalArgumentException
  *@author zhangsan
  *@description
  */
-class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val editText: EditText, val activity: SearchActivity):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val viewModel: SearchViewModel, val activity: SearchActivity):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var SearchNum:Int=0
 
     var isRepetive=false
+
 
     inner class HistoryViewHolder(view: View):RecyclerView.ViewHolder(view){
         val historyplace:TextView=view.findViewById(R.id.tv_map_history_place)
@@ -60,10 +66,11 @@ class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val editText: EditTex
         viewHolder.itemView.setOnClickListener {
             val position=viewHolder.adapterPosition
             val place=placeList[position]
-            Toast.makeText(parent.context, "开始搜索…………${place.placeItem.placeName}", Toast.LENGTH_SHORT).show()
-            editText.setText(place.placeItem.placeName)
-            editText.setSelection(editText.text.length)
-            activity.showresultplace()
+            viewModel.SearchPlace(place.placeItem.placeId)
+            val intent = Intent(activity,MapActivity::class.java)
+            intent.putExtra("placeSearchid",place.placeItem.placeId)
+            activity.startActivity(intent)
+            activity.finish()
         }
         viewHolder
     }else{
@@ -72,7 +79,6 @@ class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val editText: EditTex
         viewHolder.resultplace.setOnClickListener {
             val position=viewHolder.adapterPosition
             val place=placeList[position]
-            Toast.makeText(parent.context, "开始搜索…………"+viewHolder.resultplace.text, Toast.LENGTH_SHORT).show()
             SearchNum=SearchHistory.getSavedNum()//获取上一次保存的记录个数
             //判断一下是否历史记录重复的情况
             for (i in 0..SearchNum-1){
@@ -88,9 +94,11 @@ class HistoryAdapter(val placeList:ArrayList<SearchPlace>, val editText: EditTex
                 SearchNum++//点击一次搜索记录个数加1
                 SearchHistory.savePlaceNum(SearchNum)//保存新的搜索个数
             }
-            editText.setText("")
-            editText.setSelection(editText.text.length)
-            activity.showhistoryplace()
+            viewModel.SearchPlace(place.placeItem.placeId)
+            val intent = Intent(activity,MapActivity::class.java)
+            intent.putExtra("placeSearchid",place.placeItem.placeId)
+            activity.startActivity(intent)
+            activity.finish()
         }
         viewHolder
     }

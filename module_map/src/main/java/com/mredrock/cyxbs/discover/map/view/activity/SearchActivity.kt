@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
@@ -31,7 +32,6 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
     val mlist = ArrayList<SearchPlace>()
 
-    val count = 0
 
     val TYPE_HISTORYPLACE = 0
 
@@ -54,7 +54,6 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         initData()
         inithistoryplace()
         initEvent()
-        closeKeyboard()
     }
 
     fun initData() {
@@ -113,7 +112,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
     fun initEvent() {
         //为rv构造适配器
         map_rv_search.layoutManager = LinearLayoutManager(this)
-        val adapter = HistoryAdapter(mlist, map_et_search_place_set, this)
+        val adapter = HistoryAdapter(mlist, viewModel, this)
         map_rv_search.adapter = adapter
 
         map_iv_search_back.setOnClickListener {
@@ -133,7 +132,6 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
             map_et_search_place_set.setText("")
             map_et_search_place_set.isCursorVisible = true
             map_et_search_place_set.isFocusable = true
-
         }
         map_et_search_place_set.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
@@ -141,22 +139,15 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                 if(content.isNotEmpty()){
                     CONTENT_TYPE = true
                     val filterPlace=placeItemList.filter { it.placeName!!.contains(content) }
+                    showresultplace()
                     if(filterPlace.size!=0){
                         //将每一个筛选的place添加进Mlist
-                        showresultplace()
                         for (place in filterPlace){
                             mlist.add(SearchPlace(place,TYPE_RESULTPLACE))
                         }
-                        LogUtils.d("zt","1111")
                         adapter.notifyDataSetChanged()
-                    }else{
-                        //用于输入搜索不到时的处理
-                        showresultplace()
-                        adapter.notifyDataSetChanged()
-                        com.mredrock.cyxbs.discover.map.utils.Toast.toast("搜索不到！",Gravity.CENTER,0,-800)
                     }
                 }else{
-                    LogUtils.d("zt","222")
                     CONTENT_TYPE = false
                     showhistoryplace()
                     adapter.notifyDataSetChanged()
@@ -175,7 +166,6 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
-
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 map_et_search_place_set.textColor=R.color.levelOneFontColor
             }
@@ -195,9 +185,4 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
         }
     }
 
-    fun closeKeyboard() {
-        val manager = getSystemService(Context.INPUT_METHOD_SERVICE)
-                as InputMethodManager
-        manager.hideSoftInputFromWindow(window.decorView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-    }
 }

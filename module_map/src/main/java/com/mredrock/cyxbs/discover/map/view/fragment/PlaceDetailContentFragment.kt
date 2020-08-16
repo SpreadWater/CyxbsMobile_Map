@@ -25,9 +25,11 @@ import com.mredrock.cyxbs.discover.map.view.adapter.PlaceDetailImageAdapter
 import com.mredrock.cyxbs.discover.map.view.adapter.PlaceLabelAdapter
 import com.mredrock.cyxbs.discover.map.view.widget.CollectDialog
 import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
+import com.mredrock.cyxbs.discover.map.viewmodel.ImageLoaderViewModel
 import com.mredrock.cyxbs.discover.map.viewmodel.PlaceDetailViewModel
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.map_fragment_place_content.*
+import java.io.File
 
 class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>() {
     var placeId: Int? = 0
@@ -37,6 +39,8 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
     var mplaceattribute = ""
     override val viewModelClass: Class<PlaceDetailViewModel>
         get() = PlaceDetailViewModel::class.java
+
+    val LoadviewModel=ImageLoaderViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.map_fragment_place_content, container, false)
@@ -94,6 +98,8 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             for (_Uri in pathList) {
 //                Glide.with(this).load(_Uri).into(mView)
                 Log.e("*****zt", _Uri.path)
+                val file= File(_Uri.toString())
+                LoadviewModel.loadImage(file,placeId!!)
                 System.out.println(_Uri.path)
             }
         }
@@ -111,7 +117,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
 
     private fun initOnClick() {
         map_tv_search_more_place_detail.setOnClickListener {
-            changeToActivity(ImageAllActivity())
+            placeId?.let { it1 -> changeToActivity(ImageAllActivity(), it1) }
         }
         map_iv_place_collect.setOnClickListener {
 
@@ -154,8 +160,9 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         }
     }
 
-    private fun changeToActivity(activity: Activity) {
+    private fun changeToActivity(activity: Activity,placeId: Int) {
         val intent = Intent(BaseApp.context, activity::class.java)
+        intent.putExtra("sharePlaceid",placeId)
         this.startActivity(intent)
     }
 
