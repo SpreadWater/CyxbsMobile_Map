@@ -330,5 +330,53 @@
 
     <color name="transactionCompletionEditViewColor" tools:ignore="ResourceName">#ffffff</color>
 
+    <!--    掌邮地图-->
+
+    <!--输入框字体的颜色    -->
+    <color name="map_et_search_color" tools:ignore="ResourceName">#8B8B8C</color>
+    <!-- 输入框背景的颜色   -->
+    <color name="map_et_search_background_color" tools:ignore="ResourceName">#1F1F1F</color>
+    <!--lab的颜色    -->
+    <color name="map_tv_lab_color" tools:ignore="ResourceName">#F0F0F2</color>
+    <!--detail的地名颜色    -->
+    <color name="map_tv_detail_color" tools:ignore="ResourceName">#F0F0F2</color>
+    <!--圆角边框的颜色    -->
+    <color name="map_tv_rentage_color" tools:ignore="ResourceName">#A1A1A2</color>
+    <!--  分享此地的颜色  -->
+    <color name="map_tv_share_color" tools:ignore="ResourceName">#A1A1A2</color>
+    <!--查看更多的颜色    -->
+    <color name="map_tv_more_color" tools:ignore="ResourceName">#5A5A5A</color>
+    <!-- 历史记录的颜色   -->
+    <color name="map_tv_history_color" tools:ignore="ResourceName">#A0A0A1</color>
+    <!--    清除全部的颜色-->
+    <color name="map_tv_cleanall_color" tools:ignore="ResourceName">#595959</color>
+    <!--搜索框的字体颜色    -->
+    <color name="map_et_search_title_color" tools:ignore="ResourceName">#717172</color>
+    <!--历史记录item颜色    -->
+    <color name="map_tv_history_item_color" tools:ignore="ResourceName">#EFEFF1</color>
+    <!--取消dialog的颜色    -->
+    <color name="map_dialog_cancel_color" tools:ignore="ResourceName">#E7EFFD</color>
+    <!--确定dialog的颜色    -->
+    <color name="map_dialog_confirm_color" tools:ignore="ResourceName">#4B44E5</color>
+    <!--取消字体颜色    -->
+    <color name="map_tv_dialog_cancel_color" tools:ignore="ResourceName">#86AAE3</color>
+    <!--确定字体的颜色    -->
+    <color name="map_tv_dialog_confirm_color" tools:ignore="ResourceName">#FFFFFF</color>
+    <!--dialog的背景颜色    -->
+    <color name="map_dialog_background_color" tools:ignore="ResourceName">#2D2D2D</color>
+    <!--dialog hint的颜色    -->
+    <color name="map_tv_dialog_hint_color" tools:ignore="ResourceName">#F0F0F2</color>
+    <!-- 所有图片分享蓝色字体   -->
+    <color name="map_tv_share_blue_color" tools:ignore="ResourceName">#01CAF0</color>
+    <!--暂无更多的颜色    -->
+    <color name="map_tv_nomore_color" tools:ignore="ResourceName">#A1A1A2</color>
+    <!--共享图片的toolbar颜色    -->
+    <color name="map_toolbar_image_color" tools:ignore="ResourceName">#788EFA</color>
+    <!--共享图片下方的toolbar颜色    -->
+    <color name="map_down_toolbar_color" tools:ignore="ResourceName">#6B65EF</color>
+    <!--toast的背景色    -->
+    <color name="map_toast_color" tools:ignore="ResourceName">#2A4D83</color>
+    <!--toast字体颜色   -->
+    <color name="map_toast_text_color" tools:ignore="ResourceName">#FEFEFE</color>
 </resources>
 

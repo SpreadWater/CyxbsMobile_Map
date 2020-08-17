@@ -41,8 +41,8 @@
                 android:layout_marginEnd="15dp"
                 android:gravity="left|center"
                 android:maxLines="2"
-                android:textColor="@color/grades_fragment_text_color_black"
-                android:textSize="16dp"
+                android:textColor="@color/map_tv_detail_color"
+                android:textSize="23dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.113"
@@ -101,8 +101,9 @@
                 android:layout_height="20dp"
                 android:layout_marginStart="15dp"
                 android:gravity="center"
+                android:textColor="@color/map_tv_detail_color"
                 android:text="@string/map_detail"
-                android:textSize="16dp" />
+                android:textSize="17dp" />
 
             <TextView
                 android:id="@+id/map_tv_search_more_place_detail"
@@ -110,13 +111,14 @@
                 android:layout_height="19dp"
                 android:layout_marginStart="240dp"
                 android:gravity="center"
+                android:textColor="@color/map_tv_more_color"
                 android:text="@string/map_look_more"
                 android:textSize="12dp" />
 
             <ImageView
                 android:id="@+id/map_iv_search_more_place_detail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="16dp"
                 android:layout_marginLeft="6dp"
                 android:background="@drawable/map_ic_forward" />
         </LinearLayout>
@@ -146,7 +148,6 @@
                 android:id="@+id/map_iv_back"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:layout_marginTop="3dp"
                 android:layout_marginStart="140dp"
                 android:src="@drawable/map_ic_share_image_grey" />
 
@@ -157,7 +158,7 @@
                 android:maxLines="1"
                 android:padding="5dp"
                 android:text="@string/map_share_people_place_image"
-                android:textColor="@color/mine_about_text_color_normal"
+                android:textColor="@color/map_tv_share_color"
                 android:textSize="14dp" />
         </LinearLayout>
 
@@ -177,8 +178,9 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:padding="5dp"
+                android:textColor="@color/map_tv_detail_color"
                 android:text="@string/map_tv_about_place_more"
-                android:textSize="15dp" />
+                android:textSize="18dp" />
         </LinearLayout>
 
         <com.mredrock.cyxbs.common.component.RedRockAutoWarpView

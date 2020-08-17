@@ -16,7 +16,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="大西北"
-        android:textColor="@color/levelTwoFontColor"
+        android:textColor="@color/map_tv_history_item_color"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"

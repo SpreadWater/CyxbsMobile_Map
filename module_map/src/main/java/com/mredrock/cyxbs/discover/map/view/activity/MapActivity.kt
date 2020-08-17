@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.*
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -58,6 +59,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
+//        //黑夜模式测试
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         val userState = ServiceManager.getService(IAccountService::class.java).getVerifyService()
         if (!userState.isLogin()) {
             //这里只是模拟一下登录，如果有并发需求，自己设计
@@ -239,6 +242,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         }
         map_et_search.setOnClickListener {
             changeToActivity(SearchActivity())
+            finish()
         }
 
     }
@@ -336,6 +340,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         })
         map_iv_image.setOnTouchListener { view, motionEvent -> gestureDetector.onTouchEvent(motionEvent) }
     }
+
 
     /*
     点击地图判断，先判断x坐标

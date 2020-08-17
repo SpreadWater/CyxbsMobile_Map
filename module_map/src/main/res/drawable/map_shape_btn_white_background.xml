@@ -4,8 +4,8 @@
     <gradient
         android:type="linear"
         android:useLevel="true"
-        android:startColor="@color/writeAbleAreaBackgroundDark"
-        android:endColor="@color/writeAbleAreaBackgroundDark" />
+        android:startColor="@color/map_dialog_cancel_color"
+        android:endColor="@color/map_dialog_cancel_color" />
     <corners
         android:topLeftRadius="50dp"
         android:topRightRadius="50dp"

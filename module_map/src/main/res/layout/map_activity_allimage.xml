@@ -10,10 +10,10 @@
     <ImageView
         android:id="@+id/map_iv_allimage_back"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="15dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="15dp"
-        android:src="@drawable/common_back"
+        android:src="@drawable/map_ic_back"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,9 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="35dp"
         android:text="@string/map_tv_allimage_name"
-        android:textColor="@color/levelOneFontColor"
+        android:textColor="@color/map_tv_detail_color"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -38,20 +38,23 @@
         android:layout_marginBottom="19dp"
         android:src="@drawable/map_ic_share"
         app:layout_constraintBottom_toTopOf="@id/map_rv_allimage"
-        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toRightOf="@id/map_tv_allimage_name"
-        app:layout_constraintRight_toLeftOf="@id/map_tv_allimage_share" />
+        app:layout_constraintRight_toLeftOf="@id/map_tv_allimage_share"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.96" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/map_tv_allimage_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="62dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/map_tv_allimage_share"
-        android:textColor="@color/qa_answer_empty_content_color"
+        android:textColor="@color/map_tv_share_blue_color"
         android:textSize="14sp"
-        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.945"
         app:layout_constraintLeft_toRightOf="@id/map_tv_allimage_name"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -77,7 +80,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:text="@string/map_tv_allimage_nomore"
-        android:textColor="@color/logInToTheGrayFontBelow"
+        android:textColor="@color/map_tv_nomore_color"
         android:visibility="gone"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/map_rv_allimage" />

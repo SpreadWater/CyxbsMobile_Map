@@ -34,7 +34,7 @@
             android:layout_height="30dp"
             android:background="@drawable/map_shape_btn_white_background"
             android:text="@string/map_btn_cancel"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/map_tv_dialog_cancel_color"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

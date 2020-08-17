@@ -339,7 +339,51 @@
     <color name="main_activity_login_et_edited_color" tools:ignore="ResourceName">#333333</color>
 
     <color name="main_activity_login_et_hint_color" tools:ignore="ResourceName">#999999</color>
+<!--    掌邮地图-->
+    <color name="map_et_search_color" tools:ignore="ResourceName">#93959D</color>
 
+    <color name="map_et_search_background_color" tools:ignore="ResourceName">#F0F4FD</color>
 
+    <color name="map_tv_lab_color" tools:ignore="ResourceName">#0E2A53</color>
+
+    <color name="map_tv_detail_color" tools:ignore="ResourceName">#15305C</color>
+    
+    <color name="map_tv_rentage_color" tools:ignore="ResourceName">#778AA9</color>
+
+    <color name="map_tv_share_color" tools:ignore="ResourceName">#234780</color>
+
+    <color name="map_tv_more_color" tools:ignore="ResourceName">#ABBCD8</color>
+
+    <color name="map_tv_history_color" tools:ignore="ResourceName">#7789A9</color>
+
+    <color name="map_tv_cleanall_color" tools:ignore="ResourceName">#ABBBD7</color>
+
+    <color name="map_et_search_title_color" tools:ignore="ResourceName">#93959D</color>
+
+    <color name="map_tv_history_item_color" tools:ignore="ResourceName">#23477F</color>
+
+    <color name="map_dialog_cancel_color" tools:ignore="ResourceName">#E7EFFD</color>
+
+    <color name="map_dialog_confirm_color" tools:ignore="ResourceName">#4B44E5</color>
+
+    <color name="map_tv_dialog_cancel_color" tools:ignore="ResourceName">#86AAE3</color>
+
+    <color name="map_tv_dialog_confirm_color" tools:ignore="ResourceName">#FFFFFF</color>
+
+    <color name="map_dialog_background_color" tools:ignore="ResourceName">#FFFFFF</color>
+
+    <color name="map_tv_dialog_hint_color" tools:ignore="ResourceName">#132F5B</color>
+
+    <color name="map_tv_share_blue_color" tools:ignore="ResourceName">#01CAF0</color>
+
+    <color name="map_tv_nomore_color" tools:ignore="ResourceName">#ABBCD8</color>
+
+    <color name="map_toolbar_image_color" tools:ignore="ResourceName">#788EFA</color>
+
+    <color name="map_down_toolbar_color" tools:ignore="ResourceName">#6B65EF</color>
+
+    <color name="map_toast_color" tools:ignore="ResourceName">#2A4D83</color>
+
+    <color name="map_toast_text_color" tools:ignore="ResourceName">#FEFEFE</color>
 </resources>
 

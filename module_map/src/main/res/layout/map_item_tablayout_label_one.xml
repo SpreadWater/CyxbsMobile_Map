@@ -30,7 +30,7 @@
         android:paddingEnd="8dp"
         android:paddingBottom="5dp"
         android:singleLine="true"
-        android:textColor="#234780"
+        android:textColor="@color/map_tv_lab_color"
         android:textSize="15dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

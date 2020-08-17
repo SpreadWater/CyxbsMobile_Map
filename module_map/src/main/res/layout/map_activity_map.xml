@@ -26,11 +26,11 @@
 
             <ImageView
                 android:id="@+id/map_iv_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="15dp"
+                android:layout_height="20dp"
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="52dp"
-                android:src="@drawable/common_back" />
+                android:src="@drawable/map_ic_back" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/map_et_search"
@@ -47,7 +47,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:singleLine="true"
-                android:textColor="@color/transparent"
+                android:textColor="@color/map_et_search_color"
                 android:textSize="16sp" />
 
             <com.mredrock.cyxbs.discover.map.view.widget.MyTabLayout
@@ -77,7 +77,7 @@
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="我的收藏"
-                android:textColor="@color/qa_tab_selected_color"
+                android:textColor="@color/map_tv_lab_color"
                 android:textSize="14sp" />
         </RelativeLayout>
 
