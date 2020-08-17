@@ -370,10 +370,6 @@
     <color name="map_tv_share_blue_color" tools:ignore="ResourceName">#01CAF0</color>
     <!--暂无更多的颜色    -->
     <color name="map_tv_nomore_color" tools:ignore="ResourceName">#A1A1A2</color>
-    <!--共享图片的toolbar颜色    -->
-    <color name="map_toolbar_image_color" tools:ignore="ResourceName">#788EFA</color>
-    <!--共享图片下方的toolbar颜色    -->
-    <color name="map_down_toolbar_color" tools:ignore="ResourceName">#6B65EF</color>
     <!--toast的背景色    -->
     <color name="map_toast_color" tools:ignore="ResourceName">#2A4D83</color>
     <!--toast字体颜色   -->

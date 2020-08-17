@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
+import com.mredrock.cyxbs.common.utils.extensions.dp2px
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.view.widget.ShareDialog
 import com.zhihu.matisse.Matisse
@@ -27,10 +29,10 @@ object ImageSelectutils {
                         .choose(MimeType.ofImage(), false)
                         .capture(true)  // 使用相机，和 captureStrategy 一起使用
                         .captureStrategy(CaptureStrategy(true, "RedRock"))
-                        .theme(R.style.map_photo_style)
                         .countable(true)
                         .maxSelectable(maxCount)
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+                        .autoHideToolbarOnSingleTap(true)
                         .thumbnailScale(0.87f)
                         .imageEngine(GlideLoadEngine())
                         .forResult(REQUEST_CODE_CHOOSE_PHOTO_ALBUM)
@@ -49,9 +51,9 @@ object ImageSelectutils {
                         .choose(MimeType.ofImage(), false)
                         .capture(true)  // 使用相机，和 captureStrategy 一起使用
                         .captureStrategy(CaptureStrategy(true, "RedRock"))
-                        .theme(R.style.map_photo_style)
                         .countable(true)
                         .maxSelectable(maxCount)
+                        .autoHideToolbarOnSingleTap(true)
                         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
                         .thumbnailScale(0.87f)
                         .imageEngine(GlideLoadEngine())

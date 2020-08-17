@@ -378,10 +378,6 @@
 
     <color name="map_tv_nomore_color" tools:ignore="ResourceName">#ABBCD8</color>
 
-    <color name="map_toolbar_image_color" tools:ignore="ResourceName">#788EFA</color>
-
-    <color name="map_down_toolbar_color" tools:ignore="ResourceName">#6B65EF</color>
-
     <color name="map_toast_color" tools:ignore="ResourceName">#2A4D83</color>
 
     <color name="map_toast_text_color" tools:ignore="ResourceName">#FEFEFE</color>
