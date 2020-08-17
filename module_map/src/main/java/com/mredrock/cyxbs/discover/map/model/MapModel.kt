@@ -10,6 +10,9 @@ import okhttp3.ResponseBody
 import java.io.File
 import java.io.RandomAccessFile
 
+/**
+ * by xgl
+ */
 object MapModel {
     fun saveMapImageFile(responseBody: ResponseBody, filePath: String) {
         if (ContextCompat.checkSelfPermission(

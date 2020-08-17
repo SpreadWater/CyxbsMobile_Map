@@ -8,9 +8,10 @@ import android.graphics.Color
 import android.graphics.PointF
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Message
 import android.view.*
 import android.widget.FrameLayout
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -50,6 +51,7 @@ import kotlin.collections.ArrayList
 class MapActivity : BaseViewModelActivity<MapViewModel>() {
     companion object {
         const val MAPSAVE = 1
+        const val MSG = 0
     }
 
     private val path = Environment.getExternalStorageDirectory().absolutePath + "/cquptmap/map.jpg"
@@ -64,7 +66,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private var placeId: String? = null
     override val viewModelClass: Class<MapViewModel>
         get() = MapViewModel::class.java
-    private  var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>?=null
+    private var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
@@ -74,7 +76,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         if (!userState.isLogin()) {
             //这里只是模拟一下登录，如果有并发需求，自己设计
             Thread {
-                userState.login(this, "2019210437", "142576")
+                userState.login(this, "2019212381", "261919")
             }.start()
         }
         placeId = intent.getStringExtra("placeId")
@@ -102,12 +104,10 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     if (MapDataDao.isMapSaved(MAPSAVE))
                         map_cl_map_background.setBackgroundColor(Color.parseColor(MapDataDao.getSavedMap(1)?.mapBackgroundColor))
                 } else {
+                    Toast.toast("由于网络不稳定，如进入出现白屏，退出重新登录直到全部数据出现")
                     HistoryPlaceDao.saveStatus(false)
                     ButtonInfoDao.saveStatus(false)
                 }
-                if (!(HistoryPlaceDao.getStatus() && ButtonInfoDao.getStatus()))
-                    File(path).delete()
-
                 initBasicData()
             }
             doAfterRefused {
@@ -127,6 +127,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 if (File(path).exists()) {
                     map_iv_image.setImage(ImageSource.uri(path))
                 }
+                IsLoadImageStatusDao.saveStatus(true)
                 dialog.dismiss()
             }
         })
@@ -146,6 +147,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     fun getCollectPlaceData() {
         collectList.clear()
         map_iv_image.clearPointList()
+        map_iv_image.stopScale()
         viewModel.getCollectPlace()
         viewModel.collectPlaces.observe(this, Observer<CollectPlace> {
             for (placeId in it.placeId!!) {
@@ -211,8 +213,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             tabItemList = it.buttonInfo as ArrayList<TabLayoutTitles.TabLayoutItem>
             initTabCategory(tabItemList)
         })
-
-        initLoadMapProgress()
+        if (!IsLoadImageStatusDao.getStatus()) {
+            initLoadMapProgress()
+        }
         viewModel.getPlaceData()
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
@@ -241,6 +244,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 //保存到本地数据库
                 if (placeList != null) {
                     SearchData.saveItemNum(placeList!!.size)
+                    placeItemList = placeList as ArrayList<PlaceItem>
                     for (place in it.placeList!!) {
                         if (!HistoryPlaceDao.isPlaceSaved(place.placeId)) {
                             HistoryPlaceDao.savePlace(place)
@@ -267,12 +271,14 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         }
         AddIconImage.setImageViewToButton(R.drawable.map_ic_search_before, map_et_search, 0)
         map_btn_collect_place.setOnClickListener {
-            IsLockDao.saveStatus(false)
+            IsLockDao.saveStatus(true)
+            sendMsg(MSG)
             getCollectPlaceData()
         }
         map_et_search.setOnClickListener {
             changeToActivity(SearchActivity())
-            IsLockDao.saveStatus(false)
+            IsLockDao.saveStatus(true)
+            sendMsg(MSG)
             finish()
         }
 
@@ -309,7 +315,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_tl_category.setTitle(tabItemList)
         map_tl_category.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                IsLockDao.saveStatus(false)
+                IsLockDao.saveStatus(true)
+                sendMsg(MSG)
                 if (tab != null) {
                     tabItemList[tab.position].code?.let { viewModel.getTypeWordPlaceList(it) }
                 }
@@ -390,6 +397,21 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             }
         }
         judgePlaceY(pointF.y, placeXList)
+    }
+
+    private val handler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            if (msg.what == MSG) {
+                map_iv_lock.setImageResource(R.drawable.map_ic_un_lock)
+            }
+        }
+    }
+
+    fun sendMsg(index: Int) {
+        val message = Message()
+        message.what = index
+        handler.sendMessage(message)
     }
 
     /*
