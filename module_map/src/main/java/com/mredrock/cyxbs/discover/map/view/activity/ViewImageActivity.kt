@@ -25,8 +25,6 @@ import kotlinx.android.synthetic.main.map_activity_view_image.*
 class ViewImageActivity : AppCompatActivity() {
     companion object {
         private const val IMG_RES_PATHS = "imgResPaths"
-        private const val POSITION = "position"
-
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

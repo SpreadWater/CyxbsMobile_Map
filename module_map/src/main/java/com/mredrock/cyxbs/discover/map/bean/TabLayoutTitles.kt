@@ -1,9 +1,5 @@
 package com.mredrock.cyxbs.discover.map.bean
 
-import androidx.room.Dao
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 

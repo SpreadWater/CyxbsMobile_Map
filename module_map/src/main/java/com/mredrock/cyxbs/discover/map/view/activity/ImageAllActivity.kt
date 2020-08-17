@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,8 +37,7 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
 
     val imageUrls = ArrayList<Uri>()
 
-    val MAX_SELECTABLE_IMAGE_COUNT = 6
-
+    var imageurl=ArrayList<String>()
     var adapter:ImageAdapter?=null
 
     var placeid=0
@@ -46,6 +46,11 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity_allimage)
         placeid=intent.getIntExtra("sharePlaceid",0)
+        imageurl=intent.getStringArrayListExtra("imageurl")
+        for (i in 0..imageurl.size-1){
+            val uri=Uri.parse(imageurl[i])
+            imageUrls.add(uri)
+        }
         LogUtils.d("zt",placeid.toString())
         val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         layoutManager.isAutoMeasureEnabled
@@ -92,7 +97,6 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
             //图片路径 同样视频地址也是这个 根据requestCode
             val pathList: List<Uri> = Matisse.obtainResult(data)
             for (_Uri in pathList) {
-//                Glide.with(this).load(_Uri).into(mView)
                 imageUrls.add(_Uri)
                 val file=File(_Uri.toString())
                 viewModel.loadImage(file,placeid)

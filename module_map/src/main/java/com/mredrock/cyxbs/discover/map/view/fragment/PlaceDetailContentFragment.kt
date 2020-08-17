@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.model.dao.CollectStatusDao
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
@@ -39,6 +40,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
     private val ATTRIBUTE = 0
     private val LABEL = 1
     var mplaceattribute = ""
+    val imageurls=ArrayList<String>()
     override val viewModelClass: Class<PlaceDetailViewModel>
         get() = PlaceDetailViewModel::class.java
 
@@ -70,6 +72,8 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
                 }
                 map_tv_place_name.text = it.placeName
                 if (images != null)
+                    imageurls.addAll(images!!)
+
                     initImagesRv(images as ArrayList<String>)
                 sendMsg(0)
             }
@@ -97,8 +101,6 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             //图片路径 同样视频地址也是这个 根据requestCode
             val pathList: List<Uri> = Matisse.obtainResult(data)
             for (_Uri in pathList) {
-//                Glide.with(this).load(_Uri).into(mView)
-                Log.e("*****zt", _Uri.path)
                 val file = File(_Uri.toString())
                 LoadviewModel.loadImage(file, placeId!!)
                 System.out.println(_Uri.path)
@@ -118,7 +120,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
 
     private fun initOnClick() {
         map_tv_search_more_place_detail.setOnClickListener {
-            placeId?.let { it1 -> changeToActivity(ImageAllActivity(), it1) }
+            placeId?.let { it1 -> changeToActivity(ImageAllActivity(), it1,imageurls) }
         }
         map_iv_place_collect.setOnClickListener {
             if (!placeId?.let { it1 -> CollectStatusDao.getCollectStatus(it1) }!!) {
@@ -152,6 +154,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
 
     private fun initImagesRv(imageUrlList: ArrayList<String>) {
         if (imageUrlList.isNotEmpty()) {
+            LogUtils.d("zt",imageUrlList[0])
             val placeDetailImageAdapter = PlaceDetailImageAdapter(imageUrlList)
             map_rv_place_detail_image_list.apply {
                 layoutManager = LinearLayoutManager(BaseApp.context, LinearLayoutManager.HORIZONTAL, false)
@@ -161,9 +164,10 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         }
     }
 
-    private fun changeToActivity(activity: Activity, placeId: Int) {
+    private fun changeToActivity(activity: Activity, placeId: Int,imageUrls:ArrayList<String>) {
         val intent = Intent(BaseApp.context, activity::class.java)
         intent.putExtra("sharePlaceid", placeId)
+        intent.putExtra("imageurl",imageUrls)
         this.startActivity(intent)
     }
 
