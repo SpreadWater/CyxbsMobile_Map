@@ -1,11 +1,20 @@
 package com.mredrock.cyxbs.discover.map.bean
 
 
+import android.icu.util.BuddhistCalendar
+import androidx.room.Entity
+import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-
+/*
+  placeitem by xgl
+  2020.8.17
+ */
 class PlaceItem : Serializable {
+
+    var isCollected: Boolean? = false
+
     @SerializedName("place_name")
     var placeName: String? = null
 
@@ -17,9 +26,8 @@ class PlaceItem : Serializable {
 
     @SerializedName("place_center_y")
     var placeCenterY: Float = 0f
-
     @SerializedName("building_list")
-    var buildingRectList: MutableList<BuildingRect>? = null
+    var buildingRectList: List<BuildingRect>? = null
 
     @SerializedName("tag_left")
     var tagLeft: Float = 0f

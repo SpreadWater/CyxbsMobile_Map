@@ -16,11 +16,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
-import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.CollectPlace
-import com.mredrock.cyxbs.discover.map.model.dao.CollectDao
-import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
+import com.mredrock.cyxbs.discover.map.model.dao.CollectStatusDao
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
 import com.mredrock.cyxbs.discover.map.view.activity.ImageAllActivity
 import com.mredrock.cyxbs.discover.map.view.adapter.PlaceDetailImageAdapter
@@ -33,11 +30,14 @@ import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.map_fragment_place_content.*
 import java.io.File
 
+/**
+ * @author xgl
+ * @date 2020.8
+ */
 class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>() {
     var placeId: Int? = 0
     private val ATTRIBUTE = 0
     private val LABEL = 1
-    var placeName: String? = null
     var mplaceattribute = ""
     override val viewModelClass: Class<PlaceDetailViewModel>
         get() = PlaceDetailViewModel::class.java
@@ -49,7 +49,6 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         val bundle = this.arguments //得到从Activity传来的数据
         if (bundle != null) {
             placeId = bundle.getString("placeId").toInt()
-            placeName = bundle.getString("placeName")
         }
         return view
     }
@@ -111,7 +110,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
      判断是否被收藏
      */
     private fun isCollect(placeId: Int) {
-        if (CollectDao.getCollectStatus(placeId))
+        if (CollectStatusDao.getCollectStatus(placeId))
             map_iv_place_collect.setImageResource(R.drawable.map_ic_collect_red)
         else
             map_iv_place_collect.setImageResource(R.drawable.map_ic_collect)
@@ -122,18 +121,19 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             placeId?.let { it1 -> changeToActivity(ImageAllActivity(), it1) }
         }
         map_iv_place_collect.setOnClickListener {
-            if (!placeId?.let { it1 -> CollectDao.getCollectStatus(it1) }!!) {
+            if (!placeId?.let { it1 -> CollectStatusDao.getCollectStatus(it1) }!!) {
                 viewModel.addCollectPlace(placeId!!)
+                CollectStatusDao.saveCollectStatus(placeId!!, true)
                 map_iv_place_collect.setImageResource(R.drawable.map_ic_collect_red)
-                CollectDao.saveCollectStatus(placeId!!, true)
+
             } else {
-                map_iv_place_collect.setImageResource(R.drawable.map_ic_collect)
                 this.activity?.let { it1 -> showCollectDialog(it1) }
             }
         }
         map_tv_share_image.setOnClickListener {
             this.activity?.let { it1 -> showShareDialog(it1) }
         }
+
     }
 
 
@@ -151,7 +151,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
     }
 
     private fun initImagesRv(imageUrlList: ArrayList<String>) {
-        if (!imageUrlList.isEmpty()) {
+        if (imageUrlList.isNotEmpty()) {
             val placeDetailImageAdapter = PlaceDetailImageAdapter(imageUrlList)
             map_rv_place_detail_image_list.apply {
                 layoutManager = LinearLayoutManager(BaseApp.context, LinearLayoutManager.HORIZONTAL, false)
@@ -193,8 +193,9 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
 
             override fun onConfirm() {
                 viewModel.deleteCollectPlace(placeId!!)
-                CollectDao.saveCollectStatus(placeId!!, false)
+                CollectStatusDao.saveCollectStatus(placeId!!, false)
                 dialog.dismiss()
+                map_iv_place_collect.setImageResource(R.drawable.map_ic_collect)
             }
         })
         dialog.show()

@@ -28,7 +28,7 @@ object LogUtils {
             Log.v(tag, msg, throwable)
     }
 
-    fun d(tag: String = "tag", msg: String, throwable: Throwable? = null) {
+    fun d(tag: String = "tag", msg: String?, throwable: Throwable? = null) {
         if (SHOW_LOG and DEBUG_MASK == DEBUG_MASK)
             Log.d(tag, msg, throwable)
     }

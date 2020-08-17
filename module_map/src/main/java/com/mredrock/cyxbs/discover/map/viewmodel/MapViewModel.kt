@@ -1,7 +1,6 @@
 package com.mredrock.cyxbs.discover.map.viewmodel
 
 import android.os.Environment
-import android.os.RecoverySystem
 import androidx.lifecycle.MutableLiveData
 import com.mredrock.cyxbs.common.network.ApiGenerator
 import com.mredrock.cyxbs.common.utils.LogUtils
@@ -12,7 +11,6 @@ import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.common.viewmodel.event.ProgressDialogEvent
 import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.bean.CollectPlace
-import com.mredrock.cyxbs.discover.map.bean.MapData
 import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
 import com.mredrock.cyxbs.discover.map.bean.TabLayoutTitles
 import com.mredrock.cyxbs.discover.map.model.DownloadInterceptor
@@ -33,7 +31,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MapViewModel : BaseViewModel() {
     val mapLoadProgress = MutableLiveData<Float>()
-    val isSuccess=MutableLiveData<Boolean>()
     var disposable: Disposable? = null
     var typewordPlaceData = MutableLiveData<List<Int>>()
     val tabTitles = MutableLiveData<TabLayoutTitles>()
@@ -73,7 +70,6 @@ class MapViewModel : BaseViewModel() {
             addInterceptor(DownloadInterceptor(object : DownloadListener {
                 override fun onProgress(currentByte: Long, totalByte: Long, done: Boolean) {
                     mapLoadProgress.postValue((currentByte.toDouble() / totalByte).toFloat())
-                    isSuccess.postValue(done)
                 }
             }))
         }
@@ -142,11 +138,11 @@ class MapViewModel : BaseViewModel() {
                 }.lifeCycle()
     }
 
-    fun loadMapFile() {
+    fun loadMapFile(mapUrl: String? = MapDataDao.getSavedMap(1)?.mapUrl) {
         ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, { builder -> OkHttpDownloadConfig(builder) }, true)
-        MapDataDao.getSavedMap(1)?.mapUrl?.let {
+        if (mapUrl != null) {
             ApiGenerator.getApiService(2019212381, ApiService::class.java)
-                    .download(it)
+                    .download(mapUrl)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .doOnNext {

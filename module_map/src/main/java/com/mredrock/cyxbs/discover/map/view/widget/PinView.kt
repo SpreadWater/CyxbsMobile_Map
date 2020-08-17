@@ -20,7 +20,6 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
         if (sPin != null) {
             pointList.add(sPin)
         }
-        initialise()
         invalidate()
     }
 
@@ -30,13 +29,11 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
 
     fun addPointF(pointF: ArrayList<PointF>) {
         pointList.addAll(pointF)
-        initialise()
         invalidate()
     }
 
     fun clearPointList() {
         pointList.clear()
-        initialise()
         invalidate()
     }
 

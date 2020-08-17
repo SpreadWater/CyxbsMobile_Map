@@ -21,7 +21,7 @@ object MapModel {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) != PackageManager.PERMISSION_GRANTED
         ) {
-            CyxbsToast.makeText(BaseApp.context, "操作失败，请开启储存权限", Toast.LENGTH_LONG).show()
+            com.mredrock.cyxbs.discover.map.utils.Toast.toast("操作失败，请开启储存权限")
             return
         }
         var loadByte: Long = 0

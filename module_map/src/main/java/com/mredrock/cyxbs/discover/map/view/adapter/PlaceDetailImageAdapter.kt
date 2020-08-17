@@ -21,7 +21,7 @@ class PlaceDetailImageAdapter(val imageList: ArrayList<String>) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Glide.with(BaseApp.context).load(R.drawable.map_ic_collect).into(holder.itemView.map_iv_rectangle_iamge)
+        Glide.with(BaseApp.context).load(imageList[position]).into(holder.itemView.map_iv_rectangle_iamge)
     }
 
     override fun getItemCount(): Int {

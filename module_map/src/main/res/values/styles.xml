@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-<!--    by徐国林-->
+
     <style name="map_tablayout_textsize" parent="TextAppearance.AppCompat.Button" tools:ignore="ResourceName">
         <item name="android:textSize">15sp</item>
-    </style>
-    <style name="map_anim_popwindow" tools:ignore="ResourceName">
-        <item name="android:windowEnterAnimation">@anim/map_popupwindow_show</item>
-        <item name="android:windowExitAnimation">@anim/map_popupwindow_hide</item>
     </style>
 
     <style name="Transparent" parent="@style/AppTheme" tools:ignore="ResourceName">
@@ -14,6 +10,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
     <style name="map_photo_style" parent="Matisse.Zhihu">
         <item name="colorPrimary">@color/map_toolbar_image_color</item>
         <item name="colorPrimaryDark">@color/map_toolbar_image_color</item>
@@ -21,7 +18,8 @@
         <item name="album.dropdown.title.color">@color/zhihu_album_dropdown_title_text</item>
         <item name="album.dropdown.count.color">@color/zhihu_album_dropdown_count_text</item>
         <item name="album.element.color">@android:color/white</item>
-        <item name="album.thumbnail.placeholder">@color/zhihu_album_dropdown_thumbnail_placeholder</item>
+        <item name="album.thumbnail.placeholder">@color/zhihu_album_dropdown_thumbnail_placeholder
+        </item>
         <item name="album.emptyView">@drawable/ic_empty_zhihu</item>
         <item name="album.emptyView.textColor">@color/zhihu_album_empty_view</item>
         <item name="item.placeholder">@color/zhihu_item_placeholder</item>
@@ -30,9 +28,17 @@
         <item name="page.bg">@color/zhihu_page_bg</item>
         <item name="bottomToolbar.bg">@color/zhihu_bottom_toolbar_bg</item>
         <item name="bottomToolbar.preview.textColor">@color/zhihu_bottom_toolbar_preview</item>
+<<<<<<< Updated upstream
         <item name="bottomToolbar.apply.textColor">@color/map_toolbar_image_color</item>
         <item name="preview.bottomToolbar.back.textColor">@color/zhihu_preview_bottom_toolbar_back_text</item>
         <item name="preview.bottomToolbar.apply.textColor">@color/map_toolbar_image_color</item>
+=======
+        <item name="bottomToolbar.apply.textColor">@color/colorAccent</item>
+        <item name="preview.bottomToolbar.back.textColor">
+            @color/zhihu_preview_bottom_toolbar_back_text
+        </item>
+        <item name="preview.bottomToolbar.apply.textColor">@color/colorAccent</item>
+>>>>>>> Stashed changes
         <item name="listPopupWindowStyle">@style/Popup.Zhihu</item>
         <item name="capture.textColor">@color/zhihu_capture</item>
     </style>

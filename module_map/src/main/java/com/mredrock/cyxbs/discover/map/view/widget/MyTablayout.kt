@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import com.google.android.material.tabs.TabLayout
-import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.TabLayoutTitles
 import kotlinx.android.synthetic.main.map_item_tablayout_label_one.view.*
@@ -54,7 +53,7 @@ class MyTabLayout : TabLayout {
         })
     }
 
-    fun setTitle(titles: List<TabLayoutTitles.TabLayoutItem>?) {
+    fun setTitle(titles: ArrayList<TabLayoutTitles.TabLayoutItem>) {
         this.titles = titles
         /**
          * 开始添加切换的Tab。

@@ -1,7 +1,6 @@
 package com.mredrock.cyxbs.discover.map.view.activity
 
 import android.Manifest
-import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -19,7 +18,6 @@ import com.mredrock.cyxbs.common.utils.extensions.toast
 import com.mredrock.cyxbs.discover.map.R
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.map_activity_view_image.*
-import org.jetbrains.anko.startActivity
 
 /*
     用于查看图片，保存图片，放大缩小

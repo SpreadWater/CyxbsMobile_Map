@@ -6,10 +6,9 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/map_cl_map_background"
-       >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.mredrock.cyxbs.discover.map.view.widget.PinView
             android:id="@+id/map_iv_image"
@@ -114,6 +113,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.236" />
+
+        <ImageView
+            android:id="@+id/map_iv_lock"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/map_ic_un_lock"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.938"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.356" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.mredrock.cyxbs.discover.map.view.widget.MyFrameLayout

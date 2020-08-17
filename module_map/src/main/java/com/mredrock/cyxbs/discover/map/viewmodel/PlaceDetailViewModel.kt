@@ -74,8 +74,8 @@ class PlaceDetailViewModel : BaseViewModel() {
                 .safeSubscribeBy {
                     if (it.status == 200) {
                         Toast.toast("收藏成功")
-                    }else{
-                        LogUtils.d("zt",it.info.toString())
+                    } else {
+                        LogUtils.d("zt", it.info.toString())
                         Toast.toast("收藏失败")
                     }
                 }.lifeCycle()

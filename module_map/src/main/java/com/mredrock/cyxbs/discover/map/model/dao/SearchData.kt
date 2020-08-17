@@ -15,20 +15,21 @@ object SearchData {
     /*
     用于存储搜索页面的传入的值，防止因加载不完时搜索页面的崩溃
      */
-    fun saveHotword(hotword:String) {
+    fun saveHotword(hotword: String) {
         sharedPreferences().edit {
             putString("hotword", hotword)
         }
     }
-    fun saveItemNum(ItemNum:Int) {
+
+    fun saveItemNum(ItemNum: Int) {
         sharedPreferences().edit {
-            putInt("ItemNum",ItemNum)
+            putInt("ItemNum", ItemNum)
         }
     }
 
-    fun getSavedHotword(): String= sharedPreferences().getString("hotword","")
+    fun getSavedHotword(): String = sharedPreferences().getString("hotword", "")
 
-    fun getSavedItemNum(): Int= sharedPreferences().getInt("ItemNum",125)
+    fun getSavedItemNum(): Int = sharedPreferences().getInt("ItemNum", 125)
 
     fun isHotwordSaved() = sharedPreferences().contains("hotword")
 
