@@ -1,5 +1,6 @@
 <resources>
 <!--    by张涛 -->
+    <string name="map_toast_no_history_search">"历史记录为空"</string>
     <string name="map_toast_cancel">取消成功</string>
     <string name="map_toast_collect_success">收藏成功</string>
     <string name="map_toast_collect_fail">收藏失败</string>

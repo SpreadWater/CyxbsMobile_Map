@@ -42,6 +42,7 @@ import com.mredrock.cyxbs.discover.map.view.widget.ProgressDialog
 import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_activity_map.map_iv_image
 import java.io.File
+import java.lang.Exception
 import kotlin.collections.ArrayList
 
 /**
@@ -110,6 +111,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     if (MapDataDao.isMapSaved(MAPSAVE))
                         map_cl_map_background.setBackgroundColor(Color.parseColor(MapDataDao.getSavedMap(1)?.mapBackgroundColor))
                 } else {
+                    IsLoadImageStatusDao.saveStatus(false)
                     Toast.toast(R.string.map_toast_notice_internet)
                     HistoryPlaceDao.saveStatus(false)
                     ButtonInfoDao.saveStatus(false)
@@ -131,8 +133,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         viewModel.mapLoadProgress.observe(this, Observer<Float> {
             dialog.setProgress((it * 100).toInt().toString())
             if ((it * 100).toInt() >= 100 || it == 0f) {
-                val path = Environment.getExternalStorageDirectory().absolutePath + "/cquptmap/map.jpg"
                 if (File(path).exists()) {
+                    map_iv_image.setBackgroundColor(Color.parseColor(MapDataDao.getSavedMap(MAPSAVE)?.mapBackgroundColor))
                     map_iv_image.setImage(ImageSource.uri(path))
                 }
                 IsLoadImageStatusDao.saveStatus(true)
@@ -336,6 +338,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     tabItemList[tab.position].code?.let { viewModel.getTypeWordPlaceList(it) }
                 }
                 viewModel.typewordPlaceData.observe(this@MapActivity, Observer {
+                    removePins()
                     if (it != null) {
                         removePins()
                         for (placeId in it) {
@@ -362,8 +365,33 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         定位处理
      */
     private fun PlaceLocation(placeItem: PlaceItem) {
-        removePins()
-        map_iv_image.setLocation(0.5f, PointF(placeItem.placeCenterX, placeItem.placeCenterY))
+        map_iv_image.setOnImageEventListener(object : SubsamplingScaleImageView.OnImageEventListener {
+            override fun onReady() {
+                removePins()
+                map_iv_image.setLocation(PointF(placeItem.placeCenterX, placeItem.placeCenterY))
+            }
+
+            override fun onImageLoaded() {
+
+            }
+
+            override fun onPreviewLoadError(e: Exception?) {
+
+            }
+
+            override fun onImageLoadError(e: Exception?) {
+
+            }
+
+            override fun onTileLoadError(e: Exception?) {
+
+            }
+
+            override fun onPreviewReleased() {
+
+            }
+
+        })
     }
 
     /*

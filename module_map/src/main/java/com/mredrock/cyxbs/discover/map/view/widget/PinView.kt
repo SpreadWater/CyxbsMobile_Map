@@ -57,10 +57,10 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
     //在地图上画点
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        // Don't draw pin before image is ready so it doesn't move around during setup.
         if (!isReady) {
             return
         }
+        // Don't draw pin before image is ready so it doesn't move around during setup.
         paint.isAntiAlias = true
         var vPin: PointF = PointF()
         for (i: Int in pinBitmapList.indices) {
@@ -76,8 +76,8 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
     }
 
     //定位具体位置并放缩
-    fun setLocation(scale: Float, pointF: PointF) {
-        setScaleAndCenter(scale, pointF)
+    fun setLocation(pointF: PointF) {
+        setScaleAndCenter(0.5f,pointF)
         setPin(pointF)
     }
 

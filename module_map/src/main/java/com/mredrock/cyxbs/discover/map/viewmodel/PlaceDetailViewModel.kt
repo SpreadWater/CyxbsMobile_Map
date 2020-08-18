@@ -73,10 +73,10 @@ class PlaceDetailViewModel : BaseViewModel() {
                 .setSchedulers()
                 .safeSubscribeBy {
                     if (it.status == 200) {
-                        Toast.toast(R.string.map_toast_collect_fail)
+                        Toast.toast(R.string.map_toast_collect_success)
                     } else {
                         LogUtils.d("zt", it.info.toString())
-                        Toast.toast(R.string.map_toast_collect_success)
+                        Toast.toast(R.string.map_toast_collect_fail)
                     }
                 }.lifeCycle()
     }

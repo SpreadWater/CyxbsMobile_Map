@@ -80,7 +80,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                 mlist.add(SearchPlace(place, TYPE_HISTORYPLACE))
             }
         } else {
-            Toast.makeText(this, "历史记录为空", Toast.LENGTH_SHORT).show()
+            com.mredrock.cyxbs.discover.map.utils.Toast.toast(R.string.map_toast_no_history_search)
         }
     }
 
