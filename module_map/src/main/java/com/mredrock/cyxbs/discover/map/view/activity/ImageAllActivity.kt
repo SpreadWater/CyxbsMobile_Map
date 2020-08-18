@@ -51,7 +51,7 @@ class ImageAllActivity : BaseViewModelActivity<ImageLoaderViewModel>() {
             val uri=Uri.parse(imageurl[i])
             imageUrls.add(uri)
         }
-        LogUtils.d("zt",placeid.toString())
+
         val layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
         layoutManager.isAutoMeasureEnabled
         adapter= ImageAdapter(imageUrls,this)

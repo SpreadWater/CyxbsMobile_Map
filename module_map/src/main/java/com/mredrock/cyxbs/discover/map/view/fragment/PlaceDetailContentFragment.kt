@@ -72,8 +72,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
                 }
                 map_tv_place_name.text = it.placeName
                 sendMsg(1)
-                if (images.isNullOrEmpty())
-                    imageurls.addAll(images!!)
+                imageurls.addAll(images!!)
                 initImagesRv(images as ArrayList<String>)
             }
         })
