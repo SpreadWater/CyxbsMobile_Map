@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.mredrock.cyxbs.common.BaseApp
@@ -34,6 +35,7 @@ import com.mredrock.cyxbs.discover.map.bean.*
 import com.mredrock.cyxbs.discover.map.model.dao.*
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
+import com.mredrock.cyxbs.discover.map.utils.NetWorkUtils
 import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
 import com.mredrock.cyxbs.discover.map.view.widget.ProgressDialog
@@ -63,6 +65,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override val isFragmentActivity: Boolean
         get() = false
     private val map = MapData()
+
+    //搜索返回来的id
     private var placeId: String? = null
     override val viewModelClass: Class<MapViewModel>
         get() = MapViewModel::class.java
@@ -79,10 +83,12 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 userState.login(this, "2019212381", "261919")
             }.start()
         }
+        if (!NetWorkUtils.isNetWorkAvailable(this))
+            Toast.toast(R.string.map_toast_open_network)
         placeId = intent.getStringExtra("placeId")
         initView()
         initBottomSheetBehavior()
-        initMapImage()
+        initMap()
     }
 
     private fun initBasicData() {
@@ -95,7 +101,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         getHotWord()
     }
 
-    private fun initMapImage() {
+    private fun initMap() {
         this.doPermissionAction(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
         {
             doAfterGranted {
@@ -104,19 +110,21 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                     if (MapDataDao.isMapSaved(MAPSAVE))
                         map_cl_map_background.setBackgroundColor(Color.parseColor(MapDataDao.getSavedMap(1)?.mapBackgroundColor))
                 } else {
-                    Toast.toast("由于网络不稳定，如进入出现白屏，退出重新登录直到全部数据出现")
+                    Toast.toast(R.string.map_toast_notice_internet)
                     HistoryPlaceDao.saveStatus(false)
                     ButtonInfoDao.saveStatus(false)
                 }
                 initBasicData()
             }
             doAfterRefused {
-                CyxbsToast.makeText(BaseApp.context, "操作失败，请开启储存权限", android.widget.Toast.LENGTH_LONG).show()
+                CyxbsToast.makeText(BaseApp.context, R.string.map_toast_open_permission.toString(), android.widget.Toast.LENGTH_LONG).show()
             }
         }
     }
 
-
+    /*
+        监听下载图片进度条
+     */
     private fun initLoadMapProgress() {
         val dialog = ProgressDialog(this)
         dialog.show()
@@ -146,7 +154,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     fun getCollectPlaceData() {
         collectList.clear()
-        map_iv_image.clearPointList()
+        removePins()
         map_iv_image.stopScale()
         viewModel.getCollectPlace()
         viewModel.collectPlaces.observe(this, Observer<CollectPlace> {
@@ -160,10 +168,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             }
         })
         if (collectList.isEmpty()) {
-            Toast.toast("啊哦，你目前没有收藏哦")
+            Toast.toast(R.string.map_toast_no_collect_list)
         } else {
-            map_iv_image.clearPointList()
-            map_iv_image.stopScale()
             map_iv_image.addPointF(collectList)
         }
     }
@@ -191,7 +197,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             map_iv_image.setImage(ImageSource.uri(path))
             map_cl_map_background.setBackgroundColor(Color.parseColor(map.mapVersion?.let { MapDataDao.getSavedMap(it)?.mapBackgroundColor }))
         } else {
-            CyxbsToast.makeText(BaseApp.context, "本地没有地图数据", android.widget.Toast.LENGTH_LONG).show()
+            CyxbsToast.makeText(BaseApp.context, R.string.map_toast_no_map_data.toString(), android.widget.Toast.LENGTH_LONG).show()
         }
         var num = 1
         while (num <= HistoryPlaceDao.getAllSavePlace()) {
@@ -207,15 +213,18 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         从网络拿到地点基础数据
      */
     private fun getDataFromNetwork() {
+
         viewModel.getTabLayoutTitles()
         viewModel.tabTitles.observe(this, Observer<TabLayoutTitles> {
             ButtonInfoDao.saveButtonInfo(it, true)
             tabItemList = it.buttonInfo as ArrayList<TabLayoutTitles.TabLayoutItem>
             initTabCategory(tabItemList)
         })
+
         if (!IsLoadImageStatusDao.getStatus()) {
             initLoadMapProgress()
         }
+
         viewModel.getPlaceData()
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
@@ -259,10 +268,13 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
     private fun initView() {
+        IsLockDao.saveStatus(true)
+        if (IsLockDao.getStatus())
+            map_iv_lock.setImageResource(R.drawable.map_ic_un_lock)
         map_iv_lock.setOnClickListener {
             if (IsLockDao.getStatus()) {
                 map_iv_lock.setImageResource(R.drawable.map_ic_lock)
-                Toast.toast("取消锁定后对地图进行操作")
+                Toast.toast(R.string.map_toast_lock)
                 IsLockDao.saveStatus(false)
             } else {
                 IsLockDao.saveStatus(true)
@@ -281,7 +293,9 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             sendMsg(MSG)
             finish()
         }
-
+        map_iv_back.setOnClickListener {
+            finish()
+        }
     }
 
     /*
@@ -315,15 +329,15 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_tl_category.setTitle(tabItemList)
         map_tl_category.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                IsLockDao.saveStatus(true)
+                map_iv_image.stopScale()
                 sendMsg(MSG)
+                IsLockDao.saveStatus(true)
                 if (tab != null) {
                     tabItemList[tab.position].code?.let { viewModel.getTypeWordPlaceList(it) }
                 }
                 viewModel.typewordPlaceData.observe(this@MapActivity, Observer {
-                    map_iv_image.clearPointList()
-                    map_iv_image.stopScale()
                     if (it != null) {
+                        removePins()
                         for (placeId in it) {
                             val place = HistoryPlaceDao.getSavedPlace(placeId)
                             if (place != null) {
@@ -348,9 +362,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         定位处理
      */
     private fun PlaceLocation(placeItem: PlaceItem) {
-        map_iv_image.clearPointList()
+        removePins()
         map_iv_image.setLocation(0.5f, PointF(placeItem.placeCenterX, placeItem.placeCenterY))
-
     }
 
     /*
@@ -365,19 +378,21 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         }
         val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                if (map_iv_image.isReady) {
-                    map_iv_image.clearPointList()
-                    val point: PointF? = map_iv_image.viewToSourceCoord(e.x, e.y)
-                    if (point != null) {
-                        if (IsLockDao.getStatus())
-                            judgePlaceX(point)
-                    }
-                    LogUtils.d("tagtag", "" + point?.x + " " + point?.y)
+                val point: PointF? = map_iv_image.viewToSourceCoord(e.x, e.y)
+                if (point != null) {
+                    removePins()
+                    if (IsLockDao.getStatus())
+                        judgePlaceX(point)
                 }
+                LogUtils.d("tagtag", "" + point?.x + " " + point?.y)
                 return true
             }
         })
         map_iv_image.setOnTouchListener { view, motionEvent -> gestureDetector.onTouchEvent(motionEvent) }
+    }
+
+    fun removePins() {
+        map_iv_image.removePins()
     }
 
 

@@ -9,6 +9,7 @@ import com.mredrock.cyxbs.common.utils.extensions.safeSubscribeBy
 import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
 import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.discover.map.BuildConfig
+import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.CollectPlace
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetail
 import com.mredrock.cyxbs.discover.map.network.ApiService
@@ -38,7 +39,6 @@ class PlaceDetailViewModel : BaseViewModel() {
                 .getCollectPlaceList()
                 .setSchedulers()
                 .safeSubscribeBy {
-                    LogUtils.d("collectp", it.status.toString())
                     collectPlaces.value = it
                 }.lifeCycle()
     }
@@ -73,10 +73,10 @@ class PlaceDetailViewModel : BaseViewModel() {
                 .setSchedulers()
                 .safeSubscribeBy {
                     if (it.status == 200) {
-                        Toast.toast("收藏成功")
+                        Toast.toast(R.string.map_toast_collect_fail)
                     } else {
                         LogUtils.d("zt", it.info.toString())
-                        Toast.toast("收藏失败")
+                        Toast.toast(R.string.map_toast_collect_success)
                     }
                 }.lifeCycle()
     }
@@ -87,7 +87,7 @@ class PlaceDetailViewModel : BaseViewModel() {
                 .setSchedulers()
                 .safeSubscribeBy {
                     if (it.status == 200)
-                        Toast.toast("取消成功")
+                        Toast.toast(R.string.map_toast_cancel)
                 }.lifeCycle()
     }
 

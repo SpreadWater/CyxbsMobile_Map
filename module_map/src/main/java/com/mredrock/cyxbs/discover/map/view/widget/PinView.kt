@@ -7,17 +7,25 @@ import android.view.View
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
+import kotlinx.android.synthetic.main.map_activity_map.*
 
 
 class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageView(context, attr) {
     private val paint: Paint = Paint()
     private var pin: Bitmap? = null
+    private val point = PointF()
     private var pointList = ArrayList<PointF>()
+    private var pinVisibilityList: MutableList<Boolean> = ArrayList()
+    private var pinPositionList: MutableList<PointF> = ArrayList()
+    private var pinBitmapList: MutableList<Bitmap> = ArrayList()
 
     constructor(context: Context?) : this(context, null) {}
 
     fun setPin(sPin: PointF?) {
         if (sPin != null) {
+            pin?.let { pinBitmapList.add(it) }
+            pinVisibilityList.add(true)
+            pinPositionList.add(PointF(0f, 0f))
             pointList.add(sPin)
         }
         invalidate()
@@ -27,12 +35,15 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
         setScaleAndCenter(0f, center)
     }
 
-    fun addPointF(pointF: ArrayList<PointF>) {
-        pointList.addAll(pointF)
-        invalidate()
+    fun addPointF(pointList: ArrayList<PointF>) {
+        for (point in pointList)
+            setPin(point)
     }
 
-    fun clearPointList() {
+    fun removePins() {
+        pinBitmapList.clear()
+        pinVisibilityList.clear()
+        pinPositionList.clear()
         pointList.clear()
         invalidate()
     }
@@ -50,13 +61,17 @@ class PinView(context: Context?, attr: AttributeSet?) : SubsamplingScaleImageVie
         if (!isReady) {
             return
         }
-        var vPin: PointF = PointF()
         paint.isAntiAlias = true
-        for (spin in pointList) {
-            sourceToViewCoord(spin, vPin)
-            val vX: Float = vPin.x - pin!!.width / 2
-            val vY: Float = vPin.y - pin!!.height
-            canvas.drawBitmap(pin, vX, vY, paint)
+        var vPin: PointF = PointF()
+        for (i: Int in pinBitmapList.indices) {
+            sourceToViewCoord(pointList[i], vPin)
+            point.set(pinBitmapList[i].width.toFloat(), pinBitmapList[i].height.toFloat())
+            val vX = vPin.x - pinBitmapList[i].width / 2
+            val vY = vPin.y - pinBitmapList[i].height
+            pinPositionList[i].set(pointList[i].x - point.x / 2, pointList[i].y - point.y)
+            if (pinVisibilityList[i]) {
+                canvas.drawBitmap(pinBitmapList[i], vX, vY, paint)
+            }
         }
     }
 

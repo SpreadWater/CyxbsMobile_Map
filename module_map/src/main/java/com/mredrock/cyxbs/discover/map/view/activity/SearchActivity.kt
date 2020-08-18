@@ -146,7 +146,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
                         //用于搜素不到的处理
                         if(!isSearch){
                             isSearch=true
-                            com.mredrock.cyxbs.discover.map.utils.Toast.toast("搜索不到该地点",Gravity.CENTER,0,-800)
+                            com.mredrock.cyxbs.discover.map.utils.Toast.toast(R.string.map_toast_no_search_place,Gravity.CENTER,0,-800)
                         }
                     }
                 }else{

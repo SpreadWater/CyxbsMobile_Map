@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.component.CyxbsToast
+import com.mredrock.cyxbs.discover.map.R
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.RandomAccessFile
@@ -24,7 +25,7 @@ object MapModel {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) != PackageManager.PERMISSION_GRANTED
         ) {
-            com.mredrock.cyxbs.discover.map.utils.Toast.toast("操作失败，请开启储存权限")
+            com.mredrock.cyxbs.discover.map.utils.Toast.toast(R.string.map_toast_open_permission)
             return
         }
         var loadByte: Long = 0
@@ -33,7 +34,7 @@ object MapModel {
             file.parentFile.mkdirs()
             file.createNewFile()
         }
-        val buffer = ByteArray(1024 * 1024)
+        val buffer = ByteArray(1024 * 4)
         val randomAccessFile = RandomAccessFile(file, "rwd")
         val loadFileLength: Long = file.length()
         randomAccessFile.seek(loadFileLength)

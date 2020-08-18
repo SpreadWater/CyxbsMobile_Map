@@ -1,5 +1,8 @@
 <resources>
 <!--    by张涛 -->
+    <string name="map_toast_cancel">取消成功</string>
+    <string name="map_toast_collect_success">收藏成功</string>
+    <string name="map_toast_collect_fail">收藏失败</string>
     <string name="map_tv_collect_cancel_place">不再收藏该地点</string>
     <string name="map_tv_collect_recommend">推荐</string>
     <string name="map_et_collect_collectname">我的收藏</string>
@@ -14,14 +17,20 @@
     <string name="map_tv_allimage_name">所有图片</string>
     <string name="map_tv_allimage_share">与大家分享你拍摄的此地点</string>
     <string name="map_tv_allimage_nomore">暂无更多图片</string>
+    <string name="map_toast_no_search_place">搜索不到该地点</string>
 <!--    by徐国林-->
-    <string name="map_hint_input_places"> 大家都在搜: 风雨操场</string>
+    <string name="map_toast_lock">取消锁定后对地图进行操作</string>
+    <string name="map_toast_open_network">你目前没有网络哦，请退出登录，开启网络后使用</string>
+    <string name="map_toast_notice_internet">由于网络不稳定，如进入出现白屏，退出重新登录直到全部数据出现</string>
+    <string name="map_toast_no_collect_list">啊哦，你目前没有收藏哦</string>
+    <string name="map_toast_open_permission">操作失败，请开启储存权限</string>
+    <string name="map_toast_no_map_data">本地没有地图数据</string>
+    <string name="map_hint_input_places"> 大家都在搜:</string>
     <string name="map_tv_about_place_more">关于该地点</string>
     <string name="map_share_people_place_image">与大家分享你拍摄的此地点</string>
     <string name="map_look_more">查看更多</string>
     <string name="map_detail">详情</string>
     <string name="map_label_name">运动场</string>
     <string name="map_place_detail">风雨操场</string>
-    <string name="map_collect_place_list_foot_item">暂无收藏哦</string>
     <string name="map_dialog_progress_title">正在加载地图图片</string>
 </resources>

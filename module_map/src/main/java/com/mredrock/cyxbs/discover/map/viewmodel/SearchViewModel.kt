@@ -45,8 +45,6 @@ class SearchViewModel:BaseViewModel() {
         ApiGenerator.getApiService(2019212381,ApiService::class.java)
                 .addhot(placeid)
                 .setSchedulers()
-                .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
-                .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
                 .safeSubscribeBy {
                     if (it.status==200){
                         LogUtils.d("zt","搜索成功!")
