@@ -11,6 +11,7 @@ import java.io.Serializable
   placeitem by xgl
   2020.8.17
  */
+@Entity(primaryKeys = ["placeId"], tableName = "places")
 class PlaceItem : Serializable {
 
     var isCollected: Boolean? = false
@@ -26,6 +27,8 @@ class PlaceItem : Serializable {
 
     @SerializedName("place_center_y")
     var placeCenterY: Float = 0f
+
+    @TypeConverters(BuildingRectConverter::class)
     @SerializedName("building_list")
     var buildingRectList: List<BuildingRect>? = null
 

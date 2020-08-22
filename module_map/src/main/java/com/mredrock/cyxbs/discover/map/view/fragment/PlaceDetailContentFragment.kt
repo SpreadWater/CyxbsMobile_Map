@@ -18,6 +18,8 @@ import com.mredrock.cyxbs.common.BaseApp
 import com.mredrock.cyxbs.common.ui.BaseViewModelFragment
 import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
+import com.mredrock.cyxbs.discover.map.config.PlaceData
+import com.mredrock.cyxbs.discover.map.database.DataBaseManger
 import com.mredrock.cyxbs.discover.map.model.dao.CollectStatusDao
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
 import com.mredrock.cyxbs.discover.map.view.activity.ImageAllActivity
@@ -122,6 +124,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
         }
         map_iv_place_collect.setOnClickListener {
             if (!placeId?.let { it1 -> CollectStatusDao.getCollectStatus(it1) }!!) {
+                Thread { DataBaseManger.insertCollectByPlaceId(PlaceData.placeBasicData[placeId!! - 1]) }.start()
                 viewModel.addCollectPlace(placeId!!)
                 CollectStatusDao.saveCollectStatus(placeId!!, true)
                 map_iv_place_collect.setImageResource(R.drawable.map_ic_collect_red)
@@ -193,6 +196,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             }
 
             override fun onConfirm() {
+                Thread { placeId?.let { DataBaseManger.deleteCollectByPlaceId(it) } }.start()
                 viewModel.deleteCollectPlace(placeId!!)
                 map_iv_place_collect.setImageResource(R.drawable.map_ic_collect)
                 CollectStatusDao.saveCollectStatus(placeId!!, false)

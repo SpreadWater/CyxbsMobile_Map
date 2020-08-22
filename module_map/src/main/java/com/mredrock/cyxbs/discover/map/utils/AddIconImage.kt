@@ -28,6 +28,7 @@ object AddIconImage {
             BOTTOM -> view.setCompoundDrawables(null, null, drawable, drawable)
         }
     }
+
     fun setImageViewToButton(drawable: Int, view: EditText, place: Int) {
         val drawable: Drawable =
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

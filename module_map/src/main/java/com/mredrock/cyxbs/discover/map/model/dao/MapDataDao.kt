@@ -8,7 +8,9 @@ import com.mredrock.cyxbs.discover.map.bean.MapData
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 
 object MapDataDao {
-
+    /*
+    存储地图基础数据
+     */
     fun saveMap(map: MapData) {
         sharedPreferences().edit {
             putString(map.mapVersion.toString(), Gson().toJson(map))

@@ -13,8 +13,8 @@ class TabLayoutTitles : Serializable {
         @SerializedName("title")
         val title: String? = null
 
-        @SerializedName("code")
-        val code: String? = null
+        @SerializedName("place_id")
+        val placeId: List<Int>? = null
 
         @SerializedName("is_hot")
         val isHot: Boolean? = null

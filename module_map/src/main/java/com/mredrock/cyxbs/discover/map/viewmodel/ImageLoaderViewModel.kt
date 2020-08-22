@@ -7,6 +7,7 @@ import com.mredrock.cyxbs.common.utils.extensions.setSchedulers
 import com.mredrock.cyxbs.common.viewmodel.BaseViewModel
 import com.mredrock.cyxbs.common.viewmodel.event.ProgressDialogEvent
 import com.mredrock.cyxbs.discover.map.BuildConfig
+import com.mredrock.cyxbs.discover.map.config.PlaceData
 import com.mredrock.cyxbs.discover.map.network.ApiService
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,7 +26,7 @@ class ImageLoaderViewModel:BaseViewModel() {
     }
 
     fun retrofitConfig(builder: Retrofit.Builder): Retrofit.Builder {
-        builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
+        builder.baseUrl(PlaceData.BaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         return builder

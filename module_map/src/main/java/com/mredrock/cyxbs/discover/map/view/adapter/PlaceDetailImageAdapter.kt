@@ -3,6 +3,7 @@ package com.mredrock.cyxbs.discover.map.view.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mredrock.cyxbs.common.BaseApp
@@ -12,7 +13,7 @@ import kotlinx.android.synthetic.main.map_item_place_detail_image.view.*
 
 class PlaceDetailImageAdapter(val imageList: ArrayList<String>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     class PlaceDetailImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val map_iv_rect_iamge = itemView.findViewById<RectangleView>(R.id.map_iv_rectangle_iamge)
+        val map_iv_rect_iamge = itemView.findViewById<ImageView>(R.id.map_iv_rectangle_iamge)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

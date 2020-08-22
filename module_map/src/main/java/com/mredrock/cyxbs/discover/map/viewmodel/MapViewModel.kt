@@ -12,7 +12,11 @@ import com.mredrock.cyxbs.common.viewmodel.event.ProgressDialogEvent
 import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.bean.CollectPlace
 import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
+import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.bean.TabLayoutTitles
+import com.mredrock.cyxbs.discover.map.config.PlaceData
+import com.mredrock.cyxbs.discover.map.database.DataBaseManger
+import com.mredrock.cyxbs.discover.map.database.PlaceDatabase
 import com.mredrock.cyxbs.discover.map.model.DownloadInterceptor
 import com.mredrock.cyxbs.discover.map.model.DownloadListener
 import com.mredrock.cyxbs.discover.map.model.dao.MapDataDao
@@ -30,33 +34,22 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MapViewModel : BaseViewModel() {
+    private val placeDao = PlaceDatabase.getDatabase().getPlaceDao()
     val mapLoadProgress = MutableLiveData<Float>()
     var disposable: Disposable? = null
-    var typewordPlaceData = MutableLiveData<List<Int>>()
     val tabTitles = MutableLiveData<TabLayoutTitles>()
     val collectPlaces = MutableLiveData<CollectPlace>()
     var placeBasicData = MutableLiveData<PlaceBasicData>()
     val hotWord = MutableLiveData<String>()
 
     companion object {
-        const val TAG = "mapviewmodel"
+        const val TAG = "MapViewModel"
     }
 
     fun retrofitConfig(builder: Retrofit.Builder): Retrofit.Builder {
-        builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
+        builder.baseUrl(PlaceData.BaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        return builder
-    }
-
-    fun okHttpConfig(builder: OkHttpClient.Builder): OkHttpClient.Builder {
-        builder.run {
-            if (BuildConfig.DEBUG) {
-                val logging = HttpLoggingInterceptor()
-                logging.level = HttpLoggingInterceptor.Level.BODY
-                addInterceptor(logging)
-            }
-        }
         return builder
     }
 
@@ -76,73 +69,61 @@ class MapViewModel : BaseViewModel() {
         return builder
     }
 
+    init {
+        ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, null, true)
+    }
+
     fun getTabLayoutTitles() {
-        ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, { builder -> okHttpConfig(builder) }, true)
         ApiGenerator.getApiService(2019212381, ApiService::class.java)
                 .button()
                 .mapOrThrowApiException()
                 .setSchedulers()
-                .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
-                .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
                 .safeSubscribeBy {
                     tabTitles.value = it
-                }.lifeCycle()
-    }
-
-    fun getTypeWordPlaceList(code: String) {
-        ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, { builder -> okHttpConfig(builder) }, true)
-        ApiGenerator.getApiService(2019212381, ApiService::class.java)
-                .searchPlaceType(code)
-                .mapOrThrowApiException()
-                .setSchedulers()
-                .safeSubscribeBy {
-                    typewordPlaceData.value = it
-                }.lifeCycle()
+                }
     }
 
     fun getCollectPlace() {
-        ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, { builder -> okHttpConfig(builder) }, true)
         ApiGenerator.getApiService(2019212381, ApiService::class.java)
                 .getCollectPlaceList()
                 .mapOrThrowApiException()
                 .setSchedulers()
                 .safeSubscribeBy {
-                    collectPlaces.value = it
-                }.lifeCycle()
+                    collectPlaces.value=it
+                }
     }
 
     fun getHotWord() {
-        ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, { builder -> okHttpConfig(builder) }, true)
         ApiGenerator.getApiService(2019212381, ApiService::class.java)
                 .getPlaceHot()
                 .mapOrThrowApiException()
                 .setSchedulers()
-                .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
-                .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
                 .safeSubscribeBy {
                     hotWord.value = it
-                }.lifeCycle()
+                }
     }
 
     fun getPlaceData() {
-        ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, { builder -> okHttpConfig(builder) }, true)
         ApiGenerator.getApiService(2019212381,
                 ApiService::class.java)
                 .getPlaceItemsList()
                 .mapOrThrowApiException()
                 .setSchedulers()
-                .doFinally { progressDialogEvent.value = ProgressDialogEvent.DISMISS_DIALOG_EVENT }
-                .doOnSubscribe { progressDialogEvent.value = ProgressDialogEvent.SHOW_NONCANCELABLE_DIALOG_EVENT }
                 .safeSubscribeBy {
+                    Thread {
+                        PlaceData.placeBasicData.clear()
+                        PlaceData.placeBasicData = it.placeList as ArrayList<PlaceItem>
+                        DataBaseManger.saveAllPlaces()
+                    }.start()
                     placeBasicData.value = it
-                }.lifeCycle()
+                }
     }
 
-    fun loadMapFile(mapUrl: String? = MapDataDao.getSavedMap(1)?.mapUrl) {
+    fun loadMapFile() {
         ApiGenerator.registerNetSettings(2019212381, { builder -> retrofitConfig(builder) }, { builder -> OkHttpDownloadConfig(builder) }, true)
-        if (mapUrl != null) {
+        MapDataDao.getSavedMap(1)?.mapUrl?.let {
             ApiGenerator.getApiService(2019212381, ApiService::class.java)
-                    .download(mapUrl)
+                    .download(it)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .doOnNext {

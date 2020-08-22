@@ -70,7 +70,7 @@ class MyTabLayout : TabLayout {
                         map_iv_hot.visibility = View.GONE
                     }
                     val text: TextView = tab.customView!!.findViewById(R.id.map_tv_label_item)
-                    text.text = title.code
+                    text.text = title.title
                 }
                 this.addTab(tab, false)
             }

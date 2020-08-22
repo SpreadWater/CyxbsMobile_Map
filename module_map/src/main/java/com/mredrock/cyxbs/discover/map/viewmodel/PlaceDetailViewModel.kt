@@ -12,6 +12,7 @@ import com.mredrock.cyxbs.discover.map.BuildConfig
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.CollectPlace
 import com.mredrock.cyxbs.discover.map.bean.PlaceDetail
+import com.mredrock.cyxbs.discover.map.config.PlaceData
 import com.mredrock.cyxbs.discover.map.network.ApiService
 import com.mredrock.cyxbs.discover.map.utils.Toast
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,7 +29,7 @@ class PlaceDetailViewModel : BaseViewModel() {
     }
 
     fun retrofitConfig(builder: Retrofit.Builder): Retrofit.Builder {
-        builder.baseUrl("https://cyxbsmobile.redrock.team/wxapi/magipoke-stumap/")
+        builder.baseUrl(PlaceData.BaseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         return builder

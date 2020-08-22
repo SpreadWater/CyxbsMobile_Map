@@ -15,14 +15,14 @@ object HistoryPlaceDao {
     /*
     本地开启数据库，以place的id为索引存储
      */
-    const val code=0
+    const val CODE=0
     fun saveStatus(status: Boolean) {
         sharedPreferences().edit {
-            putBoolean(code.toString(), status)
+            putBoolean(CODE.toString(), status)
         }
     }
 
-    fun getStatus() = sharedPreferences().getBoolean(code.toString(), false)
+    fun getStatus() = sharedPreferences().getBoolean(CODE.toString(), false)
 
     fun savePlace(place: PlaceItem) {
         sharedPreferences().edit {
