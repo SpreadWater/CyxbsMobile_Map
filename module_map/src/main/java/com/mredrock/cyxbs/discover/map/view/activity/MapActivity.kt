@@ -84,7 +84,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         if (!userState.isLogin()) {
             //这里只是模拟一下登录，如果有并发需求，自己设计
             Thread {
-                userState.login(this, "2019212381", "261919")
+                userState.login(this, "2019210437", "142576")
             }.start()
         }
         //拿到搜索返回的id
@@ -360,10 +360,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private fun initMap(id: Int) {
         map_iv_image.setDoubleTapZoomScale(0.5f)
         sendMsg(MSG_LOADIMAGE)
-        if (!placeId.equals(null)) {
-            Thread { DataBaseManger.getAllPlaces() }.start()
-            placeLocation(PlaceData.placeBasicData.get(placeId?.toInt()!! - 1))
-        }
         if (!placeId.equals(null)) {
             Thread { DataBaseManger.getAllPlaces() }.start()
             placeLocation(PlaceData.placeBasicData.get(placeId?.toInt()!! - 1))
