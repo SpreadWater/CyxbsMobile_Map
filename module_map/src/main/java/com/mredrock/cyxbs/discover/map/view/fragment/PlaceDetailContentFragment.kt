@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +19,7 @@ import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.config.PlaceData
 import com.mredrock.cyxbs.discover.map.database.DataBaseManger
+import com.mredrock.cyxbs.discover.map.event.PlaceIdEvent
 import com.mredrock.cyxbs.discover.map.model.dao.CollectStatusDao
 import com.mredrock.cyxbs.discover.map.utils.ImageSelectutils
 import com.mredrock.cyxbs.discover.map.view.activity.ImageAllActivity
@@ -31,30 +31,47 @@ import com.mredrock.cyxbs.discover.map.viewmodel.ImageLoaderViewModel
 import com.mredrock.cyxbs.discover.map.viewmodel.PlaceDetailViewModel
 import com.zhihu.matisse.Matisse
 import kotlinx.android.synthetic.main.map_fragment_place_content.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.io.File
+
 
 /**
  * @author xgl
  * @date 2020.8
  */
 class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>() {
+    companion object {
+        const val ATTRIBUTE = 0
+        const val LABEL = 1
+        const val MSG = 1
+    }
+
     var placeId: Int? = 0
-    private val ATTRIBUTE = 0
-    private val LABEL = 1
     var mplaceattribute = ""
-    val imageurls = ArrayList<String>()
+    val imageUrls = ArrayList<String>()
     override val viewModelClass: Class<PlaceDetailViewModel>
         get() = PlaceDetailViewModel::class.java
 
-    val LoadviewModel = ImageLoaderViewModel()
+    val loadviewModel = ImageLoaderViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.map_fragment_place_content, container, false)
-        val bundle = this.arguments //得到从Activity传来的数据
-        if (bundle != null) {
-            placeId = bundle.getString("placeId").toInt()
-        }
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this)
         return view
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    fun onEvent(event: PlaceIdEvent) {
+        placeId = event.placeId
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -70,11 +87,12 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             it?.run {
                 if (placeAttribute != null && !placeAttribute!!.contains("")) {
                     initLabelRV(placeAttribute as ArrayList<String>, ATTRIBUTE)
+                    initLabelRV(tags as ArrayList<String>, LABEL)
                     mplaceattribute = placeAttribute!!.get(0)
                 }
-                map_tv_place_name.text = it.placeName
-                sendMsg(1)
-                imageurls.addAll(images!!)
+                map_tv_place_name.text = placeName
+                sendMsg(MSG)
+                imageUrls.addAll(images!!)
                 initImagesRv(images as ArrayList<String>)
             }
         })
@@ -102,7 +120,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
             val pathList: List<Uri> = Matisse.obtainResult(data)
             for (_Uri in pathList) {
                 val file = File(_Uri.toString())
-                LoadviewModel.loadImage(file, placeId!!)
+                loadviewModel.loadImage(file, placeId!!)
                 System.out.println(_Uri.path)
             }
         }
@@ -120,7 +138,7 @@ class PlaceDetailContentFragment : BaseViewModelFragment<PlaceDetailViewModel>()
 
     private fun initOnClick() {
         map_tv_search_more_place_detail.setOnClickListener {
-            placeId?.let { it1 -> changeToActivity(ImageAllActivity(), it1, imageurls) }
+            placeId?.let { it1 -> changeToActivity(ImageAllActivity(), it1, imageUrls) }
         }
         map_iv_place_collect.setOnClickListener {
             if (!placeId?.let { it1 -> CollectStatusDao.getCollectStatus(it1) }!!) {

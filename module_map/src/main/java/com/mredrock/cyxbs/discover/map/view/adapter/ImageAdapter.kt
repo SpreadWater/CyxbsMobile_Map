@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.Image
 import com.mredrock.cyxbs.discover.map.view.activity.ViewImageActivity
+import com.mredrock.cyxbs.discover.map.view.widget.RectangleView
 
 /**
  *@date 2020-8-9
@@ -20,8 +21,8 @@ import com.mredrock.cyxbs.discover.map.view.activity.ViewImageActivity
  */
 class ImageAdapter(val imageUrls:ArrayList<Uri>, val activity: AppCompatActivity):RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
-    inner class ViewHolder(view: View):RecyclerView.ViewHolder(view){
-        val image:ImageView=view.findViewById(R.id.map_iv_image)
+     class ViewHolder(view: View):RecyclerView.ViewHolder(view){
+        val image:RectangleView=view.findViewById(R.id.map_iv_image)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,7 +39,7 @@ class ImageAdapter(val imageUrls:ArrayList<Uri>, val activity: AppCompatActivity
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val image=imageUrls[position]
-        Glide.with(activity).load(image).placeholder(R.drawable.map_shape_image_loading).into(holder.image)
+        Glide.with(activity).load(image).into(holder.image)
     }
 
     override fun getItemCount()=imageUrls.size

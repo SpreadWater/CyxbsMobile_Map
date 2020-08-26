@@ -6,18 +6,16 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.PointF
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Message
 import android.view.*
 import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.davemorrissey.labs.subscaleview.ImageSource
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayout
 import com.mredrock.cyxbs.common.BaseApp
@@ -26,30 +24,29 @@ import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
 import com.mredrock.cyxbs.common.service.account.IAccountService
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
-import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.R.layout.map_activity_map
 import com.mredrock.cyxbs.discover.map.bean.PlaceBasicData
-import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.bean.*
 import com.mredrock.cyxbs.discover.map.config.PlaceData
 import com.mredrock.cyxbs.discover.map.database.DataBaseManger
+import com.mredrock.cyxbs.discover.map.event.PlaceIdEvent
 import com.mredrock.cyxbs.discover.map.model.dao.*
 import com.mredrock.cyxbs.discover.map.viewmodel.MapViewModel
 import com.mredrock.cyxbs.discover.map.utils.AddIconImage
 import com.mredrock.cyxbs.discover.map.utils.NetWorkUtils
 import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
+import com.mredrock.cyxbs.discover.map.view.widget.MapLayout
 import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_activity_map.map_iv_image
+import org.greenrobot.eventbus.EventBus
 import java.io.File
-import java.lang.Exception
 import kotlin.collections.ArrayList
 
 /**
- * @author xgl
- * @date 2020.8
+ *
  */
 
 @Route(path = DISCOVER_MAP)
@@ -58,14 +55,13 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         const val MAP_SAVE = 1
         const val MSG = 0
         const val MSG_COLLECT = 2
-        const val MSG_LOADIMAGE = 3
     }
 
-    private var zoomCenterId: Int = 29
+    private val iconList = mutableListOf<IconBean>()
     private var dialogData: ProgressDialog? = null
+    private var zoomCenterId: Int = 29
     private val path = Environment.getExternalStorageDirectory().absolutePath + "/cquptmap/map.jpg"
-    private var collectList = ArrayList<PointF>()
-    private val placeXList = ArrayList<PlaceItem>()
+    private var collectList = ArrayList<Int>()
     private var tabItemList = ArrayList<TabLayoutTitles.TabLayoutItem>()
     override val isFragmentActivity: Boolean
         get() = false
@@ -82,15 +78,15 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         val userState = ServiceManager.getService(IAccountService::class.java).getVerifyService()
         if (!userState.isLogin()) {
-            //这里只是模拟一下登录，如果有并发需求，自己设计
             Thread {
                 userState.login(this, "2019212381", "261919")
             }.start()
         }
-        //拿到搜索返回的id
+        dialogData = ProgressDialog(this)
         placeId = intent.getStringExtra("placeId")
         initView()
         initData()
+        initSearchLocation()
     }
 
     private fun initData() {
@@ -120,10 +116,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
      */
     private fun getDataFromLocal() {
         if (File(path).exists()) {
-            map_iv_image.setImage(ImageSource.uri(path))
+            map_iv_image.setUrl("loadFromLocal")
+//            Toast.toast("由于没有网络，仅展示地图")
             map_cl_map_background.setBackgroundColor(Color.parseColor(PlaceData.mapData.mapVersion?.let { MapDataDao.getSavedMap(it)?.mapBackgroundColor }))
         } else {
-            CyxbsToast.makeText(BaseApp.context, R.string.map_toast_no_map_data.toString(), android.widget.Toast.LENGTH_LONG).show()
+            Toast.toast(R.string.map_toast_no_map_data)
         }
 
         //本地如果有图片就从本地拿取，由于没有网络使用不了，启动锁定模式仅展示地图，取消地图详情
@@ -136,73 +133,20 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
         //本地有图片直接加载
         if (File(path).exists()) {
-            dialogData = ProgressDialog(this)
-            if (dialogData != null) {
-                dialogData!!.setMessage("加载数据中...")
-                dialogData!!.show()
-            }
-            map_iv_image.setImage(ImageSource.uri(path))
+            dialogData?.setMessage("加载数据中...")
+            dialogData?.show()
             if (MapDataDao.isMapSaved(MAP_SAVE))
                 map_cl_map_background.setBackgroundColor(Color.parseColor(MapDataDao.getSavedMap(MAP_SAVE)?.mapBackgroundColor))
         } else {
             IsLoadImageStatusDao.saveStatus(false)
         }
 
-        // 初始化hot数据
-        map_et_search.setText("  大家都在搜:" + SearchData.getSavedHotword())
-        viewModel.getHotWord()
-        viewModel.hotWord.observe(this, Observer {
-            if (it != "" && it != null) {
-                SearchData.saveHotword(it)
-                map_et_search.setText("  大家都在搜：${it}")
-            }
-        })
-
-        //初始化 buttoninfo
-        viewModel.getTabLayoutTitles()
-        viewModel.tabTitles.observe(this, Observer<TabLayoutTitles> {
-            ButtonInfoDao.saveButtonInfo(it, true)
-            tabItemList = it.buttonInfo as ArrayList<TabLayoutTitles.TabLayoutItem>
-            initTabCategory(tabItemList)
-        })
-
-        //是否下载图片
-        if (!IsLoadImageStatusDao.getStatus()) {
-            viewModel.loadMapFile()
-            val dialog = com.mredrock.cyxbs.discover.map.view.widget.ProgressDialog(this)
-            dialog.show()
-            viewModel.mapLoadProgress.observe(this, Observer<Float> {
-                dialog.setProgress((it * 100).toInt().toString())
-                if ((it * 100).toInt() >= 100 || it == 0f) {
-                    if (File(path).exists()) {
-                        map_iv_image.setBackgroundColor(Color.parseColor(MapDataDao.getSavedMap(MAP_SAVE)?.mapBackgroundColor))
-                        map_iv_image.setImage(ImageSource.uri(path))
-                    }
-                    IsLoadImageStatusDao.saveStatus(true)
-                    dialog.dismiss()
-                    dialogData = ProgressDialog(this)
-                    if (dialogData != null) {
-                        dialogData!!.setMessage("加载数据中...")
-                        dialogData!!.show()
-                    }
-                    sendMsg(MSG_LOADIMAGE)
-                }
-            })
-            dialog.setListener(object : com.mredrock.cyxbs.discover.map.view.widget.ProgressDialog.OnClickListener {
-                override fun onCancel() {
-                    dialog.setProgress("0")
-                    dialog.dismiss()
-                    viewModel.disposable?.dispose()
-                }
-            })
-        }
-
         //初始化placeitem数据
         viewModel.getPlaceData()
         viewModel.placeBasicData.observe(this, Observer<PlaceBasicData> {
             it?.run {
-
                 map_cl_map_background.setBackgroundColor(Color.parseColor(mapBackgroundColor))
+
                 if (!hotWord.equals("") && hotWord != null) {
                     map_et_search.setText("  大家都在搜：$hotWord")
                     SearchData.saveHotword(hotWord!!)
@@ -222,30 +166,90 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 if (!PlaceData.mapData.mapVersion?.let { it1 -> MapDataDao.isMapSaved(it1) }!!) {
                     MapDataDao.saveMap(PlaceData.mapData)
                 }
-
                 if (placeList != null) {
                     SearchData.saveItemNum(placeList!!.size)
                 }
                 zoomCenterId = openSite
-                initMap(openSite)
+            }
+            if (IsLoadImageStatusDao.getStatus())
+                sendMsg(MAP_SAVE)
+        })
+
+        // 初始化hot数据
+        map_et_search.setText("  大家都在搜:" + SearchData.getSavedHotword())
+        viewModel.getHotWord()
+        viewModel.hotWord.observe(this, Observer {
+            if (it != "" && it != null) {
+                SearchData.saveHotword(it)
+                map_et_search.setText("  大家都在搜：${it}")
+            }
+        })
+
+        //初始化 buttoninfo
+        viewModel.getTabLayoutTitles()
+        viewModel.tabTitles.observe(this, Observer<TabLayoutTitles> {
+            ButtonInfoDao.saveButtonInfo(it, true)
+            tabItemList = it.buttonInfo as ArrayList<TabLayoutTitles.TabLayoutItem>
+            initTabCategory(tabItemList)
+        })
+
+        val dialog = com.mredrock.cyxbs.discover.map.view.widget.ProgressDialog(this)
+        //是否下载图片
+        if (!IsLoadImageStatusDao.getStatus()) {
+            viewModel.loadMapFile()
+            dialog.show()
+        }
+
+        //监听进度条
+        viewModel.mapLoadProgress.observe(this, Observer<Float> {
+            dialog.setProgress((it * 100).toInt().toString())
+            if ((it * 100).toInt() >= 100 || it == 0f) {
+                if (File(path).exists())
+                    map_iv_image.setBackgroundColor(Color.parseColor(MapDataDao.getSavedMap(MAP_SAVE)?.mapBackgroundColor))
+                IsLoadImageStatusDao.saveStatus(true)
+                sendMsg(MAP_SAVE)
+                dialog.dismiss()
+            }
+        })
+
+        dialog.setListener(object : com.mredrock.cyxbs.discover.map.view.widget.ProgressDialog.OnClickListener {
+            override fun onCancel() {
+                dialog.setProgress("0")
+                dialog.dismiss()
+                viewModel.disposable?.dispose()
             }
         })
 
         //初始化收藏数据
         viewModel.getCollectPlace()
-        viewModel.collectPlaces.observe(this, Observer<CollectPlace> {
-            PlaceData.collectPlace.clear()
-            for (placeId in it.placeId!!) {
-                PlaceData.collectPlace.add((PlaceData.placeBasicData[placeId - 1]))
+    }
+
+    private val handler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            if (msg.what == MSG) {
+                map_iv_lock.setImageResource(R.drawable.map_ic_un_lock)
             }
-            Thread { DataBaseManger.saveAllCollect() }.start()
-        })
+            if (msg.what == MSG_COLLECT) {
+                PlaceData.collectPlace.forEach { place ->
+                    collectList.add(place.placeId)
+                }
+                map_iv_image.showSomeIcons(collectList)
+            }
+            if (msg.what == MAP_SAVE)
+                initMap()
+        }
+    }
+
+    fun sendMsg(index: Int) {
+        val message = Message()
+        message.what = index
+        handler.sendEmptyMessageDelayed(index,300)
     }
 
     /*
       拿到收藏数据
        */
-
     fun initCollectPlace() {
         collectList.clear()
         Thread {
@@ -257,16 +261,15 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     private fun initView() {
 
-        //锁定操作
-        IsLockDao.saveStatus(true)
         if (IsLockDao.getStatus())
             map_iv_lock.setImageResource(R.drawable.map_ic_un_lock)
         map_iv_lock.setOnClickListener {
             if (IsLockDao.getStatus()) {
                 map_iv_lock.setImageResource(R.drawable.map_ic_lock)
-                Toast.toast(R.string.map_toast_lock)
+                map_iv_image.setIsLock(true)
                 IsLockDao.saveStatus(false)
             } else {
+                map_iv_image.setIsLock(false)
                 IsLockDao.saveStatus(true)
                 map_iv_lock.setImageResource(R.drawable.map_ic_un_lock)
             }
@@ -279,14 +282,14 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_btn_collect_place.setOnClickListener {
             IsLockDao.saveStatus(true)
             sendMsg(MSG)
-            removePins()
-            map_iv_image.stopScale()
+            map_iv_image.setIsLock(false)
             initCollectPlace()
         }
         map_et_search.setOnClickListener {
             changeToActivity(SearchActivity())
-            IsLockDao.saveStatus(true)
             sendMsg(MSG)
+            map_iv_image.setIsLock(false)
+            IsLockDao.saveStatus(true)
         }
         map_iv_back.setOnClickListener {
             finish()
@@ -320,17 +323,11 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         map_tl_category.setTitle(tabItemList)
         map_tl_category.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                map_iv_image.stopScale()
-                sendMsg(MSG)
                 IsLockDao.saveStatus(true)
                 if (tab != null) {
-                    removePins()
-                    for (placeId in tabItemList[tab.position].placeId!!) {
-                        val place = PlaceData.placeBasicData[placeId - 1]
-                        if (!place.equals(null)) {
-                            map_iv_image.setPin(PointF(place.placeCenterX, place.placeCenterY))
-                        }
-                    }
+                    sendMsg(MSG)
+                    map_iv_image.setIsLock(false)
+                    map_iv_image.showSomeIcons(tabItemList[tab.position].placeId as ArrayList<Int>)
                 }
             }
 
@@ -345,151 +342,70 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     }
 
     /*
-        定位处理
+        初始化地图数据
      */
-    private fun placeLocation(placeItem: PlaceItem) {
-        removePins()
-        if (map_iv_image.isImageLoaded) {
-            map_iv_image.setLocation(PointF(placeItem.placeCenterX, placeItem.placeCenterY))
+    private fun initMap() {
+        dialogData?.dismiss()
+        iconList.clear()
+        PlaceData.placeBasicData.forEach { bean ->
+            val buildingList = bean.buildingRectList
+            buildingList?.forEach { building ->
+                iconList.add(IconBean(bean.placeId,
+                        bean.placeCenterX,
+                        bean.placeCenterY,
+                        bean.tagLeft,
+                        bean.tagRight,
+                        bean.tagTop,
+                        bean.tagBottom,
+                        building.buildingLeft,
+                        building.buildingRight,
+                        building.buildingTop,
+                        building.buildingBottom
+                ))
+            }
         }
-    }
-
-    /*
-    初始化map控件
-     */
-    private fun initMap(id: Int) {
-        map_iv_image.setDoubleTapZoomScale(0.5f)
-        sendMsg(MSG_LOADIMAGE)
-        if (!placeId.equals(null)) {
-            Thread { DataBaseManger.getAllPlaces() }.start()
-            placeLocation(PlaceData.placeBasicData.get(placeId?.toInt()!! - 1))
-        }
-        if (!placeId.equals(null)) {
-            Thread { DataBaseManger.getAllPlaces() }.start()
-            placeLocation(PlaceData.placeBasicData.get(placeId?.toInt()!! - 1))
-        }
-        val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
-                val point: PointF? = map_iv_image.viewToSourceCoord(e.x, e.y)
-                if (point != null) {
-                    removePins()
-                    if (IsLockDao.getStatus())
-                        judgePlaceX(point)
-                }
-                LogUtils.d("tagtag", "" + point?.x + " " + point?.y)
-                return true
+        map_iv_image.setOpenId(zoomCenterId)
+        map_iv_image.addSomeIcon(iconList)
+        if (File(path).exists())
+            map_iv_image.setUrl("loadFromLocal")
+        map_iv_image.setOnIconClickListener(object : MapLayout.OnIconClickListener {
+            override fun onIconClick(v: View) {
             }
         })
-        map_iv_image.setOnTouchListener { view, motionEvent -> gestureDetector.onTouchEvent(motionEvent) }
+
+        map_iv_image.setOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
+            override fun onPlaceClick(icon: ImageView) {
+                val iconBean = icon.tag as IconBean
+                showPlaceDetail(iconBean.placeId)
+                map_iv_image.showIcon(iconBean.placeId.toString())
+            }
+        })
     }
 
-    fun removePins() {
-        map_iv_image.removePins()
-    }
 
-
-    /*
-    点击地图判断，先判断x坐标
-     */
-    private fun judgePlaceX(pointF: PointF) {
-        placeXList.clear()
-        for (placeX in PlaceData.placeBasicData) {
-            if (placeNameX(pointF.x, placeX)) {
-                placeXList.add(placeX)
-            }
-            for (building in placeX.buildingRectList!!) {
-                if (placeX(pointF.x, building)) {
-                    placeXList.add(placeX)
-                }
-            }
-        }
-        judgePlaceY(pointF.y, placeXList)
-    }
-
-    private val handler: Handler = object : Handler() {
-        override fun handleMessage(msg: Message) {
-            super.handleMessage(msg)
-            if (msg.what == MSG) {
-                map_iv_lock.setImageResource(R.drawable.map_ic_un_lock)
-            }
-            if (msg.what == MSG_COLLECT) {
-                for (place in PlaceData.collectPlace) {
-                    collectList.add(PointF(place.placeCenterX, place.placeCenterY))
-                }
-                map_iv_image.addPointF(collectList)
-                if (collectList.isEmpty()) {
-                    Toast.toast(R.string.map_toast_no_collect_list)
-                }
-            }
-            if (msg.what == MSG_LOADIMAGE) {
-                placeLocation(PlaceData.placeBasicData[zoomCenterId - 1])
-                if(dialogData!=null)
-                    dialogData!!.dismiss()
-            }
+    private fun initSearchLocation() {
+        if (!placeId.equals(null)) {
+            placeId?.let { map_iv_image.focusToPoint(it.toInt()) }
         }
     }
 
-    fun sendMsg(index: Int) {
-        val message = Message()
-        message.what = index
-        handler.sendMessage(message)
+    fun closeIcons() {
+        map_iv_image.closeAllIcons()
     }
 
-    /*
-     点击地图判断，判断y坐标
-     */
-    private fun judgePlaceY(y: Float, placeList: ArrayList<PlaceItem>) {
-        for (placeY in placeList) {
-            if (placeNameY(y, placeY)) {
-                showPlaceDetail(placeY)
-            }
-            for (building in placeY.buildingRectList!!) {
-                if (placeY(y, building)) {
-                    showPlaceDetail(placeY)
-                }
-            }
-        }
-    }
-
-    private fun showPlaceDetail(placeItem: PlaceItem) {
-        replaceFragment(PlaceDetailContentFragment(), placeItem.placeId)
+    private fun showPlaceDetail(placeId: Int) {
+        replaceFragment(PlaceDetailContentFragment(), placeId)
         map_bottom_sheet_content.visibility = View.VISIBLE
         bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
     }
-
-    /*
-        建筑物名字判断
-     */
-    private fun placeNameX(x: Float, placeItem: PlaceItem): Boolean {
-        return x <= placeItem.tagRight && x >= placeItem.tagLeft
-    }
-
-    private fun placeNameY(y: Float, placeItem: PlaceItem): Boolean {
-        return y <= placeItem.tagBottom && y >= placeItem.tagTop
-    }
-
-    /*
-        建筑判断
-     */
-    private fun placeX(x: Float, building: PlaceItem.BuildingRect): Boolean {
-        return x <= building.buildingRight && x >= building.buildingLeft
-    }
-
-    private fun placeY(y: Float, building: PlaceItem.BuildingRect): Boolean {
-        return y <= building.buildingBottom && y >= building.buildingTop
-    }
-
 
     private fun changeToActivity(activity: Activity) {
         val intent = Intent(BaseApp.context, activity::class.java)
         startActivity(intent)
     }
 
-
     private fun replaceFragment(fragment: Fragment, placeId: Int) {
-        val bundle = Bundle()
-        bundle.putString("placeId", placeId.toString())
-        fragment.arguments = bundle
+        EventBus.getDefault().postSticky(PlaceIdEvent(placeId))
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.map_bottom_sheet_content, fragment)

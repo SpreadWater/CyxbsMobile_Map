@@ -34,11 +34,9 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MapViewModel : BaseViewModel() {
-    private val placeDao = PlaceDatabase.getDatabase().getPlaceDao()
     val mapLoadProgress = MutableLiveData<Float>()
     var disposable: Disposable? = null
     val tabTitles = MutableLiveData<TabLayoutTitles>()
-    val collectPlaces = MutableLiveData<CollectPlace>()
     var placeBasicData = MutableLiveData<PlaceBasicData>()
     val hotWord = MutableLiveData<String>()
 
@@ -89,7 +87,11 @@ class MapViewModel : BaseViewModel() {
                 .mapOrThrowApiException()
                 .setSchedulers()
                 .safeSubscribeBy {
-                    collectPlaces.value=it
+                    PlaceData.collectPlace.clear()
+                    it.placeId?.forEach { id ->
+                        PlaceData.collectPlace.add(PlaceData.placeBasicData[id - 1])
+                    }
+//                    Thread { DataBaseManger.saveAllCollect() }.start()
                 }
     }
 
