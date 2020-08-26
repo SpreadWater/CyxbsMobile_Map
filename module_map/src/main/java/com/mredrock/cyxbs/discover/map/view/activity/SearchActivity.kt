@@ -7,13 +7,13 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.bean.SearchPlace
-import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
+import com.mredrock.cyxbs.discover.map.config.PlaceData
+import com.mredrock.cyxbs.discover.map.database.DataBaseManger
 import com.mredrock.cyxbs.discover.map.model.dao.SearchData
 import com.mredrock.cyxbs.discover.map.model.dao.SearchHistory
 import com.mredrock.cyxbs.discover.map.view.adapter.HistoryAdapter
@@ -38,7 +38,7 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
 
     var isSearch = false
 
-    val placeItemList = ArrayList<PlaceItem>()
+    var placeItemList = ArrayList<PlaceItem>()
 
     var hot_word = ""
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,11 +60,8 @@ class SearchActivity : BaseViewModelActivity<SearchViewModel>() {
             map_et_search_place_set.setTypeface(Typeface.DEFAULT)
         }
         //获取之前本地basic的数据
-        for (i in 1..place_num) {
-            if (HistoryPlaceDao.isPlaceSaved(i)) {
-                HistoryPlaceDao.getSavedPlace(i)?.let { placeItemList.add(it) }
-            }
-        }
+        Thread { DataBaseManger.getAllPlaces() }.start()
+        placeItemList=PlaceData.placeBasicData
     }
 
     //加载历史记录

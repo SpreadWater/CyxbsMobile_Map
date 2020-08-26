@@ -4,17 +4,11 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.discover.map.R
-import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 import com.mredrock.cyxbs.discover.map.bean.SearchPlace
-import com.mredrock.cyxbs.discover.map.model.dao.HistoryPlaceDao
-import com.mredrock.cyxbs.discover.map.model.dao.SearchData
 import com.mredrock.cyxbs.discover.map.model.dao.SearchHistory
 import com.mredrock.cyxbs.discover.map.view.activity.MapActivity
 import com.mredrock.cyxbs.discover.map.view.activity.SearchActivity

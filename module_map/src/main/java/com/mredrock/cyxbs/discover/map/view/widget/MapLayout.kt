@@ -308,7 +308,7 @@ class MapLayout : FrameLayout, View.OnClickListener {
             val iconBean = bean.tag as IconBean
             if (iconBean.placeId == id) {
                 subScaleView.animateScaleAndCenter(
-                        1f,
+                        0.5f,
                         iconBean.placeY?.let { iconBean.placeX?.let { it1 -> PointF(it1, it) } }
                 )?.withDuration(FOCUS_ANIMATION_DURATION)
                         ?.withInterruptible(true)?.start()

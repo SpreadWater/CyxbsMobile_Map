@@ -54,6 +54,6 @@ class ImageLoaderViewModel:BaseViewModel() {
                     }else{
                         LogUtils.d("zt","上传失败!${it.info}")
                     }
-                }.lifeCycle()
+                }
     }
 }

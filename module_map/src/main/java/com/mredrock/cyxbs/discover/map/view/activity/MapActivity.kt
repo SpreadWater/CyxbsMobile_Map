@@ -86,7 +86,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
         placeId = intent.getStringExtra("placeId")
         initView()
         initData()
-        initSearchLocation()
     }
 
     private fun initData() {
@@ -381,14 +380,6 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             }
         })
     }
-
-
-    private fun initSearchLocation() {
-        if (!placeId.equals(null)) {
-            placeId?.let { map_iv_image.focusToPoint(it.toInt()) }
-        }
-    }
-
     fun closeIcons() {
         map_iv_image.closeAllIcons()
     }
