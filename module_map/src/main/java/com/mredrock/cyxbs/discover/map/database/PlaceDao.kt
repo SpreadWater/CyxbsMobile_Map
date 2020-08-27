@@ -13,7 +13,7 @@ import com.mredrock.cyxbs.discover.map.bean.PlaceItem
 @Dao
 interface PlaceDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)//避免重复添加
     fun insertAllPlaces(places: MutableList<PlaceItem>)//一次性添加所有的地址
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)//避免重复添加

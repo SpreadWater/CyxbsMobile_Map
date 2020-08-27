@@ -91,7 +91,7 @@ class MapViewModel : BaseViewModel() {
                     it.placeId?.forEach { id ->
                         PlaceData.collectPlace.add(PlaceData.placeBasicData[id - 1])
                     }
-//                    Thread { DataBaseManger.saveAllCollect() }.start()
+                    Thread { DataBaseManger.saveAllCollect() }.start()
                 }
     }
 

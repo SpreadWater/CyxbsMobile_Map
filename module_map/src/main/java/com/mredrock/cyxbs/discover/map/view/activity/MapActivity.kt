@@ -38,7 +38,7 @@ import com.mredrock.cyxbs.discover.map.utils.AddIconImage
 import com.mredrock.cyxbs.discover.map.utils.NetWorkUtils
 import com.mredrock.cyxbs.discover.map.utils.Toast
 import com.mredrock.cyxbs.discover.map.view.fragment.PlaceDetailContentFragment
-import com.mredrock.cyxbs.discover.map.view.widget.MapLayout
+import com.mredrock.cyxbs.discover.map.view.widget.MyMapLayout
 import kotlinx.android.synthetic.main.map_activity_map.*
 import kotlinx.android.synthetic.main.map_activity_map.map_iv_image
 import org.greenrobot.eventbus.EventBus
@@ -233,7 +233,10 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 PlaceData.collectPlace.forEach { place ->
                     collectList.add(place.placeId)
                 }
-                map_iv_image.showSomeIcons(collectList)
+                if (collectList.isEmpty())
+                    Toast.toast(R.string.map_toast_no_collect_list)
+                else
+                    map_iv_image.showSomeIcons(collectList)
             }
             if (msg.what == MAP_SAVE)
                 initMap()
@@ -243,18 +246,20 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     fun sendMsg(index: Int) {
         val message = Message()
         message.what = index
-        handler.sendEmptyMessageDelayed(index,300)
+        handler.sendEmptyMessageDelayed(index, 300)
     }
 
     /*
       拿到收藏数据
        */
     fun initCollectPlace() {
+        closeIcons()
         collectList.clear()
         Thread {
             DataBaseManger.getAllCollect()
             sendMsg(MSG_COLLECT)
         }.start()
+
         viewModel.getCollectPlace()
     }
 
@@ -326,6 +331,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 if (tab != null) {
                     sendMsg(MSG)
                     map_iv_image.setIsLock(false)
+                    closeIcons()
                     map_iv_image.showSomeIcons(tabItemList[tab.position].placeId as ArrayList<Int>)
                 }
             }
@@ -363,25 +369,31 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
                 ))
             }
         }
-        map_iv_image.setOpenId(zoomCenterId)
-        map_iv_image.addSomeIcon(iconList)
         if (File(path).exists())
             map_iv_image.setUrl("loadFromLocal")
-        map_iv_image.setOnIconClickListener(object : MapLayout.OnIconClickListener {
+        map_iv_image.addSomeIcons(iconList)
+        map_iv_image.setOpenSiteId(zoomCenterId.toString())
+        map_iv_image.showIconWithoutAnim(zoomCenterId.toString())
+        map_iv_image.setMyOnIconClickListener(object : MyMapLayout.OnIconClickListener {
             override fun onIconClick(v: View) {
+                val iconBean = v.tag as IconBean
+                showPlaceDetail(iconBean.placeId)
+                map_iv_image.closeIcon(v as ImageView)
             }
         })
 
-        map_iv_image.setOnPlaceClickListener(object : MapLayout.OnPlaceClickListener {
-            override fun onPlaceClick(icon: ImageView) {
-                val iconBean = icon.tag as IconBean
+        map_iv_image.setMyOnPlaceClickListener(object : MyMapLayout.OnPlaceClickListener {
+
+            override fun onPlaceClick(v: View) {
+                val iconBean = v.tag as IconBean
                 showPlaceDetail(iconBean.placeId)
                 map_iv_image.showIcon(iconBean.placeId.toString())
             }
         })
     }
+
     fun closeIcons() {
-        map_iv_image.closeAllIcons()
+        map_iv_image.closeAllIcon()
     }
 
     private fun showPlaceDetail(placeId: Int) {

@@ -4,127 +4,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/map_cl_map_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.mredrock.cyxbs.discover.map.view.widget.MapLayout
-            android:id="@+id/map_iv_image"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/map_cl_map_background"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/map_rl"
-            android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:background="@color/whiteBackground"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp">
+            <com.mredrock.cyxbs.discover.map.view.widget.MyMapLayout
+                android:id="@+id/map_iv_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+            </com.mredrock.cyxbs.discover.map.view.widget.MyMapLayout>
+            <RelativeLayout
+                android:id="@+id/map_rl"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:background="@color/whiteBackground"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="0dp">
+
+                <ImageView
+                    android:id="@+id/map_iv_back"
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="17dp"
+                    android:layout_marginTop="52dp"
+                    android:src="@drawable/map_ic_back" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/map_et_search"
+                    android:layout_width="310dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="45dp"
+                    android:layout_toRightOf="@id/map_iv_back"
+                    android:background="@drawable/map_shape_et_search_place"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:paddingStart="14dp"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/map_et_search_color"
+                    android:textSize="16sp" />
+
+                <com.mredrock.cyxbs.discover.map.view.widget.MyTabLayout
+                    android:id="@+id/map_tl_category"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/map_et_search"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginTop="7dp"
+                    app:tabBackground="@android:color/transparent"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="scrollable"
+                    app:tabPaddingEnd="-1dp"
+                    app:tabPaddingStart="-1dp"
+                    app:tabRippleColor="@android:color/transparent"
+                    app:tabSelectedTextColor="@color/qa_tab_selected_color"
+                    app:tabTextColor="@color/qa_tab_unselected_color" />
+
+                <Button
+                    android:id="@+id/map_btn_collect_place"
+                    android:layout_width="75dp"
+                    android:layout_height="54dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/whiteBackground"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="我的收藏"
+                    android:textColor="@color/map_tv_lab_color"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/map_cv_vr_map"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="186dp"
+                app:cardCornerRadius="90dp"
+                app:cardElevation="0dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/map_iv_back"
-                android:layout_width="15dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="17dp"
-                android:layout_marginTop="52dp"
-                android:src="@drawable/map_ic_back" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/map_ic_vr"
+                app:layout_constraintBottom_toBottomOf="@+id/map_cv_vr_map"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@+id/map_cv_vr_map"
+                app:layout_constraintRight_toRightOf="@+id/map_cv_vr_map"
+                app:layout_constraintTop_toTopOf="@+id/map_cv_vr_map"
+                app:layout_constraintVertical_bias="1.0" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/map_et_search"
-                android:layout_width="310dp"
-                android:layout_height="32dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="45dp"
-                android:layout_toRightOf="@id/map_iv_back"
-                android:background="@drawable/map_shape_et_search_place"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:paddingStart="14dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:singleLine="true"
-                android:textColor="@color/map_et_search_color"
-                android:textSize="16sp" />
+            <ImageView
+                android:id="@+id/map_iv_compass"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/map_ic_compass"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.98"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.236" />
 
-            <com.mredrock.cyxbs.discover.map.view.widget.MyTabLayout
-                android:id="@+id/map_tl_category"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:layout_below="@id/map_et_search"
-                android:layout_marginStart="7dp"
-                android:layout_marginTop="7dp"
-                app:tabBackground="@android:color/transparent"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabMode="scrollable"
-                app:tabPaddingEnd="-1dp"
-                app:tabPaddingStart="-1dp"
-                app:tabRippleColor="@android:color/transparent"
-                app:tabSelectedTextColor="@color/qa_tab_selected_color"
-                app:tabTextColor="@color/qa_tab_unselected_color" />
-
-            <Button
-                android:id="@+id/map_btn_collect_place"
-                android:layout_width="75dp"
-                android:layout_height="54dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:background="@color/whiteBackground"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="我的收藏"
-                android:textColor="@color/map_tv_lab_color"
-                android:textSize="14sp" />
-        </RelativeLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/map_cv_vr_map"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="186dp"
-            app:cardCornerRadius="90dp"
-            app:cardElevation="0dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/map_ic_vr"
-            app:layout_constraintBottom_toBottomOf="@+id/map_cv_vr_map"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="@+id/map_cv_vr_map"
-            app:layout_constraintRight_toRightOf="@+id/map_cv_vr_map"
-            app:layout_constraintTop_toTopOf="@+id/map_cv_vr_map"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <ImageView
-            android:id="@+id/map_iv_compass"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@drawable/map_ic_compass"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.98"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.236" />
-
-        <ImageView
-            android:id="@+id/map_iv_lock"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.938"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.356" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/map_iv_lock"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.938"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.356" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.mredrock.cyxbs.discover.map.view.widget.MyFrameLayout
         android:id="@+id/map_bottom_sheet_content"
