@@ -1,5 +1,6 @@
 package com.mredrock.cyxbs.discover.map.view.adapter
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -62,9 +63,9 @@ class HistoryAdapter(val placeList: ArrayList<SearchPlace>, val viewModel: Searc
             val position = viewHolder.adapterPosition
             val place = placeList[position]
             viewModel.SearchPlace(place.placeItem.placeId)
-            val intent = Intent(activity, MapActivity::class.java)
+            val intent = Intent()
             intent.putExtra("placeId", place.placeItem.placeId.toString())
-            activity.startActivity(intent)
+            activity.setResult(RESULT_OK,intent)
             activity.finish()
         }
         viewHolder
@@ -90,9 +91,9 @@ class HistoryAdapter(val placeList: ArrayList<SearchPlace>, val viewModel: Searc
                 SearchHistory.savePlaceNum(SearchNum)//保存新的搜索个数
             }
             viewModel.SearchPlace(place.placeItem.placeId)
-            val intent = Intent(activity, MapActivity::class.java)
+            val intent = Intent()
             intent.putExtra("placeId", place.placeItem.placeId.toString())
-            activity.startActivity(intent)
+            activity.setResult(RESULT_OK,intent)
             activity.finish()
         }
         viewHolder

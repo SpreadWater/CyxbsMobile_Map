@@ -2,10 +2,8 @@ package com.mredrock.cyxbs.discover.map.utils
 
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import com.mredrock.cyxbs.common.BaseApp
 
 object AddIconImage {

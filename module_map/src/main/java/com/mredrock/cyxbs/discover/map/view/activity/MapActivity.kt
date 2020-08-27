@@ -24,6 +24,7 @@ import com.mredrock.cyxbs.common.config.DISCOVER_MAP
 import com.mredrock.cyxbs.common.service.ServiceManager
 import com.mredrock.cyxbs.common.service.account.IAccountService
 import com.mredrock.cyxbs.common.ui.BaseViewModelActivity
+import com.mredrock.cyxbs.common.utils.LogUtils
 import com.mredrock.cyxbs.common.utils.extensions.doPermissionAction
 import com.mredrock.cyxbs.discover.map.R
 import com.mredrock.cyxbs.discover.map.R.layout.map_activity_map
@@ -74,8 +75,8 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(map_activity_map)
-//        //黑夜模式测试
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        //        //黑夜模式测试
+        //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         val userState = ServiceManager.getService(IAccountService::class.java).getVerifyService()
         if (!userState.isLogin()) {
             Thread {
@@ -83,9 +84,19 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
             }.start()
         }
         dialogData = ProgressDialog(this)
-        placeId = intent.getStringExtra("placeId")
+//        placeId = intent.getStringExtra("placeId")
         initView()
         initData()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            1 -> if (resultCode== Activity.RESULT_OK){
+                placeId=data?.getStringExtra("placeId")
+                LogUtils.d("zt","搜索的id$placeId")
+            }
+        }
     }
 
     private fun initData() {
@@ -116,7 +127,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
     private fun getDataFromLocal() {
         if (File(path).exists()) {
             map_iv_image.setUrl("loadFromLocal")
-//            Toast.toast("由于没有网络，仅展示地图")
+            //            Toast.toast("由于没有网络，仅展示地图")
             map_cl_map_background.setBackgroundColor(Color.parseColor(PlaceData.mapData.mapVersion?.let { MapDataDao.getSavedMap(it)?.mapBackgroundColor }))
         } else {
             Toast.toast(R.string.map_toast_no_map_data)
@@ -404,7 +415,7 @@ class MapActivity : BaseViewModelActivity<MapViewModel>() {
 
     private fun changeToActivity(activity: Activity) {
         val intent = Intent(BaseApp.context, activity::class.java)
-        startActivity(intent)
+        startActivityForResult(intent, 1)
     }
 
     private fun replaceFragment(fragment: Fragment, placeId: Int) {
